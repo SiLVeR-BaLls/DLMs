@@ -9,4 +9,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 ?>
-<pre><?php echo var_dump($user->test()) ?></pre>
+<pre> <?php echo var_dump($user->test()) ?> </pre>
