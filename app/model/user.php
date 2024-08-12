@@ -8,4 +8,8 @@
     public function register(){
       
     }
+
+    public function login(){
+      
+    }
   }
