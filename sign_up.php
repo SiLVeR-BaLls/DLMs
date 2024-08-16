@@ -1,15 +1,16 @@
+<?php include 'app/includes/inc_sign_up.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Library Registration</title>
-    <link rel="stylesheet" href="sign_up.css">
+    <link rel="stylesheet" href="css/sign_up.css">
 </head>
 <body>
     <div class="registration-container">
         <div class="form-section">
-            <form action="connect.php" method="post">
+            <form method="post">
                 <input type="text" placeholder="Firstname" id="Fname" name="Fname" required>
                 <input type="text" placeholder="Surname" id="Sname" name="Sname" required>
                 <input type="text" placeholder="Middle Name" id="Mname" name="Mname">
@@ -44,7 +45,7 @@
             </form>
         </div>
         <div class="info-section">
-            <img src="logo-removebg-preview.png" alt="Digital Library Logo">
+            <img src="images/logo-removebg-preview.png" alt="Digital Library Logo">
             <h1>Digital Library Management System</h1>
         </div>
     </div>
