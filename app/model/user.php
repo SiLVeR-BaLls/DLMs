@@ -1,3 +1,4 @@
+<<<<<<< glen
 <?php
 class user {
     private $db;
@@ -34,3 +35,20 @@ class user {
 
     }
 }
+
+           <?php
+  class user {
+
+    public function __construct(){
+      
+    }
+
+    public function register(){
+      
+    }
+
+    public function login(){
+      
+    }
+  }
+>>>>>>> master
