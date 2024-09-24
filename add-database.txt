@@ -1,0 +1,13 @@
+extension 
+GRAD_LVL
+	ENUM (1,2,3,4,6,7,8,9)
+yrLVL
+municipality
+city
+brgy
+province
+con1
+con2
+mail1
+mail2
+password-repeat

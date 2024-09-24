@@ -1,0 +1,187 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure padding and borders are included in element's total width and height */
+}
+
+body {
+    padding: 50px;
+    background-image: url(../pic/logo.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-attachment: fixed;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif; /* Default font for the body */
+    justify-content: center;
+    align-items: center;
+}
+
+header p {
+    text-shadow: 10px 6px 10px #3d392955;
+    justify-content: center;
+    text-align: center;
+    font-size: 40px;
+    font-family: 'Times New Roman', serif; /* Font for paragraph text */
+}
+
+.top {
+    text-align: start;
+    text-decoration: none;
+    font-size: x-large;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+p {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    text-decoration: underline;
+}
+
+.container {
+    border: 1px solid rgb(25, 0, 255);
+    margin: 10px;
+    border-radius: 25px;
+    box-shadow: 5px 10px 8px 10px rgba(25, 0, 255, 0.323);
+    background-color: #edeade55;
+    padding: 20px; /* Adjust as needed */
+    font-family: 'Georgia', serif; /* Font for text inside the container */
+}
+
+h3 {
+    color: black;
+    font-family: 'Helvetica Neue', sans-serif; /* Font for h3 elements */
+}
+
+.group1, .group-1 {
+    display: flex;
+    flex-wrap: wrap; /* Fixed 'rap' to 'wrap' */
+    gap: 10px; /* Adjust as needed */
+    justify-content: center;
+}
+
+.group-box {
+    width: 400px; /* Set your desired width */
+    height: auto; /* You can set a fixed height if needed */
+    padding: 20px; /* Optional: add some padding for better spacing */
+    margin: 10px 0; /* Optional: add margin for spacing between boxes */
+    border: 1px solid #ccc; /* Optional: add a border */
+    border-radius: 5px; /* Optional: add rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for depth */
+}
+
+.group-box {
+    margin-top: 25px;
+    padding: 0px;
+}
+
+.text-group {
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding: 0;
+    position: relative; /* Ensure proper positioning for password toggle icon */
+}
+
+
+.box {
+    margin: 0;
+    padding: 0;
+    width: 15rem;
+    height: 2rem;
+    background-color: #2b2c58;
+    border : 1 solid #f2f2f2 ;
+
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Center buttons horizontally */
+    gap: 10px; /* Adds space between buttons */
+}
+
+.button {
+    background-color: #4b2b8b;
+    color: white;
+    border: none;
+    padding: 5px 10px; /* Adjusted padding for better appearance */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px; /* Adjust font size */
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Verdana', sans-serif; /* Font for buttons */
+}
+
+.button:hover {
+    background-color: #3b1f6e;
+}
+
+.buts {
+    margin-top: 10%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    color: #000;
+}
+
+.but {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.but:hover {
+    background-color: #2b2c58;
+    color: wheat;
+}
+
+/* Additional Styles for Password Visibility Toggle */
+.show-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px; /* Increased font size for a larger icon */
+    width: 16px; /* Set width to match font size */
+    height: 16px; /* Set height to match font size */
+    text-align: center; /* Center the icon */
+    line-height: 1; /* Adjust line height */
+    padding: 0; /* Remove any default padding */
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+}
+
+/* Mobile Styles */
+@media (max-width: 600px) {
+    body {
+        padding: 20px; /* Reduced padding for mobile */
+    }
+
+    .container {
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .group-box {
+        width: 100%; /* Full width for mobile */
+        margin: 0 0 15px 0; /* Margin adjustments */
+    }
+
+    .top, h3, p {
+        font-size: 1.2em; /* Adjust font sizes for readability */
+    }
+
+    .button {
+        font-size: 12px; /* Adjust button font size */
+        padding: 10px; /* Larger touch area */
+    }
+
+    .show-password {
+        font-size: 14px; /* Larger icon for mobile */
+    }
+}
