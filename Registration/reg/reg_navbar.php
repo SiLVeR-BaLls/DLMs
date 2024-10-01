@@ -1,8 +1,21 @@
 <header class="navhead" >
-<nav class="navbar">
-            <button onclick="showStep(1)">Step 1</button>
-            <button onclick="showStep(2)">Step 2</button>
-            <button onclick="showStep(3)">Step 3</button>
-        </nav>
-</header>
+<div class="radio-inputs">
 
+  <label onclick="showStep(1)" class="radio">
+    <input type="radio" name="radio" checked="" />
+    <span class="name">Step 1</span>
+  </label>
+
+  <label onclick="showStep(2)" class="radio">
+    <input type="radio" name="radio" />
+    <span class="name">Step 2</span>
+  </label>
+
+  <label onclick="showStep(3)" class="radio">
+    <input type="radio" name="radio" />
+    <span class="name">Step 3</span>
+  </label>
+</div>
+
+
+</header>

@@ -26,15 +26,14 @@
         
 
         <form id="registration-form" action="php/connection.php" method="post" class="container">
-            
+            <div class="plus">
             <?php include 'reg/reg_navbar.php'; ?>
-            
             <?php include 'reg/user_info.php'; ?>
             <?php include 'reg/site_info.php'; ?>
             <?php include 'reg/user_site.php'; ?>
+            </div>
 
-            <button type="button" onclick="nextStep()">Next</button>
-
+        
             <div class="button-container">
                 <button type="submit" class="button">Register</button>
                 <button type="reset" class="button">Reset</button>

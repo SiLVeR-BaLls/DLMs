@@ -17,6 +17,11 @@ body {
     align-items: center;
 }
 
+.plus{
+    background-color: #5185d3;
+    border-radius: 24px;
+}
+
 header p {
     text-shadow: 10px 6px 10px #3d392955;
     justify-content: center;
@@ -24,10 +29,102 @@ header p {
     font-size: 40px;
     font-family: 'Times New Roman', serif; /* Font for paragraph text */
 }
-
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 350px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .message {
+    color: rgba(88, 87, 87, 0.822);
+    font-size: 14px;
+  }
+  
+  .flex {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+  }
+  
+  .form label {
+    position: relative;
+  }
+  
+  .form label .input {
+    width: 100%;
+    padding: 10px 10px 20px 10px;
+    outline: 0;
+    border: 1px solid rgba(105, 105, 105, 0.397);
+    border-radius: 5px;
+  }
+  
+  .form label .input + span {
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    color: grey;
+    font-size: 0.9em;
+    cursor: text;
+    transition: 0.3s ease;
+  }
+  
+  .form label .input:placeholder-shown + span {
+    top: 15px;
+    font-size: 0.9em;
+  }
+  
+  .form label .input:focus + span,.form label .input:valid + span {
+    top: 30px;
+    font-size: 0.7em;
+    font-weight: 600;
+  }
+  
+  .form label .input:valid + span {
+    color: green;
+  }
+  
+  .input01 {
+    width: 100%;
+    padding: 10px 10px 20px 10px;
+    outline: 0;
+    border: 1px solid rgba(105, 105, 105, 0.397);
+    border-radius: 5px;
+  }
+  
+  .form label .input01 + span {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    color: grey;
+    font-size: 0.9em;
+    cursor: text;
+    transition: 0.3s ease;
+  }
+  
+  .form label .input01:placeholder-shown + span {
+    top: 40px;
+    font-size: 0.9em;
+  }
+  
+  .form label .input01:focus + span,.form label .input01:valid + span {
+    top: 50px;
+    font-size: 0.7em;
+    font-weight: 600;
+  }
+  
+  .form label .input01:valid + span {
+    color: green;
+  }
+  
 .top {
     text-align: start;
     text-decoration: none;
+    background-color: white;
     font-size: x-large;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -56,18 +153,20 @@ h3 {
 .group1, .group-1 {
     display: flex;
     flex-wrap: wrap; /* Fixed 'rap' to 'wrap' */
-    gap: 10px; /* Adjust as needed */
+    gap: 50px; /* Adjust as needed */
     justify-content: center;
 }
 
 .group-box {
-    width: 400px; /* Set your desired width */
+    align-items: center;
+    justify-content: center;
     height: auto; /* You can set a fixed height if needed */
-    padding: 20px; /* Optional: add some padding for better spacing */
+    padding: 200px; /* Optional: add some padding for better spacing */
     margin: 10px 0; /* Optional: add margin for spacing between boxes */
     border: 1px solid #ccc; /* Optional: add a border */
     border-radius: 5px; /* Optional: add rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for depth */
+    
 }
 
 .group-box {
@@ -156,7 +255,65 @@ h3 {
     color: red;
     margin-top: 5px;
 }
-
+.radio-inputs {
+    position: relative;
+    display: flex;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    font-size: 14px;
+    width: 90%;
+    padding: 1rem 1rem 0 1rem;
+    
+}
+  
+  .radio-inputs .radio input {
+    display: none;
+  }
+  
+  .radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    transition: all 0.15s ease-in-out;
+    position: relative;
+  }
+  
+  .radio-inputs .radio input:checked + .name {
+    background-color: white;
+    font-weight: 600;
+  }
+  .radio-inputs .radio input + .name:hover {
+    color: #fff;
+  }
+  .radio-inputs .radio input:checked + .name:hover {
+    color: #1d1d29;
+  }
+  
+  .radio-inputs .radio input:checked + .name::after,
+  .radio-inputs .radio input:checked + .name::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    bottom: 0;
+  }
+  
+  .radio-inputs .radio input:checked + .name::after {
+    right: -10px;
+    border-bottom-left-radius: 300px;
+    box-shadow: -3px 3px 0px 3px white;
+  }
+  .radio-inputs .radio input:checked + .name::before {
+    left: -10px;
+    border-bottom-right-radius: 300px;
+    box-shadow: 3px 3px 0px 3px white;
+  }
+    
 /* Mobile Styles */
 @media (max-width: 600px) {
     body {

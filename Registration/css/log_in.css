@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body {
-    background-color: #edeade;
+    background-color: alabaster;
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -30,7 +30,6 @@ body {
 
 .login-container input {
     display: block;
-    width: 80%;
     padding: 10px;
     margin: 10px auto;
     border-radius: 5px;

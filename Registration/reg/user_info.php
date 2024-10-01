@@ -45,8 +45,8 @@
             <input id="DOB" name="DOB" class="box" type="date" required>
         </div>
         <div class="text-group">
-            <label for="GRAD_LVL">Grade Level</label>
-            <select name="GRAD_LVL" id="GRAD_LVL" required>
+            <label for="GRAD_LVL" >Grade Level</label>
+            <select class="box" name="GRAD_LVL" id="GRAD_LVL" required>
                 <option value="1">Primary</option>
                 <option value="2">Secondary</option>
                 <option value="3">Junior High School</option>
