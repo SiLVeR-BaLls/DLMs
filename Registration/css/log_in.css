@@ -28,16 +28,6 @@ body {
     margin-bottom: 20px;
 }
 
-.login-container input {
-    display: block;
-    padding: 10px;
-    margin: 10px auto;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    font-family: Verdana, Tahoma, sans-serif;
-}
-
 .login-container .button {
     background-color: #2b2c58;
     color: white;
@@ -104,25 +94,7 @@ p {
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
 }
-.group-box {
-    margin-top: 25px;
-    padding: 0px;
-}
 
-.text-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 10px;
-    padding: 0;
-    position: relative; /* Ensure proper positioning for password toggle icon */
-}
-
-.box {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
 
 .show-password {
     position: absolute;
@@ -137,3 +109,52 @@ p {
     line-height: 1; /* Adjust line height */
     padding: 0; /* Remove any default padding */
 }
+/* From Uiverse.io by somshri16 */ 
+.form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .flex {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the start of the container */
+    width: 100%; /* Ensure it takes the full width */
+    padding: 0;
+    margin: 0px;
+
+}
+
+  
+  .form label {
+    position: relative;
+  }
+  
+  .form label .input {
+  margin: 3px  0px;
+    width: 100%;
+    padding: 10px 10px 20px 10px;
+    outline: 0;
+    border: 1px solid rgba(105, 105, 105, 0.397);
+    border-radius: 5px;
+  }
+  
+  .form label .input + span {
+    position: absolute;
+    left: 11px;
+    top: 25px;
+    color: grey;
+    font-size: 0.9em;
+    cursor: text;
+    transition: 0.3s ease;
+  }
+  .form label .input:focus + span,.form label .input:valid + span {
+    top: 30px;
+    font-size: 0.6em;
+    font-weight: 500;
+  }

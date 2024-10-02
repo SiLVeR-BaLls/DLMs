@@ -6,7 +6,7 @@
 
     <div class="group-1">
     <div class="group-box">
-        <p class="tile">Account Information</p>
+        <p class="title">Account Information</p>
 
     <div class="text-group">
             <label for="username">Username</label>

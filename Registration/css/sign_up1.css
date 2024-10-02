@@ -153,16 +153,18 @@ h3 {
 .group1, .group-1 {
     display: flex;
     flex-wrap: wrap; /* Fixed 'rap' to 'wrap' */
-    gap: 50px; /* Adjust as needed */
+    gap: 20px; /* Adjust as needed */
     justify-content: center;
+    margin: 0;
+    padding: 20px 0;
 }
 
 .group-box {
     align-items: center;
     justify-content: center;
     height: auto; /* You can set a fixed height if needed */
-    padding: 200px; /* Optional: add some padding for better spacing */
-    margin: 10px 0; /* Optional: add margin for spacing between boxes */
+    padding: 10px; /* Optional: add some padding for better spacing */
+    margin: 0px 10px; /* Optional: add margin for spacing between boxes */
     border: 1px solid #ccc; /* Optional: add a border */
     border-radius: 5px; /* Optional: add rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for depth */
@@ -175,13 +177,12 @@ h3 {
 }
 
 .text-group {
-    font-size: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 10px;
-    padding: 0;
-    position: relative; /* Ensure proper positioning for password toggle icon */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding: 0;
+  position: relative; /* Ensure proper positioning for password toggle icon */
 }
 
 

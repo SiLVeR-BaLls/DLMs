@@ -16,17 +16,27 @@
             <img src="pic/logo.png" alt="Digital Library Logo">
         </a>
 
-        <form action="php/login.php" method="post">
-            <div class="group-box">
+        <form action="php/login.php" method="post" class="form">
+            <div class="flex">
 
-                <input type="text" placeholder="Username" name="Username" id="Username" required>
-                <div class="text-group">
-                    <input id="password" name="Password" class="box" type="password" placeholder="Password" required>
-                    <span id="password-toggle" class="show-password" onclick="togglePasswordVisibility('password', 'password-toggle')">📚</span>
+                <label>
+                    <input type="text" class="input" name="Username" id="Username" required>
+                    <span>Username</span>
+               </label>
+               
+               
+                <div class="flex">
+                    <label>
+                    <input id="password" name="Password" class="input" type="password" required>
+                    <span>Password</span>
+                    <spanb id="password-toggle" class="show-password" onclick="togglePasswordVisibility('password', 'password-toggle')">📚</spanb>
+                </label>
+                
                 </div>
+                 <button type="submit" class="button">Login</button>
             </div>
-            <button type="submit" class="button">Login</button>
-        </form>
+        </form>           
+
         <p>Don't have an account? <a href="sign_up.php" class="but">Sign up</a></p>
     </div>
 </body>

@@ -33,7 +33,6 @@ if ($conn->connect_error) {
         $city = $_POST['city'];
         $barangay = $_POST['barangay'];
         $province = $_POST['province'];
-
         $email1 = $_POST['mail1'];
         $email2 = $_POST['mail2'];
         $con1 = $_POST['con1'];
@@ -77,7 +76,7 @@ if ($conn->connect_error) {
 
             // Insert into students_info table
             $sql = "INSERT INTO students_info (id, IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
+                $stmt = $conn->prepare($sql);
             $stmt->bind_param("isssisssiss", $user_id, $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $A_LVL, $U_type, $status);
             $stmt->execute();
 
