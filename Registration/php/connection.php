@@ -69,29 +69,29 @@ if ($conn->connect_error) {
             $user_id = $conn->insert_id;
 
             // Insert into addresses table
-            $sql = "INSERT INTO address (id, IDno, municipality, city, barangay, province, DOB) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO address (IDno, municipality, city, barangay, province, DOB) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("issssss", $user_id, $IDno, $municipality, $city, $barangay, $province, $DOB);
+            $stmt->bind_param("ssssss", $IDno, $municipality, $city, $barangay, $province, $DOB);
             $stmt->execute();
-
+            
             // Insert into students_info table
-            $sql = "INSERT INTO students_info (id, IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-            $stmt->bind_param("isssisssiss", $user_id, $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $A_LVL, $U_type, $status);
+            $sql = "INSERT INTO students_info (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssisssiss", $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $A_LVL, $U_type, $status);
             $stmt->execute();
 
             // Insert into user_log table
-            $sql = "INSERT INTO user_log (id, IDno, username, password) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO user_log (IDno, username, password) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("isss", $user_id, $IDno, $username, $password);
+            $stmt->bind_param("sss", $IDno, $username, $password);
             $stmt->execute();
 
             // Insert into contact table
-            $sql = "INSERT INTO contact (id, IDno, email1, email2, con1, con2) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO contact (IDno, email1, email2, con1, con2) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("isssss", $user_id, $IDno, $email1, $email2, $con1, $con2);
+            $stmt->bind_param("sssss", $IDno, $email1, $email2, $con1, $con2);
             $stmt->execute();
-
             $message = "Registration successful!";
             $message_type = "success";
         }

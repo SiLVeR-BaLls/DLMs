@@ -22,25 +22,25 @@ if ($conn->connect_error) {
         $username = $_POST['Username'];
         $password = $_POST['Password'];
 
-        // Prepare and execute SQL query to check user credentials
-        $query = "SELECT * FROM user_log WHERE username = ?";
+        // Prepare SQL query to check credentials and get U_type from students_info
+       
+        // Prepare the statement
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $username);
+        $stmt->bind_param("ss", $username, $password);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows == 1) {
-            $data = $result->fetch_assoc();
-
-            // Verify the password (Note: Password hashing is recommended)
+            // Verify the password (Note: password hashing like bcrypt is recommended)
             if ($password === $data['password']) {
                 // Login successful
                 $message = "Login successful! Welcome back, " . $data['username'];
                 $message_type = "success";
-                // Start a session for the user (optional)
+                
+                // Start a session for the user
                 session_start();
                 $_SESSION['username'] = $data['username'];
                 $_SESSION['user_id'] = $data['id'];
+                $_SESSION['U_type'] = $data['U_type']; // Store user type in session
             } else {
                 // Incorrect password
                 $message = "Incorrect password. Please try again.";
@@ -61,6 +61,8 @@ if ($conn->connect_error) {
 }
 ?>
 
+
+<!--
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,24 +76,22 @@ if ($conn->connect_error) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Function to display SweetAlert messages
-       
-function login() {
-    const username = document.getElementById('login-username').value;
-    const password = document.getElementById('login-password').value;
-    
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    
-    if (storedUser && storedUser.username === username && storedUser.password === password) {
-        if (storedUser.role === 'admin') {
-            window.location.href = 'landing-admin.html';
-        } else {
-            window.location.href = 'landing-user.html';
+        function showAlert(message, type) {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Welcome!' : 'Error',
+                text: message,
+                didClose: () => {
+                    if (type === 'success') {
+                        // Redirect to profile page or home page upon successful login
+                        window.location.href = 'profile.php';
+                    } else if (type === 'error') {
+                        // Redirect back to the login page
+                        window.history.back();
+                    }
+                }
+            });
         }
-    } else {
-        alert('Invalid username or password.');
-    }
-}
-
     </script>
 </head>
 
@@ -106,4 +106,4 @@ function login() {
     </script>
 </body>
 
-</html>
+</html>-->
