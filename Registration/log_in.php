@@ -48,6 +48,12 @@ if (isset($_POST['submit'])) {
             <td><label>Password</label></td>
             <td><input class="input" type="text" name="password" placeholder="Enter Password"></td>
 
+            <label for="">
+              <div>
+                <p>still don't hava account?  <a href="sign_up.php">sign up</a></p>
+              </div>
+            </label>
+
          
           </tr>
           <tr>
