@@ -39,7 +39,7 @@
                 <button type="reset" class="button">Reset</button>
                 <div id="error-message" class="error"></div>
             </div>
-            <p>Do you have an account? <a href="log_in.html" class="but">Log In</a></p>
+            <p>Do you have an account? <a href="log_in.php" class="but">Log In</a></p>
         </form>
     </main>
 </body>

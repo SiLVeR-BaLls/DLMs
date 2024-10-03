@@ -14,7 +14,7 @@
             </label>
             
             <div id="manual-id-container" class="form-group" style="display: block;">
-                <label for="IDno">ID No.</label>
+                <label for="IDno"></label>
                 <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)">
             </div>
 
