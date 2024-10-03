@@ -264,7 +264,7 @@ if ($isLoggedIn) {
         $('#download-btn').off('click').on('click', function() {
             var canvas = $('#qrcode-display canvas')[0];
             var link = document.createElement('a');
-            link.download = 'qrcode-' + id + '.png';
+            link.download = 'qrcode-.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
