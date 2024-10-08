@@ -41,34 +41,26 @@
         #startCameraButton:hover {
             background-color: darkgreen;
         }
+        .top {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo{
+    with: 10px;
+  }
     </style>
 </head>
 <body style="background-image: url(../Registration/pic/polygon-scatter-haikei.png);">
 
-    <!-- Navigation Bar
-    <nav class="navbar" style="background:#fff">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">QR Code Attendance</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Maintenance <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Student</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-plus-sign"></span> New Student</a></li>
-                        <li><a href="attendance.php"><span class="glyphicon glyphicon-calendar"></span> Attendance</a></li>
-                    </ul>
-                </li>
-                <li><a href="#"><span class="glyphicon glyphicon-align-justify"></span> Reports</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-time"></span> Check Attendance</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-        </div>
-    </nav> -->
+<div class="top">
+           <a href="../index.html"><img class="logo" src="../Registration/pic/logo wu.png" alt="Logo"></a>
+           <strong>Digital Library Management System</strong>
+          </div>
+          
 
     <!-- Main Container -->
     <div class="container">
@@ -246,13 +238,22 @@
         });
     </script>
 
-    <!-- JavaScript libraries -->
+    <!-- JavaScript libraries 
     <script src="plugins/jquery/jquery.min.js"></script>
     <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+-->
+
+    <!-- JavaScript libraries -->
+    <script src="plugs/jquery.min.js"></script>
+    <script src="plugs/bootstrap.min.js"></script>
+    <script src="plugs/jquery.dataTables.min.js"></script>
+    <script src="plugs/dataTables.bootstrap4.min.js"></script>
+    <script src="plugs/dataTables.responsive.min.js"></script>
+    <script src="plugs/responsive.bootstrap4.min.js"></script>
 
     <!-- DataTables initialization -->
     <script>

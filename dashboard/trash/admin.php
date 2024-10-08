@@ -22,16 +22,23 @@ if (isset($_GET['logout'])) {
     exit();
 }
 
+// Initialize the login status variable
+$isLoggedIn = false;
+
 // Handle login
 if (isset($_POST['submit'])) {
     $username = $_POST['uname'];
     $password = $_POST['password'];
-  
-    $query = "SELECT * FROM `user_log` WHERE username='$username' AND password='$password'";
-    $result = mysqli_query($conn, $query);
 
-    if ($row = mysqli_fetch_assoc($result)) {
+    // Prepare statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM `user_log` WHERE username=? AND password=?");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
         $_SESSION['admin'] = $row;
+        $isLoggedIn = true; // Set login status to true
         header("Location: admin.php");
         exit();
     } else {
@@ -44,10 +51,10 @@ $isLoggedIn = isset($_SESSION['admin']);
 
 // Fetch data from the tables if logged in
 if ($isLoggedIn) {
-    $contactQuery = "SELECT * FROM contact";
-    $addressQuery = "SELECT * FROM address";
-    $adminsInfoQuery = "SELECT * FROM students_info";
-    $usersInfoQuery = "SELECT * FROM users_info"; 
+    $contactQuery = "SELECT * FROM contact where IDno  = '".$_SESSION['admin']['IDno']."'";
+    $addressQuery = "SELECT * FROM address where IDno  = '".$_SESSION['admin']['IDno']."'";
+    $adminsInfoQuery = "SELECT * FROM students_info where IDno  = '".$_SESSION['admin']['IDno']."'";
+    $usersInfoQuery = "SELECT * FROM users_info where IDno  = '".$_SESSION['admin']['IDno']."'"; 
 
     $contactResult = mysqli_query($conn, $contactQuery);
     $addressResult = mysqli_query($conn, $addressQuery);
@@ -101,7 +108,6 @@ if ($isLoggedIn) {
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
             padding-top: 60px;
         }
@@ -144,6 +150,7 @@ if ($isLoggedIn) {
 <?php else: ?>
     <p><strong>Welcome, <?php echo $_SESSION['admin']['username']; ?>!</strong></p>
     <a href="?logout=true" style="color: red;">Logout</a>
+    <a href="ID_card.php?id=<?php echo $_SESSION['admin']['IDno']; ?>" class="button">ID</a> <!-- Correctly use the admin's ID -->
 
     <h2>Contact Information</h2>
     <table>
@@ -240,56 +247,28 @@ if ($isLoggedIn) {
             </tr>
         <?php endwhile; ?>
     </table>
-
 <?php endif; ?>
 
-<!-- Modal for QR Code -->
 <div id="qrcodeModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Your QR Code</h2>
-        <div id
-        ="qrcode-display"></div>
-        <button id="download-btn" style="display:none;">Download QR Code</button>
+        <h2>QR Code</h2>
+        <div id="qrcode-container"></div>
     </div>
 </div>
 
 <script>
     function openModal(id) {
-        $('#qrcode-display').empty().qrcode({
-            text: id,
-            width: 128,
-            height: 128
+        $('#qrcode-container').empty(); // Clear previous QR codes
+        $('#qrcode-container').qrcode({
+            text: "https://example.com/your-path?id=" + id // Change this to your desired URL
         });
-        $('#download-btn').off('click').on('click', function() {
-            var canvas = $('#qrcode-display canvas')[0];
-            var link = document.createElement('a');
-            link.download = 'qrcode-' + id + '.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-        $('#download-btn').show();
         $('#qrcodeModal').show();
     }
 
     function closeModal() {
         $('#qrcodeModal').hide();
     }
-
-    $(document).ready(function() {
-        $('.modal').click(function(event) {
-            if ($(event.target).is('.modal')) {
-                closeModal();
-            }
-        });
-    });
 </script>
-
-<?php
-// Close the connection
-mysqli_close($conn);
-?>
-
 </body>
 </html>
-

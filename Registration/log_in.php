@@ -14,12 +14,17 @@ if (isset($_POST['submit'])) {
      // print_r($row);
      if ($row['U_type']=="admin") {
          $_SESSION['admin']=$row;
-        header("Location:php/admin.php");
+        header("Location:../dashboard/admin/index.php");
       } 
       elseif($row["U_type"]=="student"){
         $_SESSION['student']=$row;
-        header("Location:php/user.php");
+        header("Location:../dashboard/student/index.php");
       }
+      elseif($row["U_type"]=="visitor"){
+        $_SESSION['visitor']=$row;
+        header("Location:../dashboard/visitor/index.php");
+      }
+      
       else{
         echo "Your UserName Or Password Not Matched!";
       }
@@ -30,37 +35,35 @@ if (isset($_POST['submit'])) {
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="css/stu">
-  <title>RoleWise</title>
+  <link rel="stylesheet" href="css/log_in.css">
+  <title>Log In</title>
 </head>
 <body>
-  <h1>Login Data</h1>
-    <fieldset>
-      <legend>Login Form</legend>
-      <form class="form" accept="" method="POST" >
-        <table>
+      <center>
+         <form class="form" accept="" method="POST" >
+         <div class="card">
+          <div class="top">
+           <a href="../index.php"><img src="pic/logo.png" alt="Logo"></a>
+           <strong>Digital Library Management System</strong>
+          </div>
           
-          <tr>
-            <td><label>UserName</label></td>
-            <td><input class="input" type="text" name="uname" placeholder="Enter User Name"></td>
-          </tr>
-          <tr>
-            <td><label>Password</label></td>
-            <td><input class="input" type="text" name="password" placeholder="Enter Password"></td>
+            <a class="login">Log in</a>
+            <div class="inputBox">
+                <input name="uname" type="text" required="required">
+                <span class="user">Username</span>
+            </div>
 
-            <label for="">
-              <div>
-                <p>still don't hava account?  <a href="sign_up.php">sign up</a></p>
-              </div>
-            </label>
+            <div class="inputBox">
+                <input name="password" type="password" required="required">
+                <span>Password</span>
+            </div>
 
-         
-          </tr>
-          <tr>
-            <td><input type="submit" name="submit" value="Login"></td>
-        </tr>
-        </table>
-      </form>
-    </fieldset>
+            <div class="inputBox">          
+              <button type="submit" name="submit" class="enter">Enter</button>
+              <p>already has account?<a href="sign_up.php">sign in</a> </p>
+            </div>
+     </div>
+    </form>
+</center>
 </body>
 </html>

@@ -1,17 +1,6 @@
 <?php
-// Configuration
-$db_host = 'localhost';
-$db_username = 'root';
-$db_password = '';
-$db_name = 'dlms';
+include 'mysql_connect.php'; // include database connection file
 
-// Create connection
-$conn = mysqli_connect($db_host, $db_username, $db_password, $db_name);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
 
 session_start();
 
@@ -22,36 +11,43 @@ if (isset($_GET['logout'])) {
     exit();
 }
 
+// Initialize the login status variable
+$isLoggedIn = false;
+
 // Handle login
 if (isset($_POST['submit'])) {
     $username = $_POST['uname'];
     $password = $_POST['password'];
-  
-    $query = "SELECT * FROM `user_log` WHERE username='$username' AND password='$password'";
-    $result = mysqli_query($conn, $query);
 
-    if ($row = mysqli_fetch_assoc($result)) {
-        $_SESSION['admin'] = $row;
-        header("Location: admin.php");
+    // Prepare statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT * FROM `user_log` WHERE username=? AND password=?");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $_SESSION['student'] = $row;
+        $isLoggedIn = true; // Set login status to true
+        header("Location: student.php");
         exit();
     } else {
         $error_message = "Your Username or Password is incorrect!";
     }
 }
 
-// Check if user is logged in as admin
-$isLoggedIn = isset($_SESSION['admin']);
+// Check if user is logged in as student
+$isLoggedIn = isset($_SESSION['student']);
 
 // Fetch data from the tables if logged in
 if ($isLoggedIn) {
-    $contactQuery = "SELECT * FROM contact";
-    $addressQuery = "SELECT * FROM address";
-    $adminsInfoQuery = "SELECT * FROM students_info";
-    $usersInfoQuery = "SELECT * FROM users_info"; 
+    $contactQuery = "SELECT * FROM contact where IDno  = '".$_SESSION['student']['IDno']."'";
+    $addressQuery = "SELECT * FROM address where IDno  = '".$_SESSION['student']['IDno']."'";
+    $studentsInfoQuery = "SELECT * FROM students_info where IDno  = '".$_SESSION['student']['IDno']."'";
+    $usersInfoQuery = "SELECT * FROM users_info where IDno  = '".$_SESSION['student']['IDno']."'"; 
 
     $contactResult = mysqli_query($conn, $contactQuery);
     $addressResult = mysqli_query($conn, $addressQuery);
-    $adminsInfoResult = mysqli_query($conn, $adminsInfoQuery);
+    $studentsInfoResult = mysqli_query($conn, $studentsInfoQuery);
     $usersInfoResult = mysqli_query($conn, $usersInfoQuery);
 }
 ?>
@@ -61,7 +57,7 @@ if ($isLoggedIn) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>student Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
     <style>
@@ -101,7 +97,6 @@ if ($isLoggedIn) {
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.4);
             padding-top: 60px;
         }
@@ -116,7 +111,7 @@ if ($isLoggedIn) {
 </head>
 <body>
 
-<h1>Admin Dashboard</h1>
+<h1>student Dashboard</h1>
 
 <?php if (!$isLoggedIn): ?>
     <h2>Login</h2>
@@ -142,8 +137,9 @@ if ($isLoggedIn) {
         </form>
     </fieldset>
 <?php else: ?>
-    <p><strong>Welcome, <?php echo $_SESSION['admin']['username']; ?>!</strong></p>
+    <p><strong>Welcome, <?php echo $_SESSION['student']['username']; ?>!</strong></p>
     <a href="?logout=true" style="color: red;">Logout</a>
+    <a href="ID_card.php?id=<?php echo $_SESSION['student']['IDno']; ?>" class="button">ID</a> <!-- Correctly use the student's ID -->
 
     <h2>Contact Information</h2>
     <table>
@@ -187,7 +183,7 @@ if ($isLoggedIn) {
         <?php endwhile; ?>
     </table>
 
-    <h2>Admins Information</h2>
+    <h2>students Information</h2>
     <table>
         <tr>
             <th>IDno</th>
@@ -200,9 +196,8 @@ if ($isLoggedIn) {
             <th>A Level</th>
             <th>User Type</th>
             <th>Status</th>
-            <th>QR Code</th>
         </tr>
-        <?php while ($row = mysqli_fetch_assoc($adminsInfoResult)): ?>
+        <?php while ($row = mysqli_fetch_assoc($studentsInfoResult)): ?>
             <tr>
                 <td><?php echo $row['IDno']; ?></td>
                 <td><?php echo $row['college']; ?></td>
@@ -214,7 +209,6 @@ if ($isLoggedIn) {
                 <td><?php echo $row['A_LVL']; ?></td>
                 <td><?php echo $row['U_type']; ?></td>
                 <td><?php echo $row['status']; ?></td>
-                <td class="qrcode" data-id="<?php echo $row['IDno']; ?>" onclick="openModal('<?php echo $row['IDno']; ?>')">Generate</td>
             </tr>
         <?php endwhile; ?>
     </table>
@@ -240,56 +234,6 @@ if ($isLoggedIn) {
             </tr>
         <?php endwhile; ?>
     </table>
-
 <?php endif; ?>
-
-<!-- Modal for QR Code -->
-<div id="qrcodeModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Your QR Code</h2>
-        <div id
-        ="qrcode-display"></div>
-        <button id="download-btn" style="display:none;">Download QR Code</button>
-    </div>
-</div>
-
-<script>
-    function openModal(id) {
-        $('#qrcode-display').empty().qrcode({
-            text: id,
-            width: 128,
-            height: 128
-        });
-        $('#download-btn').off('click').on('click', function() {
-            var canvas = $('#qrcode-display canvas')[0];
-            var link = document.createElement('a');
-            link.download = 'qrcode-.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-        $('#download-btn').show();
-        $('#qrcodeModal').show();
-    }
-
-    function closeModal() {
-        $('#qrcodeModal').hide();
-    }
-
-    $(document).ready(function() {
-        $('.modal').click(function(event) {
-            if ($(event.target).is('.modal')) {
-                closeModal();
-            }
-        });
-    });
-</script>
-
-<?php
-// Close the connection
-mysqli_close($conn);
-?>
-
 </body>
 </html>
-

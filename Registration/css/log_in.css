@@ -1,160 +1,122 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
-    background-color: alabaster;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    color: #333;
+body{
+  background-color: alabaster;
+margin: 5%;
+padding: 0;
 }
 
-.login-container {
-    text-align: center;
-    background-color: rgb(196, 180, 146);
-    margin: 50% 10% ;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.login-container img {
-    max-width: 50%;
-    margin-bottom: 20px;
-}
-
-.login-container .button {
-    background-color: #2b2c58;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: Verdana, Tahoma, sans-serif;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px auto;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.login-container .but {
-    display: inline-block;
-    color: #000;
-    text-decoration: none;
-    font-family: 'Verdana', sans-serif; /* Font for .but link */
-}
-.login-container .but:hover{
-    background-color: #2b2c58;
-    color: wheat;
-
-}
-
-.login-container .button:hover {
-    background-color: #2b1262;
-}
-
-p {
-    margin: 10px 0;
+/* Align logo and title */
+.top {
+  margin: 0px;
+  padding: 0px;
+  width: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
 }
 
 
-
-/*log in error*/
-  /* Style for background blur effect */
-  .overlay {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    backdrop-filter: blur(5px); /* Apply blur effect */
-    z-index: 999; /* Ensure it is behind the pop-up */
+/* Logo styling */
+.top img {
+  width: 100px;
+  margin-right: 10px;
 }
 
-.popup-message {
-    display: none; /* Hidden by default */
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px; /* Adjusted width */
-    padding: 20px;
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    z-index: 1000;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+.login {
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  font-weight: bold;
+  font-size: x-large;
 }
 
-
-.show-password {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 16px; /* Increased font size for a larger icon */
-    width: 16px; /* Set width to match font size */
-    height: 16px; /* Set height to match font size */
-    text-align: center; /* Center the icon */
-    line-height: 1; /* Adjust line height */
-    padding: 0; /* Remove any default padding */
-}
-/* From Uiverse.io by somshri16 */ 
-.form {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    max-width: 350px;
-    padding: 20px;
-    border-radius: 10px;
-    position: relative;
-  }
-  
-  .flex {
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-start; /* Align items to the start of the container */
-    width: 100%; /* Ensure it takes the full width */
-    padding: 0;
-    margin: 0px;
-
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  max-width: 400px;
+  flex-direction: column;
+  gap: 35px;
+  background: #e3e3e3;
+  box-shadow: 16px 16px 32px #c8c8c8,
+        -16px -16px 32px #fefefe;
+  border-radius: 8px;
 }
 
-  
-  .form label {
-    position: relative;
-  }
-  
-  .form label .input {
-  margin: 3px  0px;
-    width: 100%;
-    padding: 10px 10px 20px 10px;
-    outline: 0;
-    border: 1px solid rgba(105, 105, 105, 0.397);
-    border-radius: 5px;
-  }
-  
-  .form label .input + span {
-    position: absolute;
-    left: 11px;
-    top: 25px;
-    color: grey;
-    font-size: 0.9em;
-    cursor: text;
-    transition: 0.3s ease;
-  }
-  .form label .input:focus + span,.form label .input:valid + span {
-    top: 30px;
-    font-size: 0.6em;
-    font-weight: 500;
-  }
+input{
+  padding: 10px;
+}
+
+.inputBox {
+  position: relative;
+  width: 250px;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-size: 1em;
+  background: transparent;
+  border-left: 2px solid #000;
+  border-bottom: 4px solid #000;
+  transition: 0.1s;
+  border-bottom-left-radius: 8px;
+}
+
+.inputBox span {
+  margin-top: 5px;
+  position: absolute;
+  left: 0;
+  transform: translateY(-4px);
+  margin-left: 10px;
+  padding: 10px;
+  pointer-events: none;
+  font-size: 12px;
+  color: #000;
+  text-transform: uppercase;
+  transition: 0.5s;
+  letter-spacing: 3px;
+  border-radius: 8px;
+}
+
+.inputBox input:valid~span,
+.inputBox input:focus~span {
+  transform: translateX(113px) translateY(-15px);
+  font-size: 0.8em;
+  padding: 5px 10px;
+  background: #000;
+  letter-spacing: 0.2em;
+  color: #fff;
+  border: 2px;
+}
+
+.inputBox input:valid,
+.inputBox input:focus {
+  border: 2px solid #000;
+  border-radius: 8px;
+}
+
+.enter {
+  height: 45px;
+  width: 100px;
+  border-radius: 5px;
+  border: 2px solid #000;
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.5s;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 1em;
+}
+
+.enter:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
