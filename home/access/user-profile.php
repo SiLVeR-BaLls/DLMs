@@ -111,7 +111,7 @@ $conn->close();
 
 <body>
     <header>
-        <h1>User Profile test the fuck</h1>
+        <h1>User Profile test the boooks</h1>
     </header>
     <main>
         <div class="profile-container">

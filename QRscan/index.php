@@ -47,17 +47,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: alabaster;
   }
 
   .logo{
-    with: 10px;
+    width: 10rem;
   }
     </style>
 </head>
-<body style="background-image: url(../Registration/pic/polygon-scatter-haikei.png);">
+<body style="/*background-image: url(../Registration/pic/polygon-scatter-haikei.png);*/ background-color: alabaster;">
+
 
 <div class="top">
-           <a href="../index.html"><img class="logo" src="../Registration/pic/logo wu.png" alt="Logo"></a>
+           <a href="../dashboard/admin/index.php"><img class="logo" src="../Registration/pic/logo wu.png" alt="Logo"></a>
            <strong>Digital Library Management System</strong>
           </div>
           
