@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
          <form class="form" accept="" method="POST" >
          <div class="card">
           <div class="top">
-           <a href="../index.php"><img src="pic/logo.png" alt="Logo"></a>
+           <a href="../index.html"><img src="pic/logo.png" alt="Logo"></a>
            <strong>Digital Library Management System</strong>
           </div>
           

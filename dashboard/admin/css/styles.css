@@ -11,14 +11,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  
-  /* Logo styling */
-  .top img {
+}
+
+/* Logo styling */
+.top img {
     width: 100px;
     margin-right: 10px;
-  }
+}
+
 /* Navbar Styles */
 .navbar {
     display: flex;
@@ -32,28 +32,48 @@
 /* Brand Styles */
 .navar-brand h1 {
     font-size: 24px;
+    color: white;
 }
 
 /* Navbar Links */
 .navbar-nav {
     list-style: none;
-    display: flex;
+    display: flex; /* Ensures horizontal alignment */
+    flex-direction: row; /* Forces items to align in a row */
+    align-items: center; /* Vertically center links */
+    margin-left: auto; /* Aligns navbar items to the right of the navbar */
 }
 
+/* Spacing between list items */
 .navbar-nav li {
     margin: 0 15px;
     position: relative; /* For positioning dropdown */
 }
 
+/* General Link Styling */
 .navbar-nav a {
     color: white;
     text-decoration: none;
     padding: 10px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.navbar-nav a:hover {
+/* Styling for .link class */
+.link {
+    font-weight: bold;
+    padding: 12px 16px;
+    background-color: transparent;
+    color: #f0f0f0;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for .link */
+.link:hover {
     background-color: #575757;
+    color: #fff;
+    border-color: #fff;
     border-radius: 5px;
 }
 

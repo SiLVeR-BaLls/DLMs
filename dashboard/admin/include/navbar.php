@@ -8,17 +8,19 @@
         <span class="bar"></span>
         <span class="bar"></span>
     </div>
-    <ul class="navbar-nav" id="nav-links">
-    <li><a href="index.php">Browse</a></li>
-    <li><a href="../../QRscan/index.php">Attendance</a></li>
-    <li><a href="#users">Add Book</a></li>
-        <li><a href="#settings">Browse Users</a></li>
-        <li class="dropdown">
-            <a href="#" id="profile" onclick="toggleDropdown(event)">Setting ▼</a>
-            <ul class="dropdown-menu" id="dropdown-menu">
-                <li><a href="admin.php">Profile</a></li>
-                <li><a href="?logout=true">Logout</a></li>
-            </ul>
-        </li>
-    </ul>
+        <ul class="navbar-nav" id="nav-links">
+        <li><a href="index.php" class="link">Browse</a></li>
+        <li><a href="../../QRscan/index.php"class="link">Attendance</a></li>
+        <li><a href="#users"class="link">Add Book</a></li>
+        
+            <li><a href="BrowseUser.php"class="link">Browse Users</a></li>
+            <li class="dropdown">
+                <a href="#" id="profile" onclick="toggleDropdown(event)"class="link">Setting ▼</a>
+                <ul class="dropdown-menu" id="dropdown-menu">
+                    <li><a href="admin.php">Profile</a></li>
+                    <li><a href="?logout=true">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
 </nav>
+
