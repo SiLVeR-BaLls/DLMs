@@ -42,8 +42,6 @@ if (!$usersResult) {
 </head>
 <body>
 
-<h1>Admin Dashboard</h1>
-
 <?php include 'include/header.php'; ?>
 <?php include 'include/navbar.php'; ?>
 

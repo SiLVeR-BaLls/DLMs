@@ -10,7 +10,7 @@
     </div>
         <ul class="navbar-nav" id="nav-links">
         <li><a href="index.php" class="link">Browse</a></li>
-        <li><a href="../../QRscan/index.php"class="link">Attendance</a></li>
+        <li><a href="QRscan/index.php"class="link">Attendance</a></li>
         <li><a href="#users"class="link">Add Book</a></li>
         
             <li><a href="BrowseUser.php"class="link">Browse Users</a></li>

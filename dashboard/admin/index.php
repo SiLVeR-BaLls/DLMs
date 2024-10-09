@@ -20,8 +20,6 @@ include 'include/admin_connect.php'
 </head>
 <body>
 
-<h1>Admin Dashboard</h1>
-
 <?php if (!$isLoggedIn): ?>
 
 

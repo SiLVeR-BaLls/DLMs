@@ -55,11 +55,15 @@
   }
     </style>
 </head>
-<body style="/*background-image: url(../Registration/pic/polygon-scatter-haikei.png);*/ background-color: alabaster;">
+<body style="/*background-image: url(../../Registration/pic/polygon-scatter-haikei.png);*/ background-color: alabaster;">
 
 
-<div class="top">
-           <a href="../dashboard/admin/index.php"><img class="logo" src="../Registration/pic/logo wu.png" alt="Logo"></a>
+<div class="top"  style="height: 10vh; margin:0px; padding:50px;  background-color: alabaster;">
+
+
+
+
+           <a href="../index.php"><img class="logo" src="../../../Registration/pic/logo wu.png" alt="Logo"></a>
            <strong>Digital Library Management System</strong>
           </div>
           
