@@ -11,14 +11,14 @@ body {
     background-position: center center;
     background-size: contain;
     background-attachment: fixed;
-    background-color: #f2f2f2;
+    background-color: alabaster;
     font-family: Arial, sans-serif; /* Default font for the body */
     justify-content: center;
     align-items: center;
 }
 
 .plus{
-    background-color: #5185d3;
+    background-color: alabaster;
     border-radius: 24px;
 }
 
@@ -34,7 +34,7 @@ header p {
     flex-direction: column;
     gap: 10px;
     max-width: 350px;
-    background-color: #fff;
+    background-color: alabaster;
     padding: 20px;
     border-radius: 10px;
     position: relative;
@@ -55,76 +55,13 @@ header p {
     position: relative;
   }
   
-  .form label .input {
-    width: 100%;
-    padding: 10px 10px 20px 10px;
-    outline: 0;
-    border: 1px solid rgba(105, 105, 105, 0.397);
-    border-radius: 5px;
-  }
-  
-  .form label .input + span {
-    position: absolute;
-    left: 10px;
-    top: 15px;
-    color: grey;
-    font-size: 0.9em;
-    cursor: text;
-    transition: 0.3s ease;
-  }
-  
-  .form label .input:placeholder-shown + span {
-    top: 15px;
-    font-size: 0.9em;
-  }
-  
-  .form label .input:focus + span,.form label .input:valid + span {
-    top: 30px;
-    font-size: 0.7em;
-    font-weight: 600;
-  }
-  
-  .form label .input:valid + span {
-    color: green;
-  }
-  
-  .input01 {
-    width: 100%;
-    padding: 10px 10px 20px 10px;
-    outline: 0;
-    border: 1px solid rgba(105, 105, 105, 0.397);
-    border-radius: 5px;
-  }
-  
-  .form label .input01 + span {
-    position: absolute;
-    left: 10px;
-    top: 50px;
-    color: grey;
-    font-size: 0.9em;
-    cursor: text;
-    transition: 0.3s ease;
-  }
-  
-  .form label .input01:placeholder-shown + span {
-    top: 40px;
-    font-size: 0.9em;
-  }
-  
-  .form label .input01:focus + span,.form label .input01:valid + span {
-    top: 50px;
-    font-size: 0.7em;
-    font-weight: 600;
-  }
-  
-  .form label .input01:valid + span {
-    color: green;
-  }
-  
 .top {
+  border-radius: 25px 25px 0 0 ;
+  margin: 0;
+  padding: 10px;
     text-align: start;
     text-decoration: none;
-    background-color: white;
+    background-color: #f2f2f2;
     font-size: x-large;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -132,7 +69,17 @@ header p {
 p {
     text-align: center;
     font-family: 'Times New Roman', Times, serif;
-    text-decoration: underline;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+a:hover {
+  text-decoration: none;
+  background-color: #555D50;
+  padding: 0px;
+  border-radius:  5px;
 }
 
 .container {
@@ -155,25 +102,18 @@ h3 {
     flex-wrap: wrap; /* Fixed 'rap' to 'wrap' */
     gap: 20px; /* Adjust as needed */
     justify-content: center;
+    background-color: #f2f2f2;
     margin: 0;
     padding: 20px 0;
 }
 
 .group-box {
     align-items: center;
+  
     justify-content: center;
-    height: auto; /* You can set a fixed height if needed */
-    padding: 10px; /* Optional: add some padding for better spacing */
-    margin: 0px 10px; /* Optional: add margin for spacing between boxes */
-    border: 1px solid #ccc; /* Optional: add a border */
-    border-radius: 5px; /* Optional: add rounded corners */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for depth */
-    
-}
-
-.group-box {
-    margin-top: 25px;
-    padding: 0px;
+    padding: 20px; /* Optional: add some padding for better spacing */
+    margin: 10px 25px; /* Optional: add margin for spacing between boxes */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for depth */    
 }
 
 .text-group {
@@ -191,10 +131,9 @@ h3 {
     padding: 0;
     width: 19rem;
     height: 2rem;
-    border-radius: 10px;
-    background-color: alabaster;
-    border : 1 solid #f2f2f2 ;
-
+    border-radius: 5px 5px 5px 5px;
+    background-color: #f5efef;
+    
 }
 
 .button-container {
@@ -203,41 +142,25 @@ h3 {
     justify-content: center; /* Center buttons horizontally */
     gap: 10px; /* Adds space between buttons */
 }
+button {
+  font-size: 13px;
+  padding: 0.5em 2em;
+  border: transparent;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  background: #f2f2f2;
+  color: rgb(15, 15, 15);
+  border-radius: 4px;
+ }
+ 
+ button:hover {
+  background: rgb(2,0,36);
+  background: linear-gradient(45deg, #242124 0%, #f2f2f2 25%,  #333333 100%);
+ }
+ 
+ button:active {
+  transform: translate(0em, 0.2em);
+ }
 
-.button {
-    background-color: #4b2b8b;
-    color: white;
-    border: none;
-    padding: 5px 10px; /* Adjusted padding for better appearance */
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 10px; /* Adjust font size */
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Verdana', sans-serif; /* Font for buttons */
-}
-
-.button:hover {
-    background-color: #3b1f6e;
-}
-
-.buts {
-    margin-top: 10%;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    color: #000;
-}
-
-.but {
-    font-family: 'Times New Roman', Times, serif;
-}
-
-.but:hover {
-    background-color: #2b2c58;
-    color: wheat;
-}
 
 /* Additional Styles for Password Visibility Toggle */
 .show-password {
@@ -258,6 +181,8 @@ h3 {
     color: red;
     margin-top: 5px;
 }
+
+
 .radio-inputs {
     position: relative;
     display: flex;
@@ -266,32 +191,39 @@ h3 {
     font-size: 14px;
     width: 90%;
     padding: 1rem 1rem 0 1rem;
+      display: flex;
+      justify-content: flex-end; /* Aligns the radio buttons to the right */
+      width: 100%; /* Full width of the container */
+    
     
 }
   
   .radio-inputs .radio input {
     display: none;
+
   }
+  
   
   .radio-inputs .radio .name {
     display: flex;
     cursor: pointer;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
     border: none;
     padding: 0.5rem 0.8rem;
     transition: all 0.15s ease-in-out;
     position: relative;
+    background-color: #d8d8d8;
   }
   
   .radio-inputs .radio input:checked + .name {
-    background-color: white;
+    background-color: #f2f2f2;
     font-weight: 600;
   }
   .radio-inputs .radio input + .name:hover {
-    color: #fff;
+    color: #919090;
   }
   .radio-inputs .radio input:checked + .name:hover {
     color: #1d1d29;
@@ -309,27 +241,62 @@ h3 {
   .radio-inputs .radio input:checked + .name::after {
     right: -10px;
     border-bottom-left-radius: 300px;
-    box-shadow: -3px 3px 0px 3px white;
+    box-shadow: -3px 3px 0px 3px #f2f2f2;
   }
   .radio-inputs .radio input:checked + .name::before {
     left: -10px;
     border-bottom-right-radius: 300px;
-    box-shadow: 3px 3px 0px 3px white;
+    box-shadow: 3px 3px 0px 3px #f2f2f2;
   }
     
 /* Mobile Styles */
-@media (max-width: 600px) {
+  @media (max-width: 488px) {
+      body { 
+        display: grid;
+        justify-content: center;
+        align-items: center;       
+          padding: 20px; /* Reduced padding for mobile */
+      }
+
+      .container {
+          padding: 15px; /* Adjust padding for smaller screens */
+      }
+
+      .group-box {
+          width: 100%; /* Full width for mobile */
+          margin: 0 0 15px 0; /* Margin adjustments */
+      }
+
+      .top, h3, p {
+          font-size: 1.2em; /* Adjust font sizes for readability */
+      }
+
+      .button {
+          font-size: 12px; /* Adjust button font size */
+          padding: 10px; /* Larger touch area */
+      }
+
+      .show-password {
+          font-size: 14px; /* Larger icon for mobile */
+      }
+  }
+
+  @media (max-width: 414px) {
     body {
-        padding: 20px; /* Reduced padding for mobile */
+      
+      display: grid;
+      justify-content: center;
+      align-items: center;
+        padding: 10px; /* Reduced padding for mobile */
     }
 
     .container {
-        padding: 15px; /* Adjust padding for smaller screens */
+        padding: 8px; /* Adjust padding for smaller screens */
     }
 
     .group-box {
         width: 100%; /* Full width for mobile */
-        margin: 0 0 15px 0; /* Margin adjustments */
+        margin: 0 0 8px 0; /* Margin adjustments */
     }
 
     .top, h3, p {
@@ -337,11 +304,91 @@ h3 {
     }
 
     .button {
-        font-size: 12px; /* Adjust button font size */
-        padding: 10px; /* Larger touch area */
+        font-size: 6px; /* Adjust button font size */
+        padding: 5px; /* Larger touch area */
     }
 
     .show-password {
-        font-size: 14px; /* Larger icon for mobile */
+        font-size: 7px; /* Larger icon for mobile */
     }
 }
+/* Mobile Styles */
+
+/* Small Tablets or Landscape Phones (up to 768px wide) */
+@media (max-width: 768px) {
+  body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      flex-direction: column;
+  }
+
+  .container {
+      padding: 15px;
+  }
+
+  .top, h3, p {
+      font-size: 1.5em;
+  }
+
+  .button {
+      font-size: 14px;
+      padding: 8px;
+  }
+}
+
+/* Small Devices (up to 640px wide) */
+@media (max-width: 640px) {
+  body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+  }
+
+  .container {
+      padding: 12px;
+  }
+
+  .top, h3, p {
+      font-size: 1.3em;
+  }
+
+  .button {
+      font-size: 12px;
+      padding: 6px;
+  }
+}
+
+/* Extra Small Devices (up to 414px wide) */
+@media (max-width: 486px) {
+  body {
+      height: 100vh;
+      display: grid;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+  }
+
+  .container {
+      padding: 10px;
+  }
+
+  .top, h3, p {
+      font-size: 1.2em;
+  }
+
+  .button {
+      font-size: 10px;
+      padding: 5px;
+  }
+
+  .show-password {
+      font-size: 14px;
+  }
+}
+
+/* Extra Extra Small Devices (up

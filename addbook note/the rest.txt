@@ -1,0 +1,21 @@
+add book
+#brief title
+#series/notes
+#subject
+#resource
+#added entries
+#RDA types
+
+#added entries
+//alternate titles
+-uniform title [leading article][]
+-vaying form
+-series uniform title [leading article][]
+
+//co-authors, illostrator,editors, etc
+-name
+-date
+-role
+(update)
+find heading
+

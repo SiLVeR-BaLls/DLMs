@@ -1,4 +1,6 @@
 <!-- Table displaying users -->
+
+<div class="tableofuser">
 <table id="usersTable" class="table table-striped table-bordered dt-responsive">
     <thead>
         <tr>
@@ -153,3 +155,4 @@
         });
     }
 </script>
+</div>

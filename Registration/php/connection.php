@@ -124,7 +124,7 @@ if ($conn->connect_error) {
                 text: message,
                 didClose: () => {
                     if (type === 'success') {
-                        window.location.href = '../log_in.html'; // Redirect to the index page
+                        window.location.href = '../log_in.php'; // Redirect to the index page
                     } else if (type === 'error') {
                 // Redirect back to the registration page using history.back()
                 // This will take the user to the previous page in their history stack

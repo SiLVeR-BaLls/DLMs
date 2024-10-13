@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2024 at 05:22 AM
+-- Generation Time: Oct 13, 2024 at 09:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,6 +44,8 @@ INSERT INTO `address` (`IDno`, `municipality`, `city`, `barangay`, `province`, `
 ('2021-3085-A', 'sta barbara', 'iloilo city', 'conaynay', 'iloilo', '2022-10-29'),
 ('2021-3085-b', 'rtyuiop', ' dfghjkl', 'kuala ', 'lumpo', '2023-11-28'),
 ('2021-3085-S', 'rtyuiop', ' dfghjkl', 'kuala ', 'lumpo', '2023-11-28'),
+('fried makar', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-11-29'),
+('fried shike', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-11-29'),
 ('whahaha', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-10-07');
 
 -- --------------------------------------------------------
@@ -78,7 +80,23 @@ INSERT INTO `attendance` (`ID`, `IDno`, `TIMEIN`, `TIMEOUT`, `LOGDATE`, `STATUS`
 (10, '2021-3085-A', '10:41:21', '10:41:34', '2024-10-07', 1),
 (11, '2021-3085-A', '10:41:49', '11:03:13', '2024-10-07', 1),
 (12, '2021-3085-S', '11:02:32', '11:03:01', '2024-10-07', 1),
-(13, 'whahaha', '11:19:39', '00:00:00', '2024-10-07', 0);
+(13, 'whahaha', '11:19:39', '00:00:00', '2024-10-07', 0),
+(14, 'whahaha', '01:34:13', '02:13:11', '2024-10-09', 1),
+(15, '2021-3085-A', '02:15:42', '02:15:47', '2024-10-09', 1),
+(16, '2021-3085-A', '02:15:55', '02:40:18', '2024-10-09', 1),
+(17, 'Username: D', '02:16:00', '00:00:00', '2024-10-09', 0),
+(18, '2021-3085-A', '02:40:22', '02:40:25', '2024-10-09', 1),
+(19, '2021-3085-A', '02:40:26', '02:40:33', '2024-10-09', 1),
+(20, 'Username: D', '02:40:30', '00:00:00', '2024-10-09', 0),
+(21, '2021-3085-A', '02:40:40', '02:40:45', '2024-10-09', 1),
+(22, '2021-3085-A', '02:40:49', '02:40:52', '2024-10-09', 1),
+(23, '', '02:40:49', '00:00:00', '2024-10-09', 0),
+(24, '2021-3085-A', '02:40:56', '02:40:59', '2024-10-09', 1),
+(25, '2021-3085-A', '02:41:01', '02:41:04', '2024-10-09', 1),
+(26, '2021-3085-A', '02:41:05', '02:41:09', '2024-10-09', 1),
+(27, '2021-3085-A', '02:41:15', '02:41:18', '2024-10-09', 1),
+(28, '2021-3085-A', '02:41:19', '00:00:00', '2024-10-09', 0),
+(29, 'fried shike', '01:22:30', '00:00:00', '2024-10-11', 0);
 
 -- --------------------------------------------------------
 
@@ -102,6 +120,8 @@ INSERT INTO `contact` (`IDno`, `email1`, `email2`, `con1`, `con2`) VALUES
 ('2021-3085-A', '45678@76', '', '5678', ''),
 ('2021-3085-b', '45678@76', '', '5678', ''),
 ('2021-3085-S', '45678@76', '', '5678', ''),
+('fried makar', '098765@xcvbjk', '', '098765432', ''),
+('fried shike', '098765@xcvbjk', '', '098765432', ''),
 ('whahaha', '333@gmail.coom', '', '333', '');
 
 -- --------------------------------------------------------
@@ -131,6 +151,8 @@ INSERT INTO `students_info` (`IDno`, `college`, `course`, `GRAD_YR`, `section`, 
 ('2021-3085-A', 'cas', 'BS in Human Services', 2025, 'd', '8', '3', '1', 'admin', 'active'),
 ('2021-3085-b', 'coe', 'BSEd ', 2030, 'd', '3', '3', '2', 'student', 'inactive'),
 ('2021-3085-S', 'coe', 'BSEd ', 2030, 'd', '3', '3', '2', 'student', 'inactive'),
+('fried makar', 'coe', 'BS in Ind Ed', 2030, 'd', '3', '5', '4', 'student', 'inactive'),
+('fried shike', 'coe', 'BS in Ind Ed', 2030, 'd', '3', '5', '4', 'student', 'inactive'),
 ('whahaha', 'cea', 'BS in Mech Eng', 1234, 'd', '8', '5', '4', 'visitor', 'inactive');
 
 -- --------------------------------------------------------
@@ -156,6 +178,8 @@ INSERT INTO `users_info` (`IDno`, `Fname`, `Sname`, `Mname`, `Ename`, `gender`) 
 ('2021-3085-A', 'von john', 'suropia', 'siodena', 'n/a', 'm'),
 ('2021-3085-b', 'john', 'jen', 'jacob', 'n/a', 'm'),
 ('2021-3085-S', 'john', 'jen', 'jacob', 'n/a', 'm'),
+('fried makar', 'darel', 'dark', 'clad', 'jr', 'o'),
+('fried shike', 'darel', 'dark', 'clad', 'jr', 'o'),
 ('whahaha', 'jake', 'jar', 'fin', 'v', 'f');
 
 -- --------------------------------------------------------
@@ -179,6 +203,8 @@ INSERT INTO `user_log` (`IDno`, `username`, `password`, `U_type`) VALUES
 ('2021-3085-A', 'vonjohn.suropia', 'vonjohn.suropia', 'admin'),
 ('2021-3085-b', 'qwerty', 'qwerty', 'student'),
 ('2021-3085-S', 'qwerty', 'qwerty', 'student'),
+('fried makar', 'dariel112', 'dariel112', 'student'),
+('fried shike', 'dariel112', 'dariel112', 'student'),
 ('whahaha', 'jarhead', 'jarhead', 'visitor');
 
 --
@@ -233,7 +259,7 @@ ALTER TABLE `user_log`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Constraints for dumped tables

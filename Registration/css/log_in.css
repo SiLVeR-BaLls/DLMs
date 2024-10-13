@@ -1,6 +1,12 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body{
   background-color: alabaster;
-margin: 5%;
+margin: 0;
 padding: 0;
 }
 
@@ -29,9 +35,13 @@ padding: 0;
   display: block;
   font-weight: bold;
   font-size: x-large;
+  font-family: 'Libre Baskerville', serif;
+
 }
 
 .card {
+      padding: 15px;
+    margin: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,8 +62,22 @@ input{
 .inputBox {
   position: relative;
   width: 250px;
+  
 }
 
+.inputBox a{
+  color: #000;
+  text-decoration: none;
+}
+
+.inputBox a:hover{
+  color: #fefefe;
+  background-color: #000;
+  transition: ease 0.3s;
+  padding: 0px;
+  margin: 0;
+  border-radius: 25%;
+}
 .inputBox input {
   width: 100%;
   padding: 10px;
@@ -61,6 +85,7 @@ input{
   border: none;
   color: #000;
   font-size: 1em;
+  font-family: 'Libre Baskerville', serif;
   background: transparent;
   border-left: 2px solid #000;
   border-bottom: 4px solid #000;
@@ -77,6 +102,7 @@ input{
   padding: 10px;
   pointer-events: none;
   font-size: 12px;
+  font-family: 'Libre Baskerville', serif;
   color: #000;
   text-transform: uppercase;
   transition: 0.5s;
@@ -88,6 +114,7 @@ input{
 .inputBox input:focus~span {
   transform: translateX(113px) translateY(-15px);
   font-size: 0.8em;
+  font-family: 'Libre Baskerville', serif;
   padding: 5px 10px;
   background: #000;
   letter-spacing: 0.2em;

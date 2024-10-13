@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
 
             <div class="inputBox">          
               <button type="submit" name="submit" class="enter">Enter</button>
-              <p>already has account?<a href="sign_up.php">sign in</a> </p>
+              <p>already has account?<a href="sign_up.php"> sign in</a> </p>
             </div>
      </div>
     </form>

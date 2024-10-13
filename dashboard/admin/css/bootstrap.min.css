@@ -1774,3 +1774,8 @@ textarea.form-control.is-invalid {
         margin-bottom: 0
     }
 }
+
+.tableofuser{
+    padding: 0 20px;
+    margin: 0px;
+}

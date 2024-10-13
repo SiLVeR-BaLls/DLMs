@@ -1,0 +1,35 @@
+add book
+#brief title
+#series/notes
+#subject
+#resource
+#added entries
+#RDA types
+
+#series/note
+//series info
+-title
+-volume
+-interest level
+-lexile
+-foutas and pinnell
+//note
+-general['note'] update
+
+#subject
+//subject
+-topical heading
+-geographic
+-form
+-general
+
+#Resource
+//link
+-url
+-description
+//digital content<!--some kind of comment box-->
+-note (add now
+(add now
+-digital content name
+-upload digital content(browse)
+-expiration date
