@@ -1,0 +1,222 @@
+<form action="">
+    <!-- Brief Title Section -->
+    <div>
+        <h1>Brief Title</h1>
+        <div>
+            <label for="B_title">Title</label>
+            <input type="text" id="B_title" name="B_title">
+        </div>
+        <div>
+            <label for="subtitle">Subtitle</label>
+            <input type="text" id="subtitle" name="subtitle">
+        </div>
+        <div>
+            <label for="author">Author</label>
+            <input type="text" id="author" name="author">
+        </div>
+        <div>
+            <label for="edition">Edition</label>
+            <input type="text" id="edition" name="edition">
+        </div>      
+    </div>
+
+    <!-- Standard Number Section -->
+    <div>
+        <h1>Standard Number</h1>
+        <div>
+            <label for="lccn">LCCN</label>
+            <input type="text" id="lccn" name="lccn">
+        </div>
+        <div>
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" name="isbn">
+        </div>
+        <div>
+            <label for="issn">ISSN</label>
+            <input type="text" id="issn" name="issn">
+        </div>
+        <div>
+            <label for="MT">Material Type</label>
+            <select name="MT" id="MT">
+                <option value="book">Book</option>
+                <option value="computer_file">Computer File</option>
+                <option value="ebook">Electronic Book (E-Book)</option>
+                <option value="artifact">Artifact</option>
+            </select>
+        </div>
+        <div>
+            <label for="ST">SubType</label>
+            <select name="ST" id="ST">
+                <option value="not_assigned">No SubType Assigned</option>
+                <option value="Braille">Braille</option>
+                <option value="Hardcover">Hardcover</option>
+                <option value="LargePrint">Large Print</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Author Section -->
+    <div>
+        <h1>Author</h1>
+        <div>
+            <label for="Aname">Name</label>
+            <input type="text" id="Aname" name="Aname">
+        </div>
+        <div>
+            <label for="Adate">Date</label>
+            <input type="text" id="Adate" name="Adate">
+        </div>           
+    </div>
+
+    <!-- Publication Information Section -->
+    <div>
+        <h1>Publication Information</h1>
+        <div>
+            <label for="place">Place</label>
+            <input type="text" id="place" name="place">
+        </div>
+        <div>
+            <label for="publisher">Publisher</label>
+            <input type="text" id="publisher" name="publisher">
+        </div>
+        <div>
+            <label for="Pdate">Date</label>
+            <input type="date" id="Pdate" name="Pdate">
+        </div>
+        <div>
+            <label for="copyright">Copyright</label>
+            <input type="text" id="copyright" name="copyright">
+        </div>
+    </div>
+
+    <!-- Additional Publication Information Section -->
+    <div>
+        <h1>Physical Description</h1>
+        <div>
+            <label for="extent">Extent</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+        <div>
+            <label for="Odetail">Other Details</label>
+            <input type="text" id="Odetail" name="Odetail">
+        </div>
+        <div>
+            <label for="size">Size</label>
+            <input type="text" id="size" name="size">
+        </div>
+    </div>
+
+    <div>
+        <h1>Series Information</h1>
+        <div>
+            <label for="extent">Title</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+        <div>
+            <label for="volume">Volume</label>
+            <input type="text" id="volume" name="volume">
+        </div>
+        <div>
+            <label for="I_LVL">Interest Level</label>
+            <input type="text" id="I_LVL" name="I_LVL">
+        </div>
+        <div>
+            <label for="lexille">Lexille</label>
+            <select  id="lexille" name="lexille">
+
+                <option value="">No Code</option>            
+            </select>
+        </div>
+        <div>
+            <label for="F_and_P">Fountas and Pinnell</label>
+            <select   id="F_and_P" name="F_and_P">
+                <option value="">Any Level</option>            
+            </select>
+        </div>
+
+<!--     for clarification
+    <div>
+        <h1>Subject</h1>
+        <div>
+            <label for="extent">Extent</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+        <div>
+            <label for="other_details">Other Details</label>
+            <input type="text" id="other_details" name="other_details">
+        </div>
+        <div>
+            <label for="size">Size</label>
+            <input type="text" id="size" name="size">
+        </div>
+    </div>
+     -->
+    <div>
+        <h1>Link</h1>
+        <div>
+            <label for="extent">URL</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+
+        <div>
+            <label for="other_details">Digital Content</label>
+            <button for="">Add now</button>
+
+                <!-- make a pup up for this  -->
+                <div>
+                <label for="">Digita Content Name</label>
+                <input></input>
+            </div>
+            <div>
+                <label for="">Digita Content Name</label>
+                <input type></input>
+            </div>
+            <div>
+                <label for="">Upload Digita Content</label>
+                <input type="file"></input>
+            </div>
+    </div>
+
+    <div>
+        <h1>Alternate Entries</h1>
+        <div>
+            <label for="extent">Unifrom Title</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+        <div>
+            <label for="extent">Varying form</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+        <div>
+            <label for="extent">Series Unifrom Title</label>
+            <input type="text" id="extent" name="extent">
+        </div>
+    </div>
+
+    <div>
+        <h1>Co-Authors, Illostrator, Editor, Etc.</h1>
+        <div>
+            <!--something like a button to add use-->
+            <label for="C_author">Name</label>
+            <input type="text" id="C_author" name="C_author">
+        </div>
+        <div>
+            <label for="C_date">Date</label>
+            <input type="text" id="C_date" name="C_date">
+        </div>
+        <div>
+            <label for="role">Role</label>
+            <input type="text" id="role" name="role">
+        </div>
+
+    </div>
+
+            <div>
+                <button type="button">Add</button>
+            </div>
+            <div>
+                <button type="button">cancel</button>
+                </div>
+                </div>
+
+    </form>

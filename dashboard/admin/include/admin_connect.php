@@ -59,7 +59,7 @@ if ($isLoggedIn) {
     $idno = $_SESSION['admin']['IDno'];
     $contactQuery = "SELECT * FROM contact WHERE IDno = ?";
     $addressQuery = "SELECT * FROM address WHERE IDno = ?";
-    $adminsInfoQuery = "SELECT * FROM students_info WHERE IDno = ?";
+    $adminsInfoQuery = "SELECT * FROM user_details WHERE IDno = ?";
     $usersInfoQuery = "SELECT * FROM users_info WHERE IDno = ?";
 
     // Prepare and execute the contact query

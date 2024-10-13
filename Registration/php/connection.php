@@ -74,8 +74,8 @@ if ($conn->connect_error) {
             $stmt->bind_param("ssssss", $IDno, $municipality, $city, $barangay, $province, $DOB);
             $stmt->execute();
             
-            // Insert into students_info table
-            $sql = "INSERT INTO students_info (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) 
+            // Insert into user_details table
+            $sql = "INSERT INTO user_details (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssisssiss", $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $A_LVL, $U_type, $status);

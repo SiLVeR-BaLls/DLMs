@@ -28,10 +28,10 @@ $studentInfo = null;
 // Fetch student information if ID is provided and the user is logged in
 if ($isLoggedIn && $idNo) {
     // Query with JOIN to fetch data from both tables
-    $query = "SELECT students_info.*, users_info.* 
-              FROM students_info 
-              JOIN users_info ON students_info.IDno = users_info.IDno 
-              WHERE students_info.IDno = ?";
+    $query = "SELECT user_details.*, users_info.* 
+              FROM user_details 
+              JOIN users_info ON user_details.IDno = users_info.IDno 
+              WHERE user_details.IDno = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $idNo); // Binding the ID number parameter
     $stmt->execute();

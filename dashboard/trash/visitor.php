@@ -49,7 +49,7 @@ $isLoggedIn = isset($_SESSION['visitor']);
 if ($isLoggedIn) {
     $contactQuery = "SELECT * FROM contact WHERE IDno = '" . $_SESSION['visitor']['IDno'] . "'";
     $addressQuery = "SELECT * FROM address WHERE IDno = '" . $_SESSION['visitor']['IDno'] . "'";
-    $visitorsInfoQuery = "SELECT * FROM students_info WHERE IDno = '" . $_SESSION['visitor']['IDno'] . "'";
+    $visitorsInfoQuery = "SELECT * FROM user_details WHERE IDno = '" . $_SESSION['visitor']['IDno'] . "'";
     $usersInfoQuery = "SELECT * FROM users_info WHERE IDno = '" . $_SESSION['visitor']['IDno'] . "'"; 
 
     $contactResult = mysqli_query($conn, $contactQuery);

@@ -53,7 +53,7 @@ $isLoggedIn = isset($_SESSION['admin']);
 if ($isLoggedIn) {
     $contactQuery = "SELECT * FROM contact where IDno  = '".$_SESSION['admin']['IDno']."'";
     $addressQuery = "SELECT * FROM address where IDno  = '".$_SESSION['admin']['IDno']."'";
-    $adminsInfoQuery = "SELECT * FROM students_info where IDno  = '".$_SESSION['admin']['IDno']."'";
+    $adminsInfoQuery = "SELECT * FROM user_details where IDno  = '".$_SESSION['admin']['IDno']."'";
     $usersInfoQuery = "SELECT * FROM users_info where IDno  = '".$_SESSION['admin']['IDno']."'"; 
 
     $contactResult = mysqli_query($conn, $contactQuery);

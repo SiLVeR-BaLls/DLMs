@@ -3,11 +3,11 @@
 include 'include/config.php';
 include 'include/admin_connect.php';
 
-// Query to retrieve users information with additional details from students_info table
+// Query to retrieve users information with additional details from user_details table
 $usersQuery = "SELECT users_info.IDno, users_info.Fname, users_info.Sname, 
-                      students_info.course, students_info.yrLVL AS year, students_info.section 
+                      user_details.course, user_details.yrLVL AS year, user_details.section 
                FROM users_info
-               JOIN students_info ON users_info.IDno = students_info.IDno";
+               JOIN user_details ON users_info.IDno = user_details.IDno";
 
 $usersResult = mysqli_query($conn, $usersQuery);
 

@@ -27,7 +27,7 @@ $user_id = $_SESSION['user_id'];
 // Fetch user data
 $query = "SELECT * FROM users_info
           JOIN address ON users_info.IDno = address.IDno
-          JOIN students_info ON users_info.IDno = students_info.IDno
+          JOIN user_details ON users_info.IDno = user_details.IDno
           JOIN user_log ON users_info.IDno = user_log.IDno
           JOIN contact ON users_info.IDno = contact.IDno
           WHERE users_info.id = ?";

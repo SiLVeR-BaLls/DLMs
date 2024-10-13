@@ -84,10 +84,10 @@ INSERT INTO `contact` (`ID`, `IDno`, `email1`, `email2`, `con1`, `con2`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `students_info`
+-- Table structure for table `user_details`
 --
 
-CREATE TABLE `students_info` (
+CREATE TABLE `user_details` (
   `id` int(11) NOT NULL,
   `IDno` varchar(11) DEFAULT NULL,
   `college` varchar(100) DEFAULT NULL,
@@ -102,10 +102,10 @@ CREATE TABLE `students_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `students_info`
+-- Dumping data for table `user_details`
 --
 
-INSERT INTO `students_info` (`id`, `IDno`, `college`, `course`, `GRAD_YR`, `section`, `GRAD_LVL`, `yrLVL`, `A_LVL`, `U_type`, `status`) VALUES
+INSERT INTO `user_details` (`id`, `IDno`, `college`, `course`, `GRAD_YR`, `section`, `GRAD_LVL`, `yrLVL`, `A_LVL`, `U_type`, `status`) VALUES
 (0, '23456789', 'cea', 'BS in Civil Eng', 2030, 'b', '4', '2', '2', 'professor', 'inactive');
 
 -- --------------------------------------------------------
@@ -176,9 +176,9 @@ ALTER TABLE `contact`
   ADD KEY `IDno` (`IDno`);
 
 --
--- Indexes for table `students_info`
+-- Indexes for table `user_details`
 --
-ALTER TABLE `students_info`
+ALTER TABLE `user_details`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDno` (`IDno`);
 
@@ -223,10 +223,10 @@ ALTER TABLE `contact`
   ADD CONSTRAINT `contact_ibfk_1` FOREIGN KEY (`IDno`) REFERENCES `users_info` (`IDno`) ON DELETE CASCADE;
 
 --
--- Constraints for table `students_info`
+-- Constraints for table `user_details`
 --
-ALTER TABLE `students_info`
-  ADD CONSTRAINT `students_info_ibfk_1` FOREIGN KEY (`IDno`) REFERENCES `users_info` (`IDno`) ON DELETE CASCADE;
+ALTER TABLE `user_details`
+  ADD CONSTRAINT `user_details_ibfk_1` FOREIGN KEY (`IDno`) REFERENCES `users_info` (`IDno`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user_log`

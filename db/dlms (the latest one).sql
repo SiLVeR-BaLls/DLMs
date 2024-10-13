@@ -127,10 +127,10 @@ INSERT INTO `contact` (`IDno`, `email1`, `email2`, `con1`, `con2`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `students_info`
+-- Table structure for table `user_details`
 --
 
-CREATE TABLE `students_info` (
+CREATE TABLE `user_details` (
   `IDno` varchar(11) NOT NULL,
   `college` varchar(100) DEFAULT NULL,
   `course` varchar(100) DEFAULT NULL,
@@ -144,10 +144,10 @@ CREATE TABLE `students_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `students_info`
+-- Dumping data for table `user_details`
 --
 
-INSERT INTO `students_info` (`IDno`, `college`, `course`, `GRAD_YR`, `section`, `GRAD_LVL`, `yrLVL`, `A_LVL`, `U_type`, `status`) VALUES
+INSERT INTO `user_details` (`IDno`, `college`, `course`, `GRAD_YR`, `section`, `GRAD_LVL`, `yrLVL`, `A_LVL`, `U_type`, `status`) VALUES
 ('2021-3085-A', 'cas', 'BS in Human Services', 2025, 'd', '8', '3', '1', 'admin', 'active'),
 ('2021-3085-b', 'coe', 'BSEd ', 2030, 'd', '3', '3', '2', 'student', 'inactive'),
 ('2021-3085-S', 'coe', 'BSEd ', 2030, 'd', '3', '3', '2', 'student', 'inactive'),
@@ -232,9 +232,9 @@ ALTER TABLE `contact`
   ADD KEY `IDno` (`IDno`);
 
 --
--- Indexes for table `students_info`
+-- Indexes for table `user_details`
 --
-ALTER TABLE `students_info`
+ALTER TABLE `user_details`
   ADD PRIMARY KEY (`IDno`),
   ADD KEY `IDno` (`IDno`);
 
@@ -278,10 +278,10 @@ ALTER TABLE `contact`
   ADD CONSTRAINT `contact_ibfk_1` FOREIGN KEY (`IDno`) REFERENCES `users_info` (`IDno`) ON DELETE CASCADE;
 
 --
--- Constraints for table `students_info`
+-- Constraints for table `user_details`
 --
-ALTER TABLE `students_info`
-  ADD CONSTRAINT `students_info_ibfk_1` FOREIGN KEY (`IDno`) REFERENCES `users_info` (`IDno`) ON DELETE CASCADE;
+ALTER TABLE `user_details`
+  ADD CONSTRAINT `user_details_ibfk_1` FOREIGN KEY (`IDno`) REFERENCES `users_info` (`IDno`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `user_log`
