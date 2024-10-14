@@ -41,7 +41,7 @@ if ($conn->connect_error) {
         $password = $_POST['password']; // No hashing
         $IDno = $_POST['IDno'];
        $U_type = $_POST['U_type'];
-        $A_LVL = $_POST['A_LVL'];
+        $A_LVL = $_POST['A_LVL']??'';
         $status = $_POST['status'];
         $college = $_POST['college']??'';
         $course = $_POST['course']??'';
@@ -75,17 +75,16 @@ if ($conn->connect_error) {
             $stmt->execute();
             
             // Insert into user_details table
-            $sql = "INSERT INTO user_details (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO user_details (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssisssiss", $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $A_LVL, $U_type, $status);
             $stmt->execute();
 
         
             // Insert into user_log table
-            $sql = "INSERT INTO user_log (IDno, username, password, U_type) VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO user_log (IDno, username, password, U_type, status) VALUES (?, ?, ?, ?  ,?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssss", $IDno, $username, $password, $U_type);
+            $stmt->bind_param("sssss", $IDno, $username, $password, $U_type, 'pending');
             $stmt->execute();
 
             // Insert into contact table

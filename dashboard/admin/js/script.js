@@ -1,8 +1,3 @@
-function toggleDropdown(event) {
-    event.preventDefault(); // Prevent default anchor behavior
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-}
 
 function toggleMobileMenu() {
     const navLinks = document.getElementById('nav-links');

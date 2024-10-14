@@ -25,6 +25,7 @@ if (!$usersResult) {
     <!-- Bootstrap CSS -->
      
 <link rel="stylesheet" href="css/bootstrap.min.css">
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/responsive.dataTables.min.css">
     <!-- DataTables CSS -->
@@ -35,7 +36,7 @@ if (!$usersResult) {
     <style>
        
         .modal {
-    z-index: 1050; /* Bootstrap modal z-index */
+            z-index: 1050;
 }
 
     </style>

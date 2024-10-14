@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Generator</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="jquery.min.js"></script>
-    <script src="jquery.qrcode.min.js"></script>
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>QR Code Generator</h1>
-        <input type="text" id="qr-input" placeholder="Enter text or URL" />
-        <button id="generate-btn">Generate QR Code</button>
-        <div id="qr-code" class="qr-code"></div>
+        <h1>Login</h1>
+        <form action="login_user.php" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <h2>Register</h2>
+        <form action="register_user.php" method="POST" enctype="multipart/form-data">
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="file" name="profile_image" accept="image/*" required>
+            <button type="submit">Register</button>
+        </form>
+        
     </div>
-    <script src="script.js"></script>
 </body>
 </html>

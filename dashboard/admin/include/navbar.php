@@ -12,13 +12,11 @@
         <li><a href="index.php" class="link">Browse</a></li>
         <li><a href="QRscan/index.php"class="link">Attendance</a></li>
         <li><a href="AddBook.php"class="link">Catalog</a></li>
-        
-            <li><a href="BrowseUser.php"class="link">Browse Users</a></li>
-            <li class="dropdown">
-                <a href="#" id="profile" onclick="toggleDropdown(event)"class="link">Setting ▼</a>
-                <ul class="dropdown-menu" id="dropdown-menu">
-                    <li><a href="admin.php">Profile</a></li>
-                    <li><a href="?logout=true">Logout</a></li>
+        <li><a href="BrowseUser.php"class="link">Browse Users</a></li>
+        <li><a href="pending.php"class="link">Pending User</a></li>
+        <li><a href="admin.php" class="link">Profile</a></li>
+        <li><a href="?logout=true" class="link">Logout</a></li> 
+                        
                 </ul>
             </li>
         </ul>

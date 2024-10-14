@@ -7,10 +7,10 @@
             <p class="tile">Account Information</p>
 
             <label>
-                <input type="radio" name="id-type" value="manual" onclick="toggleIdInput(true)" checked> Manual ID
+                <input type="radio" name="id-type" value="manual" onclick="toggleIdInput(true)" checked> Cammpus ID
             </label>
             <label>
-                <input type="radio" name="id-type" value="default" onclick="toggleIdInput(false)"> Default ID
+                <input type="radio" name="id-type" value="default" onclick="toggleIdInput(false)"> Legal ID
             </label>
             
             <div id="manual-id-container" class="form-group" style="display: block;">
@@ -29,16 +29,6 @@
                 </select>
             </div>
 
-            <div class="text-group">
-                <label for="A_LVL">Access Level</label>
-                <select class="box" id="A_LVL" name="A_LVL" required>
-                    <option value="" disabled selected>Select Academic Level</option>
-                    <option value="1">Level 1</option>
-                    <option value="2">Level 2</option>
-                    <option value="3">Level 3</option>
-                    <option value="4">Level 4</option>
-                </select>
-            </div>
 
             <div class="text-group">
                 <label for="status">Status</label>

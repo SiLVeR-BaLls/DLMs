@@ -20,16 +20,21 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
 
     // Prepare statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT * FROM `user_log` WHERE username=? AND password=?");
-    $stmt->bind_param("ss", $username, $password);
+    $stmt = $conn->prepare("SELECT * FROM `user_log` WHERE username=?");
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-        $_SESSION['admin'] = $row;
-        $isLoggedIn = true; // Set login status to true
-        header("Location: admin.php");
-        exit();
+        // Verify the password
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['admin'] = $row;
+            $isLoggedIn = true; // Set login status to true
+            header("Location: admin.php");
+            exit();
+        } else {
+            $error_message = "Your Username or Password is incorrect!";
+        }
     } else {
         $error_message = "Your Username or Password is incorrect!";
     }

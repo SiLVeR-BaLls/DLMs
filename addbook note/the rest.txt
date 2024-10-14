@@ -9,7 +9,7 @@ add book
 #added entries
 //alternate titles
 -uniform title [leading article][]
--vaying form
+-varying form
 -series uniform title [leading article][]
 
 //co-authors, illostrator,editors, etc
