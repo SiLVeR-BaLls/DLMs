@@ -42,7 +42,7 @@
         </div>
 
         <div class="group-box">
-        <p class="tile">Account Information</p>
+        <p class="tile">Student Information</p>
 
             <div class="text-group">
                 <label for="college">College</label>

@@ -82,19 +82,21 @@ input{
   width: 100%;
   padding: 10px;
   outline: none;
-  border: none;
   color: #000;
   font-size: 1em;
   font-family: 'Libre Baskerville', serif;
   background: transparent;
   border-left: 2px solid #000;
-  border-bottom: 4px solid #000;
+  border-bottom: 2px solid #000;
   transition: 0.1s;
   border-bottom-left-radius: 8px;
+  border: 2px solid #000;
+  border-radius: 8px;
+
 }
 
 .inputBox span {
-  margin-top: 5px;
+  margin-top:7px;
   position: absolute;
   left: 0;
   transform: translateY(-4px);
@@ -120,12 +122,6 @@ input{
   letter-spacing: 0.2em;
   color: #fff;
   border: 2px;
-}
-
-.inputBox input:valid,
-.inputBox input:focus {
-  border: 2px solid #000;
-  border-radius: 8px;
 }
 
 .enter {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2024 at 09:04 AM
+-- Generation Time: Oct 15, 2024 at 04:05 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,9 +44,22 @@ INSERT INTO `address` (`IDno`, `municipality`, `city`, `barangay`, `province`, `
 ('2021-3085-A', 'sta barbara', 'iloilo city', 'conaynay', 'iloilo', '2022-10-29'),
 ('2021-3085-b', 'rtyuiop', ' dfghjkl', 'kuala ', 'lumpo', '2023-11-28'),
 ('2021-3085-S', 'rtyuiop', ' dfghjkl', 'kuala ', 'lumpo', '2023-11-28'),
+('2021-hh2', 'jakarta', ' dfghjkl', 'iughvbmnm', 'yhbjnk', '2023-10-30'),
+('2345678', 'jakarta', ' dfghjkl', 'iughvbmnm', 'fghjk', '2023-11-30'),
+('345678', 'jakarta', ' dfghjkl', 'iughvbmnm', 'fghjk', '2023-11-30'),
+('3456789p', 'rctvybhijopl', 'fcgvhbjnkk,;.', '\'tyuhikpl', 'fcgvbnimkl;.', '2024-10-29'),
+('345eeee', 'rctvybhijopl', 'fcgvhbjnkk,;.', '\'tyuhikpl', 'fcgvbnimkl;.', '2024-10-29'),
+('345eeeeeee', 'rctvybhijopl', 'fcgvhbjnkk,;.', '\'tyuhikpl', 'fcgvbnimkl;.', '2024-10-29'),
+('345eeeees', 'rctvybhijopl', 'fcgvhbjnkk,;.', '\'tyuhikpl', 'fcgvbnimkl;.', '2024-10-29'),
+('555050', 'jakarta', ' dfghjkl', 'iughvbmnm', 'fghjk', '2023-11-30'),
+('5550505', 'jakarta', ' dfghjkl', 'iughvbmnm', 'fghjk', '2023-11-30'),
+('555050s', 'jakarta', ' dfghjkl', 'iughvbmnm', 'fghjk', '2023-11-30'),
+('6363622', 'sta barbara', 'rtyuio', 'fghjk', 'fghjk', '2024-12-31'),
 ('fried makar', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-11-29'),
 ('fried shike', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-11-29'),
-('whahaha', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-10-07');
+('frind nugge', 'jakarta', ' dfghjkl', 'iughvbmnm', 'yhbjnk', '2023-10-30'),
+('whahaha', '12345', '1432tr', '3424weytr', '3wresfdg', '2024-10-07'),
+('yyyyaayy', 'jakarta', ' dfghjkl', 'iughvbmnm', 'fghjk', '2023-11-30');
 
 -- --------------------------------------------------------
 
@@ -120,9 +133,52 @@ INSERT INTO `contact` (`IDno`, `email1`, `email2`, `con1`, `con2`) VALUES
 ('2021-3085-A', '45678@76', '', '5678', ''),
 ('2021-3085-b', '45678@76', '', '5678', ''),
 ('2021-3085-S', '45678@76', '', '5678', ''),
+('2021-hh2', '333@gmail.coom', '', '5678', ''),
+('6363622', '098765@xcvbjk', '', '1234567', ''),
 ('fried makar', '098765@xcvbjk', '', '098765432', ''),
 ('fried shike', '098765@xcvbjk', '', '098765432', ''),
+('frind nugge', '333@gmail.coom', '', '5678', ''),
 ('whahaha', '333@gmail.coom', '', '333', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_info`
+--
+
+CREATE TABLE `users_info` (
+  `IDno` varchar(11) NOT NULL,
+  `Fname` varchar(50) DEFAULT NULL,
+  `Sname` varchar(50) DEFAULT NULL,
+  `Mname` varchar(50) DEFAULT NULL,
+  `Ename` varchar(50) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users_info`
+--
+
+INSERT INTO `users_info` (`IDno`, `Fname`, `Sname`, `Mname`, `Ename`, `gender`) VALUES
+('2021-3085-A', 'von john', 'suropia', 'siodena', 'n/a', 'm'),
+('2021-3085-b', 'john', 'jen', 'jacob', 'n/a', 'm'),
+('2021-3085-S', 'john', 'jen', 'jacob', 'n/a', 'm'),
+('2021-hh2', 'jay jay', 'brawl', 'silbrid', 'jr', 'm'),
+('2345678', 'Dave Mclin', 'Bene', 'Taghap', 'iv', 'o'),
+('345678', 'Dave Mclin', 'Bene', 'Taghap', 'iv', 'o'),
+('3456789p', 'esrdtfyuhi', 'jtybuhniml,;.', 'fcgvhbjnk,l;..', 'iii', 'o'),
+('345eeee', 'esrdtfyuhi', 'jtybuhniml,;.', 'fcgvhbjnk,l;..', 'iii', 'o'),
+('345eeeeeee', 'esrdtfyuhi', 'jtybuhniml,;.', 'fcgvhbjnk,l;..', 'iii', 'o'),
+('345eeeees', 'esrdtfyuhi', 'jtybuhniml,;.', 'fcgvhbjnk,l;..', 'iii', 'o'),
+('555050', 'Dave Mclin', 'Bene', 'Taghap', 'iv', 'o'),
+('5550505', 'Dave Mclin', 'Bene', 'Taghap', 'iv', 'o'),
+('555050s', 'Dave Mclin', 'Bene', 'Taghap', 'iv', 'o'),
+('6363622', 'niel', 'pako ', 'garcia', 'jr', 'm'),
+('fried makar', 'darel', 'dark', 'clad', 'jr', 'o'),
+('fried shike', 'darel', 'dark', 'clad', 'jr', 'o'),
+('frind nugge', 'jay jay', 'brawl', 'silbrid', 'jr', 'm'),
+('whahaha', 'jake', 'jar', 'fin', 'v', 'f'),
+('yyyyaayy', 'Dave Mclin', 'Bene', 'Taghap', 'iv', 'o');
 
 -- --------------------------------------------------------
 
@@ -151,36 +207,22 @@ INSERT INTO `user_details` (`IDno`, `college`, `course`, `GRAD_YR`, `section`, `
 ('2021-3085-A', 'cas', 'BS in Human Services', 2025, 'd', '8', '3', '1', 'admin', 'active'),
 ('2021-3085-b', 'coe', 'BSEd ', 2030, 'd', '3', '3', '2', 'student', 'inactive'),
 ('2021-3085-S', 'coe', 'BSEd ', 2030, 'd', '3', '3', '2', 'student', 'inactive'),
+('2021-hh2', 'cas', 'BS in Info Systems', 0, 'd', '7', '4', NULL, 'student', 'active'),
+('2345678', 'coe', 'BTVTEd', 1234, 'b', '4', '4', '0', 'visitor', 'active'),
+('345678', 'coe', 'BTVTEd', 1234, 'b', '4', '4', '0', 'visitor', 'active'),
+('3456789p', 'cit', 'BS in Elec Tech (BSELT) - Level III', 0, 'c', '4', '5', '0', 'student', 'restricted'),
+('345eeee', 'cit', 'BS in Elec Tech (BSELT) - Level III', 0, 'c', '4', '5', '0', 'student', 'restricted'),
+('345eeeeeee', 'cit', 'BS in Ind Tech (BIT) - Level III', 0, 'c', '4', '5', '0', 'student', 'restricted'),
+('345eeeees', 'cit', 'BS in Hotel & Rest Tech (BSHRT) - Level II', 0, 'c', '4', '5', '0', 'student', 'restricted'),
+('555050', 'coe', 'BTVTEd', 1234, 'b', '4', '4', '0', 'visitor', 'active'),
+('5550505', 'coe', 'BTVTEd', 1234, 'b', '4', '4', '0', 'visitor', 'active'),
+('555050s', 'coe', 'BTVTEd', 1234, 'b', '4', '4', '0', 'visitor', 'active'),
+('6363622', 'cea', 'BS in Elec Eng', 2030, 'c', '3', '3', '2', 'student', 'inactive'),
 ('fried makar', 'coe', 'BS in Ind Ed', 2030, 'd', '3', '5', '4', 'student', 'inactive'),
 ('fried shike', 'coe', 'BS in Ind Ed', 2030, 'd', '3', '5', '4', 'student', 'inactive'),
-('whahaha', 'cea', 'BS in Mech Eng', 1234, 'd', '8', '5', '4', 'visitor', 'inactive');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users_info`
---
-
-CREATE TABLE `users_info` (
-  `IDno` varchar(11) NOT NULL,
-  `Fname` varchar(50) DEFAULT NULL,
-  `Sname` varchar(50) DEFAULT NULL,
-  `Mname` varchar(50) DEFAULT NULL,
-  `Ename` varchar(50) DEFAULT NULL,
-  `gender` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users_info`
---
-
-INSERT INTO `users_info` (`IDno`, `Fname`, `Sname`, `Mname`, `Ename`, `gender`) VALUES
-('2021-3085-A', 'von john', 'suropia', 'siodena', 'n/a', 'm'),
-('2021-3085-b', 'john', 'jen', 'jacob', 'n/a', 'm'),
-('2021-3085-S', 'john', 'jen', 'jacob', 'n/a', 'm'),
-('fried makar', 'darel', 'dark', 'clad', 'jr', 'o'),
-('fried shike', 'darel', 'dark', 'clad', 'jr', 'o'),
-('whahaha', 'jake', 'jar', 'fin', 'v', 'f');
+('frind nugge', 'cas', 'BS in Info Systems', 0, 'd', '7', '4', '0', 'student', 'active'),
+('whahaha', 'cea', 'BS in Mech Eng', 1234, 'd', '8', '5', '4', 'visitor', 'inactive'),
+('yyyyaayy', 'coe', 'BTVTEd', 1234, 'b', '4', '4', '0', 'visitor', 'active');
 
 -- --------------------------------------------------------
 
@@ -192,20 +234,23 @@ CREATE TABLE `user_log` (
   `IDno` varchar(11) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `U_type` varchar(50) DEFAULT NULL
+  `U_type` varchar(50) DEFAULT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_log`
 --
 
-INSERT INTO `user_log` (`IDno`, `username`, `password`, `U_type`) VALUES
-('2021-3085-A', 'vonjohn.suropia', 'vonjohn.suropia', 'admin'),
-('2021-3085-b', 'qwerty', 'qwerty', 'student'),
-('2021-3085-S', 'qwerty', 'qwerty', 'student'),
-('fried makar', 'dariel112', 'dariel112', 'student'),
-('fried shike', 'dariel112', 'dariel112', 'student'),
-('whahaha', 'jarhead', 'jarhead', 'visitor');
+INSERT INTO `user_log` (`IDno`, `username`, `password`, `U_type`, `status`) VALUES
+('2021-3085-A', 'vonjohn.suropia', 'vonjohn.suropia', 'admin', 'approved'),
+('2021-3085-b', 'qwerty', 'qwerty', 'admin', 'pending'),
+('2021-3085-S', 'qwerty', 'qwerty', 'student', 'rejected'),
+('2021-hh2', 'tffyuhh', 'tffyuhh', 'student', 'pending'),
+('6363622', 'user1', 'user1', 'student', 'approved'),
+('fried shike', 'dariel112', 'dariel112', 'student', 'pending'),
+('frind nugge', 'tffyuhh', 'tffyuhh', 'student', 'approved'),
+('whahaha', 'jarhead', 'jarhead', 'visitor', 'pending');
 
 --
 -- Indexes for dumped tables
@@ -232,16 +277,16 @@ ALTER TABLE `contact`
   ADD KEY `IDno` (`IDno`);
 
 --
--- Indexes for table `user_details`
+-- Indexes for table `users_info`
 --
-ALTER TABLE `user_details`
+ALTER TABLE `users_info`
   ADD PRIMARY KEY (`IDno`),
   ADD KEY `IDno` (`IDno`);
 
 --
--- Indexes for table `users_info`
+-- Indexes for table `user_details`
 --
-ALTER TABLE `users_info`
+ALTER TABLE `user_details`
   ADD PRIMARY KEY (`IDno`),
   ADD KEY `IDno` (`IDno`);
 

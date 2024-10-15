@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Upload file
     if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
         // Insert user data into the database
-        $query = "INSERT INTO users (first_name, last_name, username, password, email, status, profile_image) VALUES ('$first_name', '$last_name', '$username', '$password', '$email', 'pending', '$target_file')";
+        $query = "INSERT INTO users (first_name, last_name, username, password, email, status, profile_image) VALUES ('$first_name', '$last_name', '$username', '$password', '$email', 'pending', '$target_file', '$target_file')";
         
         if (mysqli_query($conn, $query)) {
             header("Location: index.html"); // Redirect after registration
