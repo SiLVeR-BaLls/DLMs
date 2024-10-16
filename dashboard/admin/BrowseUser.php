@@ -1,7 +1,8 @@
 <?php
 // Include the configuration file for database connection
-include 'include/config.php';
+include '../config.php';
 include 'include/admin_connect.php';
+
 
 // Query to retrieve users information with additional details from user_details table
 $usersQuery = "SELECT users_info.IDno, users_info.Fname, users_info.Sname, 

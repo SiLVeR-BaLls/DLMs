@@ -120,7 +120,7 @@ if ($conn->connect_error) {
         function showAlert(message, type) {
             Swal.fire({
                 icon: type === 'success' ? 'success' : 'error',
-                title: type === 'success' ? 'Congratulations!' : 'Error',
+                title: type === 'success' ? 'Please wait for your approval' : 'Error',
                 text: message,
                 didClose: () => {
                     if (type === 'success') {
@@ -156,7 +156,7 @@ if ($conn->connect_error) {
                 var fullMessage = "<?php echo addslashes($message); ?>";
 
                 if ("<?php echo $message_type; ?>" === 'success') {
-                    showAlert(`Congrats ${formattedGender} ${"<?php echo addslashes($Sname); ?>"}, your username is ${"<?php echo addslashes($username); ?>"}`, "success");
+                    showAlert(`It might take a while for our team to review your account while pending`, "success");
                 } else {
                     showAlert(fullMessage, "error");
                 }

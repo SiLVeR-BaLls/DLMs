@@ -1,4 +1,4 @@
-<div class="form-step" id="step-2" style="display:none;">
+<div class="form-step">
     <p class="top"><b class="tile">Site Information</b></p>
 
     <div class="group-1">
@@ -7,15 +7,15 @@
             <p class="tile">Account Information</p>
 
             <label>
-                <input type="radio" name="id-type" value="manual" onclick="toggleIdInput(true)" checked> Cammpus ID
+                <input type="radio" name="id-type" value="manual" onclick="toggleIdInput(true)" checked> Campus ID
             </label>
             <label>
                 <input type="radio" name="id-type" value="default" onclick="toggleIdInput(false)"> Legal ID
             </label>
             
             <div id="manual-id-container" class="form-group" style="display: block;">
-                <label for="IDno"></label>
-                <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)">
+                <label for="IDno">ID Number:</label> <!-- Added label text -->
+                <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)" required>
             </div>
 
             <div class="text-group">
@@ -29,7 +29,6 @@
                 </select>
             </div>
 
-
             <div class="text-group">
                 <label for="status">Status</label>
                 <select class="box" name="status" id="status" required>
@@ -42,7 +41,7 @@
         </div>
 
         <div class="group-box">
-        <p class="tile">Student Information</p>
+            <p class="tile">Student Information</p>
 
             <div class="text-group">
                 <label for="college">College</label>
@@ -59,13 +58,15 @@
                 <label for="course">Course</label>
                 <select class="box" id="course" name="course" required>
                     <option value="" selected disabled>Select Course</option>
-                    <!-- Options will be dynamically added -->
+                    <option value="course1">Course 1</option> <!-- Placeholder options -->
+                    <option value="course2">Course 2</option>
+                    <option value="course3">Course 3</option>
                 </select>
             </div>
 
             <div class="text-group">
-                <label for="yrLVL">Year</label>
-                <select class="box"  id="yrLVL" name="yrLVL" required>
+                <label for="yrLVL">Year Level</label>
+                <select class="box" id="yrLVL" name="yrLVL" required>
                     <option value="" selected disabled>Select Year Level</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -77,7 +78,7 @@
 
             <div class="text-group">
                 <label for="section">Section</label>
-                <select class="box"  id="section" name="section" required>
+                <select class="box" id="section" name="section" required>
                     <option value="" selected disabled>Select Section</option>
                     <option value="a">A</option>
                     <option value="b">B</option>

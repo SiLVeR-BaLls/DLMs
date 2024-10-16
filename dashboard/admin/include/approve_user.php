@@ -1,6 +1,6 @@
 <?php
 // include/config.php
-include '../include/config.php';
+include '../../config.php';
 include '../include/admin_connect.php';
 
 if (isset($_GET['id'])) {

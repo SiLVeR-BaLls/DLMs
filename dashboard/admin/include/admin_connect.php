@@ -2,14 +2,10 @@
 session_start();
 
 // Include configuration and connection files
-include 'include/config.php'; // Ensure this file contains your database connection code
+include '../config.php'; // Ensure this file contains your database connection code
 
 // Handle logout
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location: ../../Registration/log_in.php");
-    exit();
-}
+
 
 // Initialize the login status variable
 $isLoggedIn = false;

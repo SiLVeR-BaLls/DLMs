@@ -17,6 +17,14 @@ body {
     align-items: center;
 }
 
+.form-step {
+  display: none ;
+}
+
+.form-step-active {
+  display: block;
+}
+
 .plus{
     background-color: alabaster;
     border-radius: 24px;
@@ -132,10 +140,41 @@ h3 {
     width: 19rem;
     height: 2rem;
     border-radius: 5px 5px 5px 5px;
-    color: #555D50;
+    border: 1px solid #1d1d29;
 }
 
 
+input {
+  background-color: #ffffff;      /* White background for the dropdown */
+  color: #000000;  
+                    /* Dark text color */
+}
+
+input::placeholder {
+  color: #333;      
+                /* Dark text color for options */
+}
+
+input:focus::placeholder {
+  outline: none;      
+  font-weight: bold;  /* This makes the text bold */
+  /* Remove outline */
+}
+   /* Custom styles for the select element */
+        select {
+            background-color: #ffffff;      /* White background for the dropdown */
+            color: #000000;                    /* Dark text color */
+        }
+
+        /* Style for the selected option */
+        select option {
+            color: #333;                    /* Dark text color for options */
+        }
+
+        select:focus::-ms-value {
+          font-weight: bold;  /* This makes the text bold */
+
+    }
 
 .button-container {
     display: flex;

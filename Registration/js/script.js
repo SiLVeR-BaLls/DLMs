@@ -234,31 +234,43 @@ function toggleIdInput(isManual) {
   }
 }
 
-let currentStep = 1;
 
-function showStep(step) {
-  document.querySelectorAll(".form-step").forEach((element) => {
-    element.style.display = "none";
-  });
-  document.getElementById(`step-${step}`).style.display = "block";
 
-  const registerBtn = document.getElementById("registerBtn");
-  const nextBtn = document.querySelector('button[type="button"]');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const submitBtn = document.getElementById('submitBtn');
+const formSteps = document.querySelectorAll('.form-step');
+let currentStep = 0;
 
-  if (step === 3) {
-    nextBtn.style.display = "none";
-    registerBtn.style.display = "block";
-  } else {
-    nextBtn.style.display = "block";
-    registerBtn.style.display = "none";
-  }
+nextBtn.addEventListener('click', () => {
+    if (currentStep < formSteps.length - 1) {
+        formSteps[currentStep].classList.remove('form-step-active');
+        currentStep++;
+        formSteps[currentStep].classList.add('form-step-active');
+    }
+    updateButtons();
+});
+
+prevBtn.addEventListener('click', () => {
+    if (currentStep > 0) {
+        formSteps[currentStep].classList.remove('form-step-active');
+        currentStep--;
+        formSteps[currentStep].classList.add('form-step-active');
+    }
+    updateButtons();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+    currentStep = 0;
+    formSteps.forEach(step => step.classList.remove('form-step-active'));
+    formSteps[0].classList.add('form-step-active');
+    updateButtons();
+});
+
+function updateButtons() {
+    nextBtn.style.display = currentStep === formSteps.length - 1 ? 'none' : 'inline';
+    submitBtn.style.display = currentStep === formSteps.length - 1 ? 'inline' : 'none';
+    prevBtn.disabled = currentStep === 0;
 }
 
-function nextStep() {
-  if (currentStep < 3) {
-    currentStep++;
-    showStep(currentStep);
-  } else {
-    register();
-  }
-}
+updateButtons();
