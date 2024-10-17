@@ -133,7 +133,6 @@ h3 {
   position: relative; /* Ensure proper positioning for password toggle icon */
 }
 
-
 .box {
     margin: 0;
     padding: 0 1rem;
@@ -144,37 +143,6 @@ h3 {
 }
 
 
-input {
-  background-color: #ffffff;      /* White background for the dropdown */
-  color: #000000;  
-                    /* Dark text color */
-}
-
-input::placeholder {
-  color: #333;      
-                /* Dark text color for options */
-}
-
-input:focus::placeholder {
-  outline: none;      
-  font-weight: bold;  /* This makes the text bold */
-  /* Remove outline */
-}
-   /* Custom styles for the select element */
-        select {
-            background-color: #ffffff;      /* White background for the dropdown */
-            color: #000000;                    /* Dark text color */
-        }
-
-        /* Style for the selected option */
-        select option {
-            color: #333;                    /* Dark text color for options */
-        }
-
-        select:focus::-ms-value {
-          font-weight: bold;  /* This makes the text bold */
-
-    }
 
 .button-container {
     display: flex;

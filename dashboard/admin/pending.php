@@ -3,7 +3,9 @@
 include '../config.php';
 include 'include/admin_connect.php';
 
-$message = isset($_GET['message']) ? $_GET['message'] : ''; // Get message from URL
+// Get the message and type from URL parameters
+$message = isset($_GET['message']) ? $_GET['message'] : '';
+$type = isset($_GET['type']) ? $_GET['type'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,46 +16,69 @@ $message = isset($_GET['message']) ? $_GET['message'] : ''; // Get message from 
     <link rel="stylesheet" href="css/styles.css">
     <title>Admin Dashboard</title>
     <style>
-        /* Custom Alert Style */
-        .alert {
-            padding: 10px;
-            margin: 15px 0;
-            background-color: #f44336; /* Red background */
-            color: white; /* White text */
-            border-radius: 5px; /* Rounded corners */
-            text-align: center;
+        /* Popup Alert Styles */
+        .popup-alert {
             display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 100; /* On top */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: white;
+            font-size: 16px;
         }
- /* Table Styles */
- table {
+
+        .popup-success {
+            background-color: #28a745; /* Green for success */
+        }
+
+        .popup-error {
+            background-color: #f44336; /* Red for error */
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            float: right;
+        }
+
+        /* Table Styles */
+        table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             margin-bottom: 20px; /* Bottom margin for spacing */
         }
 
-       
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
-            margin:0px;
+            margin: 0px;
             text-align: center;
         }
-        td{
+
+        td {
             justify-content: center;
             align-items: center;
         }
 
         th {
             background-color: #f2f2f2;
-            text-align:center;
+            text-align: center;
         }
 
         /* Checkerboard Row Styles */
         tr:nth-child(even) {
             background-color: #f9f9f9; /* Light grey for even rows */
         }
-
 
         /* Button Styles */
         .button {
@@ -67,6 +92,23 @@ $message = isset($_GET['message']) ? $_GET['message'] : ''; // Get message from 
             color: white; /* White text */
             justify-content: center;
         }
+        .notification {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: center;
+            color: white;
+        }
+
+        /* Green for success */
+        .success {
+            background-color: #4CAF50;
+        }
+
+        /* Red for error */
+        .error {
+            background-color: #f44336;
+        }
 
         .approve {
             background-color: #28a745; /* Green */
@@ -75,63 +117,21 @@ $message = isset($_GET['message']) ? $_GET['message'] : ''; // Get message from 
         .reject {
             background-color: #f44336; /* Red */
         }
-
-        /* Modal styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; 
-            z-index: 10; /* On top */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            width: 300px;
-        }
-
-        .modal-content h3 {
-            margin-bottom: 20px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: space-evenly;
-        }
-
-        .modal-button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-        }
-
-        .confirm-approve {
-            background-color: #28a745; /* Green */
-        }
-
-        .confirm-reject {
-            background-color: #f44336; /* Red */
-        }
-
-        .cancel-button {
-            background-color: grey; /* Grey */
-        }
     </style>
 </head>
 <body>
 
     <?php include 'include/header.php'; ?>
     <?php include 'include/navbar.php'; ?>
+
+    <!-- Popup Notification -->
+        <?php if (!empty($message)): ?>
+            <div id="popupAlert" class="popup-alert <?php echo $type === 'success' ? 'popup-success' : 'popup-error'; ?>">
+                <?php echo htmlspecialchars($message); ?>
+                <button class="close-btn" onclick="closePopup()"></button>
+            </div>
+        <?php endif; ?>
+
 
     <h2>Pending Users</h2>
 
@@ -161,8 +161,8 @@ $message = isset($_GET['message']) ? $_GET['message'] : ''; // Get message from 
                     <td><?php echo htmlspecialchars($user['Sname']); ?></td>
                     <td><?php echo htmlspecialchars($user['U_type']); ?></td>
                     <td>
-                        <a href="#" class="button approve" onclick="openModal('approve', '<?php echo $user['IDno']; ?>', '<?php echo $user['Fname'] . ' ' . $user['Sname']; ?>')">Approve</a>
-                        <a href="#" class="button reject" onclick="openModal('reject', '<?php echo $user['IDno']; ?>', '<?php echo $user['Fname'] . ' ' . $user['Sname']; ?>')">Reject</a>
+                        <a href="include/approve_user.php?id=<?php echo $user['IDno']; ?>" class="button approve">Approve</a>
+                        <a href="include/reject_user.php?id=<?php echo $user['IDno']; ?>" class="button reject">Reject</a>
                     </td>
                 </tr>
             <?php endwhile;
@@ -173,52 +173,25 @@ $message = isset($_GET['message']) ? $_GET['message'] : ''; // Get message from 
         <?php endif; ?>
     </table>
 
-    <!-- Modal for confirmation -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalMessage"></h3>
-            <div class="modal-buttons">
-                <button id="confirmButton" class="modal-button confirm-approve" onclick="confirmAction()">Confirm</button>
-                <button class="modal-button cancel-button" onclick="closeModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        let currentAction = '';
-        let userId = '';
-
-        function openModal(action, id, name) {
-            currentAction = action;
-            userId = id;
-
-            const modalMessage = document.getElementById('modalMessage');
-            const confirmButton = document.getElementById('confirmButton');
-            
-            if (action === 'approve') {
-                modalMessage.textContent = `Are you sure you want to approve ${name}?`;
-                confirmButton.classList.add('confirm-approve');
-                confirmButton.classList.remove('confirm-reject');
-            } else if (action === 'reject') {
-                modalMessage.textContent = `Are you sure you want to reject ${name}?`;
-                confirmButton.classList.add('confirm-reject');
-                confirmButton.classList.remove('confirm-approve');
-            }
-
-            document.getElementById('confirmModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-        }
-
-        function confirmAction() {
-            if (currentAction === 'approve') {
-                window.location.href = `include/approve_user.php?id=${userId}`;
-            } else if (currentAction === 'reject') {
-                window.location.href = `include/reject_user.php?id=${userId}`;
+        // Function to close the popup manually
+        function closePopup() {
+            const popup = document.getElementById('popupAlert');
+            if (popup) {
+                popup.style.display = 'none';
             }
         }
+
+        // Show the popup and auto-hide after 3 seconds
+        window.onload = function () {
+            const popup = document.getElementById('popupAlert');
+            if (popup) {
+                popup.style.display = 'block'; // Show the popup
+                setTimeout(function () {
+                    popup.style.display = 'none'; // Hide after 3 seconds
+                }, 2000);
+            }
+        };
     </script>
 
 </body>
