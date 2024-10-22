@@ -55,7 +55,6 @@
             <th>Graduation Level</th>
             <th>Year Level</th>
             <th>A Level</th>
-            <th>User Type</th>
             <th>Status</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($adminsInfoResult)): ?>
@@ -68,7 +67,6 @@
                 <td><?php echo $row['GRAD_LVL']; ?></td>
                 <td><?php echo $row['yrLVL']; ?></td>
                 <td><?php echo $row['A_LVL']; ?></td>
-                <td><?php echo $row['U_type']; ?></td>
                 <td><?php echo $row['status']; ?></td>
             </tr>
         <?php endwhile; ?>

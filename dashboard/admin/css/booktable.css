@@ -9,7 +9,18 @@ body {
     display: flex; /* Use flexbox for alignment */
 }
 
-/* Number input group styling */
+/* Flexbox styling for form elements */
+.form-book {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.headsubject{
+    width: 20vw;
+}
+
+/* Input group styling */
 .number {
     display: flex; /* Use flexbox for alignment */
     flex-wrap: wrap; /* Allow items to wrap to the next line */
@@ -31,7 +42,7 @@ body {
 
 /* Sidebar styling */
 .sidebar {
-    width: 20%;
+    width: 20vw;
     background-color: #333;
     color: white;
     padding: 15px;
@@ -48,6 +59,7 @@ body {
     text-align: left;
     margin-bottom: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .sidebar button:hover {
@@ -56,7 +68,7 @@ body {
 
 /* Main content styling */
 .main-container {
-    width: 80%;
+    width: 80vw;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -74,21 +86,25 @@ body {
 }
 
 .main-content.active {
-    display: block;
+    display: block; /* Show active section */
 }
 
 /* Heading styles */
 h1 {
     font-size: 24px;
     margin-bottom: 10px;
+    color: #333; /* Improved color for better readability */
 }
 
 /* Input and select styles */
-div input, div select {
+div input,
+div select {
     width: 100%;
-    padding: 8px;
+    padding: 10px; /* Increased padding for better touch target */
     margin-bottom: 10px;
     box-sizing: border-box;
+    border: 1px solid #ccc; /* Added border for better definition */
+    border-radius: 4px; /* Rounded corners */
 }
 
 /* Action buttons styling */
@@ -106,7 +122,8 @@ div input, div select {
     border: none;
     cursor: pointer;
     margin-right: 10px;
-    transition: opacity 0.3s; /* Smooth hover effect */
+    transition: background-color 0.3s, opacity 0.3s; /* Smooth hover effect */
+    border-radius: 4px; /* Rounded corners */
 }
 
 .action-buttons button.cancel {
@@ -121,6 +138,8 @@ div input, div select {
 .action-buttons button:hover {
     opacity: 0.8; /* Slightly fade on hover */
 }
+
+/* Modal styles */
 .modal {
     display: none; /* Hidden by default */
     position: fixed;
@@ -141,6 +160,7 @@ div input, div select {
     border: 1px solid #888;
     width: 40%;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 /* Close Button */
@@ -184,12 +204,47 @@ div input, div select {
     color: red;
     font-size: 14px;
 }
+
+
+/* Container for co-authors display */
+#coAuthorsDisplay {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for buttons */
+    gap: 10px; /* Space between items */
+    margin-top: 20px; /* Space above the co-authors display */
+}
+
+.modal-actions{
+    justify-content: space-between;
+}
+
+
+/* Style for buttons */
+button {
+    background-color: #007BFF; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 15px; /* Padding inside the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Style for edit and delete buttons */
+.edit-btn, .delete-btn {
+    margin-left: 10px; /* Space between buttons */
+}
+
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 874px) {
     .content {
         flex-direction: column; /* Stack sidebar and content on smaller screens */
     }
-    
+
     .sidebar {
         width: 100%; /* Full width for sidebar */
         margin-bottom: 10px; /* Space between sidebar and main content */
@@ -197,5 +252,27 @@ div input, div select {
 
     .main-container {
         width: 100%; /* Full width for main container */
+        margin-left: 0; /* Remove left margin on mobile */
+    }
+
+    /* Adjust button styles for mobile */
+    .action-buttons button {
+        padding: 8px 15px;
+        margin-right: 5px;
+        flex: 1; /* Allow buttons to grow equally */
+    }
+
+    h1 {
+        font-size: 20px; /* Smaller headings on mobile */
+    }
+
+    /* Adjust form input and select widths */
+    div input,
+    div select {
+        width: calc(100% - 20px); /* Full width with padding adjustment */
+    }
+
+    .form-book {
+        flex-direction: column; /* Stack label and input vertically */
     }
 }

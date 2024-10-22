@@ -24,7 +24,7 @@
     <main>
         
 
-        <form id="registration-form" action="php/connection.php" method="post" class="container">
+        <form id="registration-form" action="php/SignConnect.php" method="post" class="container">
             <div class="plus">
             <?php include 'reg/user_info.php'; ?>
             <?php include 'reg/site_info.php'; ?>

@@ -1,0 +1,163 @@
++-----------------+
+|    Book         |
++-----------------+
+| - book_id	  |
+| - B_title       |
+| - subtitle      |
+| - author        |
+| - edition       |
+| - LCCN         |
+| - ISBN          |
+| - ISSN          |
+| - MT            |
+| - ST            |
+| - place         |
+| - publisher     |
+| - Pdate         |
+| - copyright      |
+| - extent        |
+| - Odetail       |
+| - size          |
++-----------------+
+
++-----------------+
+|    Series       |
++-----------------+
+| - book_id	  |
+| - title         |
+| - volume        |
+| - IL            |
+| - lexille       |
+| - F_and_P       |
+| - comments      |
++-----------------+
+
++-----------------+
+|    Subject      |
++-----------------+
+| - book_id	  |
+| - Sub_Head      |
+| - Sub_Head_input|
+| - Sub_Body_1    |
+| - Sub_input_1   |
+| - Sub_Body_2    |
+| - Sub_input_2   |
+| - Sub_Body_3    |
+| - Sub_input_3   |
++-----------------+
+
++-----------------+
+|    Resource     |
++-----------------+
+| - book_id	  |
+| - url           |
+| - Description   |
++-----------------+
+
++-----------------+
+|   AlternateTitle |
++-----------------+
+| - book_id	  |
+| - UTitle        |
+| - VForm         |
+| - SUTitle       |
++-----------------+
+
++-----------------+
+|   CoAuthor      |
++-----------------+
+| - book_id	  |
+| - Co_Name       |
+| - Co_Date       |
+| - Co_Role       |
++-----------------+
+-------------------------------------------------------------
+
+-- Create Books Table
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,  -- Primary Key
+    book_id VARCHAR(10) NOT NULL UNIQUE, -- Unique Key
+    B_title VARCHAR(255),
+    subtitle VARCHAR(255),
+    author VARCHAR(255),
+    edition VARCHAR(50),
+    LCCN VARCHAR(50),
+    ISBN VARCHAR(50),
+    ISSN VARCHAR(50),
+    MT VARCHAR(50),
+    ST VARCHAR(50),
+    place VARCHAR(255),
+    publisher VARCHAR(255),
+    Pdate DATE,
+    copyright VARCHAR(50),
+    extent VARCHAR(50),
+    Odetail VARCHAR(255),
+    size VARCHAR(50)
+);
+
+-- Create Series Table
+CREATE TABLE series (
+    book_id VARCHAR(10) NOT NULL PRIMARY KEY, -- Primary Key
+    title VARCHAR(255),
+    volume VARCHAR(50),
+    IL VARCHAR(50),
+    lexile VARCHAR(50),
+    F_and_P VARCHAR(50),
+    comments TEXT,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) -- Foreign Key
+);
+
+-- Create Subject Table
+CREATE TABLE subject (
+    book_id VARCHAR(10) NOT NULL PRIMARY KEY, -- Primary Key
+    Sub_Head VARCHAR(255),
+    Sub_Head_input VARCHAR(255),
+    Sub_Body_1 VARCHAR(255),
+    Sub_input_1 VARCHAR(255),
+    Sub_Body_2 VARCHAR(255),
+    Sub_input_2 VARCHAR(255),
+    Sub_Body_3 VARCHAR(255),
+    Sub_input_3 VARCHAR(255),
+    FOREIGN KEY (book_id) REFERENCES books(book_id) -- Foreign Key
+);
+
+-- Create Resource Table
+CREATE TABLE resource (
+    book_id VARCHAR(10) NOT NULL PRIMARY KEY, -- Primary Key
+    url VARCHAR(255),
+    Description TEXT,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) -- Foreign Key
+);
+
+-- Create Alternate Title Table
+CREATE TABLE alternate_title (
+    book_id VARCHAR(10) NOT NULL PRIMARY KEY, -- Primary Key
+    UTitle VARCHAR(255),
+    VForm VARCHAR(255),
+    SUTitle VARCHAR(255),
+    FOREIGN KEY (book_id) REFERENCES books(book_id) -- Foreign Key
+);
+
+-- Create Co-Author Table
+CREATE TABLE co_author (
+    book_id VARCHAR(10) NOT NULL PRIMARY KEY, -- Primary Key
+    Co_Name VARCHAR(255),
+    Co_Date DATE,
+    Co_Role VARCHAR(255),
+    FOREIGN KEY (book_id) REFERENCES books(book_id) -- Foreign Key
+);
+
+-- Trigger for auto-generating book_id
+DELIMITER //
+
+CREATE TRIGGER before_insert_books
+BEFORE INSERT ON books
+FOR EACH ROW
+BEGIN
+    DECLARE max_id INT;
+
+    SELECT COALESCE(MAX(CAST(SUBSTRING(book_id, 5) AS UNSIGNED)), 0) INTO max_id FROM books, alternate_title, co_author, resources, series, subject;
+    SET NEW.book_id = CONCAT('BOOK', LPAD(max_id + 1, 6, '0'));
+END; //
+
+DELIMITER ;

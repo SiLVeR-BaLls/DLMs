@@ -17,10 +17,10 @@ if (!$conn) {
 session_start();
 
 // Check if the user is logged in (admin or student)
-$isLoggedIn = isset($_SESSION['admin']) || isset($_SESSION['student']) ||  isset($_SESSION['visitor']);
+$isLoggedIn = isset($_SESSION['admin']) || isset($_SESSION['student']) || isset($_SESSION['visitor']);
 
-// Get ID number from URL
-$idNo = isset($_GET['id']) ? $_GET['id'] : null;
+// Get ID number from URL and validate
+$idNo = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;
 
 // Initialize student info
 $studentInfo = null;
@@ -28,30 +28,37 @@ $studentInfo = null;
 // Fetch student information if ID is provided and the user is logged in
 if ($isLoggedIn && $idNo) {
     // Query with JOIN to fetch data from both tables
-    $query = "SELECT user_details.*, users_info.* 
+    $query = "SELECT user_details.*, users_info.*, user_log.* 
               FROM user_details 
               JOIN users_info ON user_details.IDno = users_info.IDno 
-              WHERE user_details.IDno = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $idNo); // Binding the ID number parameter
-    $stmt->execute();
-    $result = $stmt->get_result();
+              JOIN user_log ON user_details.IDno = user_log.IDno 
+              WHERE user_details.IDno = ?;"; // Added semicolon here
 
-    // Check if student data is found
-    if ($result->num_rows > 0) {
-        $studentInfo = $result->fetch_assoc();  // Fetch the student data
+    // Prepare the statement
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param("s", $idNo); // Binding the ID number parameter
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Check if student data is found
+        if ($result->num_rows > 0) {
+            $studentInfo = $result->fetch_assoc();  // Fetch the student data
+        } else {
+            echo "<p style='color: red;'>No student found with ID number: $idNo</p>";
+        }
+
+        // Close the statement
+        $stmt->close();
     } else {
-        echo "<p style='color: red;'>No student found with ID number: $idNo</p>";
+        echo "<p style='color: red;'>Error preparing statement: " . htmlspecialchars($conn->error) . "</p>";
     }
 } else {
     echo "<p style='color: red;'>User not logged in or ID not provided.</p>";
 }
 
 // Close the connection
-$stmt->close();
 mysqli_close($conn);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -169,8 +176,7 @@ mysqli_close($conn);
     <button onclick="downloadIDCard()" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Download ID Card</button>
     <button class="return-button" onclick="window.history.back()">Return</button> <!-- Return button -->
 
-
-    <?php endif; ?>
+<?php endif; ?>
 
 </body>
 </html>

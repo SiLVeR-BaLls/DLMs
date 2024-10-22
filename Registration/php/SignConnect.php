@@ -1,12 +1,6 @@
 <?php
 // Configuration
-$db_host = 'localhost';
-$db_username = 'root';
-$db_password = '';
-$db_name = 'dlms';
-
-// Create connection
-$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
+include '../../dashboard/config.php';
 
 // Check connection
 if ($conn->connect_error) {
@@ -27,8 +21,6 @@ if ($conn->connect_error) {
         $Ename = $_POST['Ename'] ?? '';
         $gender = $_POST['gender']??'';
         $DOB = $_POST['DOB'];
-        $GRAD_LVL = $_POST['GRAD_LVL'];
-        $GRAD_YR = $_POST['GRAD_YR'];
         $municipality = $_POST['municipality'];
         $city = $_POST['city'];
         $barangay = $_POST['barangay'];
@@ -41,8 +33,7 @@ if ($conn->connect_error) {
         $password = $_POST['password']; // No hashing
         $IDno = $_POST['IDno'];
        $U_type = $_POST['U_type'];
-        $A_LVL = $_POST['A_LVL']??'';
-        $status = $_POST['status'];
+        // $status = $_POST['status'];
         $college = $_POST['college']??'';
         $course = $_POST['course']??'';
         $yrLVL = $_POST['yrLVL'];
@@ -75,14 +66,14 @@ if ($conn->connect_error) {
             $stmt->execute();
             
             // Insert into user_details table
-            $sql = "INSERT INTO user_details (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, A_LVL, U_type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $status ='active';
+            $sql = "INSERT INTO user_details (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, status) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssisssiss", $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $A_LVL, $U_type, $status);
+            $stmt->bind_param("sssissss", $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $status);
             $stmt->execute();
 
-        
+                    // Insert into user_log table
             $status = 'pending';
-            // Insert into user_log table
             $sql = "INSERT INTO user_log (IDno, username, password, U_type, status) VALUES (?, ?, ?, ?  ,?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssss", $IDno, $username, $password, $U_type, $status);

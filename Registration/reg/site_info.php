@@ -29,15 +29,7 @@
                 </select>
             </div>
 
-            <div class="text-group">
-                <label for="status">Status</label>
-                <select class="box" name="status" id="status" required>
-                    <option value="" selected disabled>Select Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="restricted">Restricted</option>
-                </select>
-            </div>
+          
         </div>
 
         <div class="group-box">
