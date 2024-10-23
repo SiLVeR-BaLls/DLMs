@@ -28,7 +28,10 @@ include 'include/admin_connect.php';
 
     <?php include 'include/header.php'; ?>
     <?php include 'include/navbar.php'; ?>
+    <?php include 'BrowseBook.php'; ?>
     <h1>search you book</h1>
+    
+    
 
     
     <?php include 'include/footer.php'; ?>

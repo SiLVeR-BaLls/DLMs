@@ -1,7 +1,40 @@
- 
-    <p><strong>Welcome, <?php echo $_SESSION['admin']['username']; ?>!</strong></p>
-    <a href="../ID_card.php?id=<?php echo $_SESSION['admin']['IDno']; ?>" class="button">ID</a> <!-- Correctly use the admin's ID -->
 
+
+<body>
+    <p><strong>Welcome, <?php echo $_SESSION['admin']['username']; ?>!</strong></p>
+    <a href="../ID_card.php?id=<?php echo $_SESSION['admin']['IDno']; ?>" class="button">ID</a>
+    <a href="include/edit_user.php?id=<?php echo $_SESSION['admin']['IDno']; ?>" class="button" style="margin-left: 5px;">Edit Profile</a> <!-- Edit Profile Button -->
+
+    <h2>Users Information</h2>
+    <table>
+        <tr>
+            <th>IDno</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Middle Name</th>
+            <th>Extension Name</th>
+            <th>Gender</th>
+            <th>Photo</th> <!-- Added Photo Column -->
+        </tr>
+        <?php while ($row = mysqli_fetch_assoc($usersInfoResult)): ?>
+            <tr>
+                <td><?php echo $row['IDno']; ?></td>
+                <td><?php echo $row['Fname']; ?></td>
+                <td><?php echo $row['Sname']; ?></td>
+                <td><?php echo $row['Mname']; ?></td>
+                <td><?php echo $row['Ename']; ?></td>
+                <td><?php echo $row['gender']; ?></td>
+                <td>
+                    <?php if (!empty($row['photo'])): ?>
+                        <img src="<?php echo htmlspecialchars($row['photo']); ?>" alt="User Photo" style="width: 50px; height: 50px;">
+                    <?php else: ?>
+                        No Photo
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+    </table>
+    
     <h2>Contact Information</h2>
     <table>
         <tr>
@@ -72,24 +105,4 @@
         <?php endwhile; ?>
     </table>
 
-    <h2>Users Information</h2>
-    <table>
-        <tr>
-            <th>IDno</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Middle Name</th>
-            <th>Extension Name</th>
-            <th>Gender</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_assoc($usersInfoResult)): ?>
-            <tr>
-                <td><?php echo $row['IDno']; ?></td>
-                <td><?php echo $row['Fname']; ?></td>
-                <td><?php echo $row['Sname']; ?></td>
-                <td><?php echo $row['Mname']; ?></td>
-                <td><?php echo $row['Ename']; ?></td>
-                <td><?php echo $row['gender']; ?></td>
-            </tr>
-        <?php endwhile; ?>
-    </table>
+</body>

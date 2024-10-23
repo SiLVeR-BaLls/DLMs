@@ -1,29 +1,28 @@
 +-----------------+
 |    Book         |
 +-----------------+
-| - book_id	  |
-| - B_title       |
-| - subtitle      |
-| - author        |
-| - edition       |
-| - LCCN         |
-| - ISBN          |
-| - ISSN          |
-| - MT            |
-| - ST            |
-| - place         |
-| - publisher     |
-| - Pdate         |
-| - copyright      |
-| - extent        |
-| - Odetail       |
-| - size          |
+| - B_title       |`
+| - subtitle      |`
+| - author        |`
+| - edition       |`
+| - LCCN          |`
+| - ISBN          |`
+| - ISSN          |`
+| - MT            |`
+| - ST            |`
+| - place         |`
+| - publisher     |`
+| - Pdate         |`
+| - copyright     |`
+| - extent        |`
+| - Odetail       |`
+| - size          |`
 +-----------------+
 
 +-----------------+
 |    Series       |
 +-----------------+
-| - book_id	  |
+| - B_title       |`
 | - title         |
 | - volume        |
 | - IL            |
@@ -35,38 +34,38 @@
 +-----------------+
 |    Subject      |
 +-----------------+
-| - book_id	  |
-| - Sub_Head      |
-| - Sub_Head_input|
-| - Sub_Body_1    |
-| - Sub_input_1   |
-| - Sub_Body_2    |
-| - Sub_input_2   |
-| - Sub_Body_3    |
-| - Sub_input_3   |
+| - B_title       |`
+| - Sub_Head      |`
+| - Sub_Head_input|`
+| - Sub_Body_1    |`
+| - Sub_input_1   |`
+| - Sub_Body_2    |`
+| - Sub_input_2   |`
+| - Sub_Body_3    |``
+| - Sub_input_3   |`
 +-----------------+
 
 +-----------------+
 |    Resource     |
 +-----------------+
-| - book_id	  |
-| - url           |
-| - Description   |
+| - B_title       |`
+| - url           |`
+| - Description   |`
 +-----------------+
 
 +-----------------+
 |   AlternateTitle |
 +-----------------+
-| - book_id	  |
-| - UTitle        |
-| - VForm         |
-| - SUTitle       |
+| - B_title       |`
+| - UTitle        |`
+| - VForm         |`
+| - SUTitle       |`
 +-----------------+
 
 +-----------------+
 |   CoAuthor      |
 +-----------------+
-| - book_id	  |
+| - B_title       |`
 | - Co_Name       |
 | - Co_Date       |
 | - Co_Role       |
