@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     // Fetch user details for the given ID
-    $stmt = $conn->prepare("SELECT users_info.IDno, users_info.Fname, users_info.Sname, user_details.course, user_details.yrLVL AS year, user_details.section, users_info.photo 
+    $stmt = $conn->prepare("SELECT users_info.IDno, users_info.Fname, users_info.Sname, user_details.course, user_details.yrLVL AS year, user_details.section, users_info.photo
                              FROM users_info 
                              JOIN user_details ON users_info.IDno = user_details.IDno 
                              WHERE users_info.IDno = ?");
@@ -33,16 +33,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle photo upload
     $photo = $user['photo']; // Default to current photo
+
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+        // Validate image format
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $file_type = mime_content_type($_FILES['photo']['tmp_name']);
+
+        if (!in_array($file_type, $allowed_types)) {
+            echo "<script>alert('Invalid image format. The image format should be JPG, PNG, or GIF.');</script>";
+            // Return and do not proceed with the update
+            echo '<script>window.history.back();</script>';
+            exit;
+        }
+
+        // Delete the current photo from the server
+        if ($photo) {
+            $current_photo_path = "uploads/" . $photo;
+            if (file_exists($current_photo_path)) {
+                unlink($current_photo_path); // Delete the current photo
+            }
+        }
+
         // Define the directory to save the uploaded photo
-        $targetDir = "uploads/"; // Ensure this directory exists and is writable
-        $photo = basename($_FILES['photo']['name']);
+        $targetDir = "uploads/";
+
+        // Check if the uploads directory exists; if not, create it
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0755, true); // Create directory with appropriate permissions
+        }
+
+        // Set the photo name and ensure it is unique
+        $photo_name = pathinfo($_FILES['photo']['name'], PATHINFO_FILENAME);
+        $photo_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $photo = $photo_name . "_" . time() . "." . $photo_extension; // Append timestamp to avoid collision
         $targetFilePath = $targetDir . $photo;
 
         // Move the uploaded file to the specified directory
-        if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
-            // Photo uploaded successfully
-        } else {
+        if (!move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
             echo "Error uploading photo.";
         }
     }
@@ -50,20 +77,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update user in the database
     $updateStmt = $conn->prepare("UPDATE users_info SET Fname = ?, Sname = ?, photo = ? WHERE IDno = ?");
     $updateStmt->bind_param("sssi", $fname, $sname, $photo, $id); // Bind photo as well
-    $updateStmt->execute();
-    $updateStmt->close();
+    if ($updateStmt->execute()) {
+        // Update user details
+        $updateDetailsStmt = $conn->prepare("UPDATE user_details SET course = ?, yrLVL = ?, section = ? WHERE IDno = ?");
+        $updateDetailsStmt->bind_param("ssss", $course, $year, $section, $id);
 
-    // Update user details
-    $updateDetailsStmt = $conn->prepare("UPDATE user_details SET course = ?, yrLVL = ?, section = ? WHERE IDno = ?");
-    $updateDetailsStmt->bind_param("ssss", $course, $year, $section, $id);
-
-    if ($updateDetailsStmt->execute()) {
-        header("Location: ../admin.php?id=" . urlencode($id)); // Redirect back to profile
-        exit;
+        if ($updateDetailsStmt->execute()) {
+            header("Location: ../admin.php?id=" . urlencode($id)); // Redirect back to profile
+            exit;
+        } else {
+            echo "Error updating user details: " . mysqli_error($conn);
+        }
     } else {
-        echo "Error updating record: " . mysqli_error($conn);
+        echo "Error updating user: " . mysqli_error($conn);
     }
 }
+
+$conn->close();
 ?>
 
 <body>
@@ -93,9 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="form-group">
             <label>Upload Photo:</label>
             <input type="file" class="form-control" name="photo" accept="image/*">
-            <?php if (!empty($user['photo'])): ?>
-                <img src="<?php echo htmlspecialchars($user['photo']); ?>" alt="User Photo" style="width: 50px; height: 50px; margin-top: 5px;">
-            <?php endif; ?>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
         <a href="../admin.php" class="btn btn-secondary">Cancel</a>

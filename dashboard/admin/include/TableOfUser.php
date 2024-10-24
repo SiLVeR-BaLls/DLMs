@@ -1,7 +1,6 @@
 <?php
 include '../../dashboard/config.php';
 
-
 // Fetch users from the database
 $usersResult = mysqli_query($conn, "SELECT users_info.IDno, users_info.Fname, users_info.Sname, 
 user_details.course, user_details.yrLVL AS year, user_details.section 
@@ -38,13 +37,14 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
                         <td><?php echo htmlspecialchars($row['year']); ?></td>
                         <td><?php echo htmlspecialchars($row['section']); ?></td>
                         <td>
-                            <button class="btn btn-info btn-sm" 
-                                    data-toggle="modal" 
-                                    data-target="#viewUserModal" 
-                                    onclick="viewUser('<?php echo htmlspecialchars($row['IDno']); ?>', '<?php echo htmlspecialchars($row['Fname']); ?>', '<?php echo htmlspecialchars($row['Sname']); ?>', '<?php echo htmlspecialchars($row['course']); ?>', '<?php echo htmlspecialchars($row['year']); ?>', '<?php echo htmlspecialchars($row['section']); ?>')">
+                            <!-- View Button -->
+                            <a href="include/user_details.php?id=<?php echo htmlspecialchars($row['IDno']); ?>"
+                             class="btn btn-info btn-sm" style="text-decoration:none; "> 
                                 View
-                            </button>
+                            </a>
+
                             
+                            <!-- Delete Button -->
                             <button class="btn btn-danger btn-sm" 
                                     onclick="deleteUser('<?php echo htmlspecialchars($row['IDno']); ?>')">
                                 Delete
@@ -55,6 +55,26 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
             </tbody>
         </table>
     </div>
+</div>
+
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewUserModalLabel">User Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>IDno:</strong> <span id="modalIDno"></span></p>
+        <p><strong>First Name:</strong> <span id="modalFname"></span></p>
+        <p><strong>Last Name:</strong> <span id="modalSname"></span></p>
+        <p><strong>Course:</strong> <span id="modalCourse"></span></p>
+        <p><strong>Year:</strong> <span id="modalYear"></span></p>
+        <p><strong>Section:</strong> <span id="modalSection"></span></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -70,7 +90,7 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
         .then((willDelete) => {
             if (willDelete) {
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '', true); // Use the correct URL if needed
+                xhr.open('POST', window.location.href, true);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.send('action=delete&id=' + encodeURIComponent(id));
 
@@ -98,9 +118,21 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
             }
         });
     }
+
+    // JavaScript function to view user details in modal
+    function viewUser(id, fname, sname, course, year, section) {
+        document.getElementById('modalIDno').innerText = id;
+        document.getElementById('modalFname').innerText = fname;
+        document.getElementById('modalSname').innerText = sname;
+        document.getElementById('modalCourse').innerText = course;
+        document.getElementById('modalYear').innerText = year;
+        document.getElementById('modalSection').innerText = section;
+    }
 </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert/dist/sweetalert.min.js"></script>
+<!-- SweetAlert and Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php
 // Handle the delete action

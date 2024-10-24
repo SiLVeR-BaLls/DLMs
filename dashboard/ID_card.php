@@ -113,6 +113,15 @@ mysqli_close($conn);
             align-items: center;
         }
 
+        /* Profile photo styling */
+        .profile-photo {
+            width: 100px; /* Set width for the profile photo */
+            height: 100px; /* Set height for the profile photo */
+            border-radius: 50%; /* Make it circular */
+            object-fit: cover; /* Cover the area */
+            margin: 20px auto; /* Center the photo */
+        }
+
         /* Print styles */
         @media print {
             body {
@@ -135,10 +144,35 @@ mysqli_close($conn);
 <?php if ($studentInfo): ?>
     <div class="id-card" id="id-card">
         <div class="id-details">
-            <h2>ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h2>
+            <!-- Add profile image at the top -->
+            <?php 
+            // Determine the path based on U_type
+            $userType = htmlspecialchars($studentInfo['U_type']);
+            $photoPath = '';
+
+            switch ($userType) {
+                case 'admin':
+                    $photoPath = "admin/include/uploads/";
+                    break;
+                case 'student':
+                    $photoPath = "student/include/uploads/";
+                    break;
+                case 'visitor':
+                    $photoPath = "visitor/include/uploads/";
+                    break;
+                case 'professor':
+                    $photoPath = "professor/include/uploads/";
+                    break;
+                default:
+                    $photoPath = "uploads/"; // Default if none matches
+                    break;
+            }
+            ?>
+            <img src="<?php echo $photoPath . htmlspecialchars($studentInfo['photo']); ?>" alt="Profile Photo" class="profile-photo"
+                 onerror="this.onerror=null; this.src='uploads/default.jpg';"> <!-- Default image if fails -->
+            <h2><?php echo htmlspecialchars($studentInfo['Fname']) . ' ' . htmlspecialchars($studentInfo['Sname']); ?></h2> <!-- Display Full Name -->
+            <h3>ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h3> <!-- Display ID Number -->
             <p>Role: <?php echo htmlspecialchars($studentInfo['U_type']); ?></p> <!-- Display Role -->
-            <p>First Name: <?php echo htmlspecialchars($studentInfo['Fname']); ?></p> <!-- Display First Name -->
-            <p>Last Name: <?php echo htmlspecialchars($studentInfo['Sname']); ?></p> <!-- Display Last Name -->
             <p>Course: <?php echo htmlspecialchars($studentInfo['course']); ?></p>
             <p>Grade: <?php echo htmlspecialchars($studentInfo['GRAD_LVL']); ?></p>
             <p>Section: <?php echo htmlspecialchars($studentInfo['section']); ?></p>
