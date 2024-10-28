@@ -1,3 +1,38 @@
+/* Center the header */
+.text-center {
+    text-align: center; /* Center the text */
+}
+
+/* Styles for the search controls container */
+.row.mb-3 {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Centers the controls horizontally */
+    margin-bottom: 1rem; /* Space below the row */
+}
+
+/* Adjust column styles */
+.col-md-4 {
+    margin: 0 15px; /* Adds space between columns */
+}
+
+/* Remove right margin from the last column */
+.col-md-4:last-child {
+    margin-right: 0; /* No margin on the last column */
+}
+
+/* Styles for labels */
+label {
+    font-weight: bold; /* Makes the label text bold */
+    margin-bottom: 5px; /* Adds space below the label */
+}
+
+/* Styles for form controls (select and input) */
+.form-control {
+    height: calc(2.25rem + 2px); /* Ensures uniform height for input and select */
+    font-size: 1rem; /* Sets a standard font size */
+    border-radius: 0.25rem; /* Slightly rounded corners */
+}
+
 
 .table {
     width: 100%;

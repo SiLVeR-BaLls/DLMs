@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add Book Copies</title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="body_contain">
         <h1>Add Copies for Book</h1>
         <form action="process_add_copy.php" method="POST">
             <input type="hidden" name="book_id" value="<?php echo $book_id; ?>">

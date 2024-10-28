@@ -27,7 +27,7 @@ $copies_result = $conn->query("SELECT * FROM book_copies WHERE book_id = $book_i
     <title>Copies of <?php echo htmlspecialchars($book['title']); ?></title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="body_contain">
         <h1 class="text-center">Copies of <?php echo htmlspecialchars($book['title']); ?></h1>
 
         <div class="text-right mb-3">

@@ -255,7 +255,7 @@
                             <h2>Edit Co-Author</h2>
                             <div class="form-book">
                                 <label for="editCo_Name">Name</label>
-                                <input type="text" id="editCo_Name" name="Co_name">
+                                <input type="text" id="editCo_Name" name="Co_Name">
                             </div>
                             <div class="form-book">
                                 <label for="editCo_Date">Date</label>
@@ -263,7 +263,7 @@
                             </div>
                             <div class="form-book">
                                 <label for="editCo_Role">Role</label>
-                                <input type="text" id="editCo_Role" name="Co_Rate">
+                                <input type="text" id="editCo_Role" name="Co_Role">
                             </div>
                             <div class="modal-actions">
                                 <button type="button" onclick="saveEditedCoAuthor()">Save</button>

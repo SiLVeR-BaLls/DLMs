@@ -13,9 +13,13 @@ $type = isset($_GET['type']) ? $_GET['type'] : '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/booktable.css">     
+    <link rel="stylesheet" href="css/styles.css">     
+
     <title>Admin Dashboard</title>
     <style>
+
+
         /* Popup Alert Styles */
         .popup-alert {
             display: none; /* Hidden by default */
@@ -135,7 +139,7 @@ $type = isset($_GET['type']) ? $_GET['type'] : '';
 
     <h2>Pending Users</h2>
 
-    <table>
+    <table class="body_contain">
         <tr>
             <th>ID No</th>
             <th>First Name</th>

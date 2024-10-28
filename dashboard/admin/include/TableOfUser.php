@@ -10,7 +10,7 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
 
 <body>
 
-<div class="container mt-5">
+<div class="body_contain">
     <h2>User Management</h2>
     
     <!-- Table displaying users -->

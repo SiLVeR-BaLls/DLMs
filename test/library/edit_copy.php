@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Edit Book Copy</title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="body_contain">
         <h1>Edit Copy Details</h1>
         <form action="process_edit_copy.php" method="POST">
             <input type="hidden" name="copy_id" value="<?php echo $copy['copy_id']; ?>">

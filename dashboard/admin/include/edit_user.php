@@ -5,7 +5,8 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     // Fetch user details for the given ID
-    $stmt = $conn->prepare("SELECT users_info.IDno, users_info.Fname, users_info.Sname, user_details.course, user_details.yrLVL AS year, user_details.section, users_info.photo
+    $stmt = $conn->prepare("SELECT users_info.IDno, users_info.Fname, users_info.Sname, user_details.course, 
+                                   user_details.yrLVL AS year, user_details.section, users_info.photo
                              FROM users_info 
                              JOIN user_details ON users_info.IDno = user_details.IDno 
                              WHERE users_info.IDno = ?");
@@ -41,12 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!in_array($file_type, $allowed_types)) {
             echo "<script>alert('Invalid image format. The image format should be JPG, PNG, or GIF.');</script>";
-            // Return and do not proceed with the update
             echo '<script>window.history.back();</script>';
             exit;
         }
 
-        // Delete the current photo from the server
+        // Delete the current photo from the server if it exists
         if ($photo) {
             $current_photo_path = "uploads/" . $photo;
             if (file_exists($current_photo_path)) {
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update user in the database
     $updateStmt = $conn->prepare("UPDATE users_info SET Fname = ?, Sname = ?, photo = ? WHERE IDno = ?");
-    $updateStmt->bind_param("sssi", $fname, $sname, $photo, $id); // Bind photo as well
+    $updateStmt->bind_param("ssss", $fname, $sname, $photo, $id); // Ensure all bindings are strings
     if ($updateStmt->execute()) {
         // Update user details
         $updateDetailsStmt = $conn->prepare("UPDATE user_details SET course = ?, yrLVL = ?, section = ? WHERE IDno = ?");
@@ -86,18 +86,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: ../admin.php?id=" . urlencode($id)); // Redirect back to profile
             exit;
         } else {
-            echo "Error updating user details: " . mysqli_error($conn);
+            echo "Error updating user details: " . $conn->error;
         }
     } else {
-        echo "Error updating user: " . mysqli_error($conn);
+        echo "Error updating user: " . $conn->error;
     }
 }
 
 $conn->close();
 ?>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .body_contain {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        color: #333;
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    }
+    .btn {
+        display: inline-block;
+        width: 48%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        text-align: center;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 1rem;
+        text-decoration: none;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+    .btn-primary:hover, .btn-secondary:hover {
+        opacity: 0.9;
+    }
+</style>
 
 <body>
-<div class="container mt-5">
+<div class="body_contain">
     <h2>Edit User</h2>
     <form method="POST" action="" enctype="multipart/form-data">
         <div class="form-group">

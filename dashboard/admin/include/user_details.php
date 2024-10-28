@@ -31,7 +31,10 @@ if (isset($_POST['delete'])) {
 ?>
 
 <body>
-    <div class="container mt-5">
+    <div class="body_contain">
+
+    <a href="../BrowseUser.php" class="btn btn-secondary"><</a>
+
         <p><strong style="color: #fff;">Welcome, <?php echo htmlspecialchars($_SESSION['admin']['username']); ?>!</strong></p>
 
         <h2 style="color: #ffffff;">Users Information</h2>
@@ -56,13 +59,14 @@ if (isset($_POST['delete'])) {
                     <td><?php echo htmlspecialchars($userInfo['Ename']); ?></td>
                     <td><?php echo htmlspecialchars($userInfo['gender']); ?></td>
                     <td>
-                        <?php if (!empty($userInfo['photo'])): ?>
-                            <img src="<?php echo htmlspecialchars($userInfo['photo']); ?>" 
-                                 alt="User Photo" 
-                                 style="height: 100px; object-fit: cover;">
-                        <?php else: ?>
-                            <span>No Photo</span>
-                        <?php endif; ?>
+                    <?php if (!empty($userInfo['photo'])): ?>
+    <img src="uploads/<?php echo htmlspecialchars($userInfo['photo']); ?>" 
+         alt="User Photo" 
+         style="height: 100px; object-fit: cover;">
+<?php else: ?>
+    <span>No Photo</span>
+<?php endif; ?>
+
                     </td>
                 </tr>
             </tbody>

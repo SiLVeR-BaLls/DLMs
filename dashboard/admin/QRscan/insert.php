@@ -16,23 +16,24 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the lowest current ID
-$result = $conn->query("SELECT MIN(ID) AS lowest_id FROM attendance");
-$row = $result->fetch_assoc();
-$lowest_id = $row['lowest_id'] ?? 0;
-
-// Renumber IDs
-$conn->query("SET @num := $lowest_id - 1");
-$conn->query("UPDATE attendance SET ID = @num := (@num + 1)");
-
-// Reset auto-increment
-$conn->query("ALTER TABLE attendance AUTO_INCREMENT = 1");
-
 // Check if studentID has been submitted via POST request
 if (isset($_POST['studentID'])) {
     // Retrieve and sanitize the studentID from POST request
     $text = $_POST['studentID'];
     
+    // Check if the student ID exists in the `users_info` table
+    $checkID_sql = "SELECT * FROM users_info WHERE IDno = ?";
+    $stmt = $conn->prepare($checkID_sql);
+    $stmt->bind_param("s", $text);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        // ID does not exist, display "Who are you?" popup
+        echo "<script>alert('Who are you?'); window.location.href='index.php';</script>";
+        exit; // Stop further processing
+    }
+
     // Set the timezone and get the current date and time
     date_default_timezone_set('Asia/Manila');
     $date = date('Y-m-d');

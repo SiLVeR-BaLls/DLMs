@@ -1,7 +1,6 @@
 <?php
 // Include the configuration file for database connection
 include '../config.php';
-include 'include/admin_connect.php';
 
 
 // Query to retrieve users information with additional details from user_details table
@@ -26,12 +25,9 @@ if (!$usersResult) {
     <!-- Bootstrap CSS -->
      
 <link rel="stylesheet" href="css/bootstrap.min.css">
-
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/responsive.dataTables.min.css">
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">     
+
     <script src="js/script.js"></script>
 
     <style>

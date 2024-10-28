@@ -20,7 +20,7 @@ $books_result = $conn->query("SELECT * FROM books");
     <title>Library Books</title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="body_contain">
         <h1 class="text-center">Library Books</h1>
 
         <div class="text-right mb-3">

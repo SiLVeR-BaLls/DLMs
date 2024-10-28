@@ -1,9 +1,5 @@
 <?php
-
 include '../config.php';
-include 'include/admin_connect.php';
-
-
 ?>
 
 <!DOCTYPE html>
@@ -11,30 +7,27 @@ include 'include/admin_connect.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/script.js"></script>
 
     <title>Admin Dashboard</title>
-    
+
 </head>
 <body>
 
-<?php if (!$isLoggedIn): ?>
+
+<?php include 'include/header.php'; ?>
+<?php include 'include/navbar.php'; ?>
 
 
-<?php endif; ?>
-
-
-    <?php include 'include/header.php'; ?>
-    <?php include 'include/navbar.php'; ?>
+<!-- Main content area -->
+<div class="main-content">
     <?php include 'BrowseBook.php'; ?>
-    <h1>search you book</h1>
-    
-    
+</div>
 
-    
-    <?php include 'include/footer.php'; ?>
+<?php include 'include/footer.php'; ?>
 
 </body>
 </html>

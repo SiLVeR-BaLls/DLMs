@@ -79,16 +79,21 @@ if ($title) {
     </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="body_contain">
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $message_type; ?>"><?php echo $message; ?></div>
-        <?php endif; ?>
-        
+            <?php endif; ?>
+            <!-- return button -->
+            <a href="../index.php" class="btn btn-secondary"><</a>
+            
+
+            <!-- the title -->
         <?php if (isset($book)): ?>
            <h4 class="book-title"><?php echo htmlspecialchars($book['B_title']); ?></h4>
-            <a href="../index.php" class="btn btn-secondary">Back to Browse</a>
-            <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">Edit</a>
-            <div class="book-card">
+           <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-info">Edit</a>
+           <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">Add Copy</a>
+           <a href="BookList.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">list</a>
+           <div class="book-card">
                 <div class="table table-custom">
                     <p><strong>Subtitle:</strong><br><?php echo htmlspecialchars($book['subtitle']); ?></p>
                     <p><strong>Author:</strong><br><?php echo htmlspecialchars($book['author']); ?></p>
@@ -114,6 +119,8 @@ if ($title) {
                     <p><strong>Other Details:</strong><br><?php echo htmlspecialchars($book['Odetail']); ?></p>
                     <p><strong>Size:</strong><br><?php echo htmlspecialchars($book['size']); ?></p>
                 </div>
+<!-- start here -->
+
             </div>
 
             <div class="row">
@@ -152,15 +159,19 @@ if ($title) {
                             <table class="table table-custom">
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
+                                        <th>Lexille</th>
                                         <th>Volume</th>
+                                        <th>Interest Level</th>
+                                        <th>Fountas and Pinnell</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php while ($row = $seriesResult->fetch_assoc()): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($row['title']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['lexille']); ?></td>
                                             <td><?php echo htmlspecialchars($row['volume']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['IL']); ?></td>
+                                            <td><?php echo htmlspecialchars($row['F_and_P']); ?></td>
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>

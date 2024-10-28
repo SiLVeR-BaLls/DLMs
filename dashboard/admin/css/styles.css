@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+.body_contain{
+    margin: 10px;
+    padding: 10px;
+}
+
 .top {
     margin: 0px;
     padding: 0px;

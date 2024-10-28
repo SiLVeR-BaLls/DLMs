@@ -1,10 +1,7 @@
 <?php
-session_start(); // Start the session if it's not already started
-
-// Destroy the session to log out the user
-session_destroy();
-
-// Redirect to the login page after logging out
+session_start();
+session_unset();    // Remove all session variables
+session_destroy();  // Destroy the session
 header("Location: ../Registration/log_in.php"); // Adjust path if needed
 exit();
 ?>
