@@ -6,17 +6,13 @@
         <div class="group-box">
             <p class="tile">Account Information</p>
 
-            <label>
-                <input type="radio" name="id-type" value="manual" onclick="toggleIdInput(true)" checked> Campus ID
-            </label>
-            <label>
-                <input type="radio" name="id-type" value="default" onclick="toggleIdInput(false)"> Legal ID
-            </label>
             
-            <div id="manual-id-container" class="form-group" style="display: block;">
+
+            <div class="text-group">
                 <label for="IDno">ID Number:</label> <!-- Added label text -->
                 <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)" required>
             </div>
+
 
             <div class="text-group">
                 <label for="U_type">User Type</label>
@@ -25,11 +21,9 @@
                     <option value="student">Student</option>
                     <option value="professor">Professor</option>
                     <option value="staff">Staff</option>
-                    <option value="visitor">Visitor</option>
                 </select>
             </div>
 
-          
         </div>
 
         <div class="group-box">
@@ -57,27 +51,19 @@
             </div>
 
             <div class="text-group">
-                <label for="yrLVL">Year Level</label>
+                <label for="yrLVL">Year and Section</label>
                 <select class="box" id="yrLVL" name="yrLVL" required>
-                    <option value="" selected disabled>Select Year Level</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                <option value="" selected disabled>Select Year and Section</option>
+                            <?php for ($year = 1; $year <= 5; $year++): ?>
+                                <?php foreach (['A', 'B', 'C', 'D'] as $section): ?>
+                                    <option value="<?php echo $year . ' ' . $section; ?>" <?php echo (isset($user['yrLVL']) && $user['yrLVL'] == "$year $section") ? 'selected' : ''; ?>>
+                                        <?php echo $year . ' ' . $section; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endfor; ?>
                 </select>
             </div>
 
-            <div class="text-group">
-                <label for="section">Section</label>
-                <select class="box" id="section" name="section" required>
-                    <option value="" selected disabled>Select Section</option>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
-                    <option value="c">C</option>
-                    <option value="d">D</option>
-                </select>
-            </div>
         </div>
     </div>
 </div>

@@ -134,7 +134,6 @@
         <tr>
             <th>IDno</th>
             <th>Municipality</th>
-            <th>City</th>
             <th>Barangay</th>
             <th>Province</th>
             <th>Date of Birth</th>
@@ -145,7 +144,6 @@
             <tr>
                 <td><?php echo htmlspecialchars($row['IDno']); ?></td>
                 <td><?php echo htmlspecialchars($row['municipality']); ?></td>
-                <td><?php echo htmlspecialchars($row['city']); ?></td>
                 <td><?php echo htmlspecialchars($row['barangay']); ?></td>
                 <td><?php echo htmlspecialchars($row['province']); ?></td>
                 <td><?php echo htmlspecialchars($row['DOB']); ?></td>
@@ -161,9 +159,6 @@
             <th>IDno</th>
             <th>College</th>
             <th>Course</th>
-            <th>Graduation Year</th>
-            <th>Section</th>
-            <th>Graduation Level</th>
             <th>Year Level</th>
             <th>A Level</th>
             <th>Status</th>
@@ -175,9 +170,6 @@
                 <td><?php echo htmlspecialchars($row['IDno']); ?></td>
                 <td><?php echo htmlspecialchars($row['college']); ?></td>
                 <td><?php echo htmlspecialchars($row['course']); ?></td>
-                <td><?php echo htmlspecialchars($row['GRAD_YR']); ?></td>
-                <td><?php echo htmlspecialchars($row['section']); ?></td>
-                <td><?php echo htmlspecialchars($row['GRAD_LVL']); ?></td>
                 <td><?php echo htmlspecialchars($row['yrLVL']); ?></td>
                 <td><?php echo htmlspecialchars($row['A_LVL']); ?></td>
                 <td><?php echo htmlspecialchars($row['status']); ?></td>

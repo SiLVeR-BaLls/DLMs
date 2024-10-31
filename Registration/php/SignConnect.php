@@ -22,7 +22,6 @@ if ($conn->connect_error) {
         $gender = $_POST['gender']??'';
         $DOB = $_POST['DOB'];
         $municipality = $_POST['municipality'];
-        $city = $_POST['city'];
         $barangay = $_POST['barangay'];
         $province = $_POST['province'];
         $email1 = $_POST['mail1'];
@@ -37,7 +36,6 @@ if ($conn->connect_error) {
         $college = $_POST['college']??'';
         $course = $_POST['course']??'';
         $yrLVL = $_POST['yrLVL'];
-        $section = $_POST['section'];
 
         // Check if IDno already exists
         $query = "SELECT * FROM users_info WHERE IDno = ?";
@@ -51,25 +49,27 @@ if ($conn->connect_error) {
             $message_type = "error";
         } else {
             // Insert into users table
-            $sql = "INSERT INTO users_info (IDno, Fname, Sname, Mname, Ename, gender) VALUES (?, ?, ?, ?, ?, ?)";
+            $Ename = 'N/A';
+            $photo = 'default.jpg';
+            $sql = "INSERT INTO users_info (IDno, Fname, Sname, Mname, Ename, gender, photo ) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $IDno, $Fname, $Sname, $Mname, $Ename, $gender);
+            $stmt->bind_param("sssssss", $IDno, $Fname, $Sname, $Mname, $Ename, $gender, $photo );
             $stmt->execute();
 
             // Get the last inserted ID
             $user_id = $conn->insert_id;
 
             // Insert into addresses table
-            $sql = "INSERT INTO address (IDno, municipality, city, barangay, province, DOB) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO address (IDno, municipality, barangay, province, DOB) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $IDno, $municipality, $city, $barangay, $province, $DOB);
+            $stmt->bind_param("sssss", $IDno, $municipality, $barangay, $province, $DOB);
             $stmt->execute();
             
             // Insert into user_details table
             $status ='active';
-            $sql = "INSERT INTO user_details (IDno, college, course, GRAD_YR, section, GRAD_LVL, yrLVL, status) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO user_details (IDno, college, course, yrLVL, status) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssissss", $IDno, $college, $course, $GRAD_YR, $section, $GRAD_LVL, $yrLVL, $status);
+            $stmt->bind_param("sssss", $IDno, $college, $course,  $yrLVL, $status);
             $stmt->execute();
 
                     // Insert into user_log table

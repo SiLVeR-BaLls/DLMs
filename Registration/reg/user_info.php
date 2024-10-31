@@ -34,15 +34,7 @@
             </div>
             <div class="text-group">
                 <label for="Ename">Extension</label>
-                <select class="box" name="Ename" id="Ename" required>
-                    <option value="" disabled selected>Select Extension</option>
-                    <option value="n/a">N/A</option>
-                    <option value="jr">JR</option>
-                    <option value="sr">SR</option>
-                    <option value="iii">III</option>
-                    <option value="iv">IV</option>
-                    <option value="v">V</option>
-                </select>
+                <input class="box" name="Ename" id="Ename" placeholder="Enter Extension">
             </div>
         </div>
 
@@ -50,13 +42,10 @@
         <div class="group-box">
             <p class="tile">Address</p>
             <div class="text-group">
-                <label for="municipality">Municipality</label>
-                <input id="municipality" name="municipality" class="box" type="text" placeholder="Enter Municipality" required>
+                <label for="municipality">Municipality/City</label>
+                <input id="municipality" name="municipality" class="box" type="text" placeholder="Enter Municipality/City" required>
             </div>
-            <div class="text-group">
-                <label for="city">City</label>
-                <input id="city" name="city" class="box" type="text" placeholder="Enter City" required>
-            </div>
+           
             <div class="text-group">
                 <label for="barangay">Barangay</label>
                 <input id="barangay" name="barangay" class="box" type="text" placeholder="Enter Barangay" required>

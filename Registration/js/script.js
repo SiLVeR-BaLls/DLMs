@@ -115,21 +115,6 @@ function updateCourses() {
 // Call this function when the college dropdown changes
 document.getElementById("college").addEventListener("change", updateCourses);
 
-//radio button of deiable text box not chossen
-document.addEventListener("DOMContentLoaded", function () {
-  const customRadio = document.getElementById("custom");
-  const outCampusRadio = document.getElementById("outCampus");
-  const textBox = document.getElementById("user_id");
-
-  function toggleTextBox() {
-    textBox.disabled = !customRadio.checked;
-  }
-  // Add event listeners for radio buttons
-  customRadio.addEventListener("change", toggleTextBox);
-  outCampusRadio.addEventListener("change", toggleTextBox);
-  // Initialize the disabled state based on the default checked state
-  toggleTextBox();
-});
 
 //repaet password
 
@@ -225,14 +210,6 @@ window.onload = displayErrorMessage;
 
 //idno problem
 
-function toggleIdInput(isManual) {
-  const manualIdContainer = document.getElementById("manual-id-container");
-  if (isManual) {
-    manualIdContainer.style.display = "block"; // Show the manual ID input
-  } else {
-    manualIdContainer.style.display = "none"; // Hide the manual ID input
-  }
-}
 
 
 
