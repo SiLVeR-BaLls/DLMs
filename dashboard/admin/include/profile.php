@@ -90,7 +90,7 @@
                 <td><?php echo htmlspecialchars($row['gender']); ?></td>
                 <td>
                     <?php if (!empty($row['photo'])): ?>
-                        <img src="include/uploads/<?php echo htmlspecialchars($row['photo']); ?>"
+                        <img src="../../pic/User//<?php echo htmlspecialchars($row['photo']); ?>"
                             alt="User Photo"
                             style="width: 50px; height: 50px; object-fit: cover;"
                             onerror="this.onerror=null; this.src='uploads/default.jpg';"> <!-- Ensure default.jpg is correctly referenced -->

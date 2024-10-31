@@ -29,7 +29,7 @@ if (isset($_POST['delete'])) {
     exit;
 }
 ?>
-
+<title>user <?php echo htmlspecialchars($userInfo['Fname']); ?></title>
 <body>
     <div class="body_contain">
 
@@ -60,7 +60,7 @@ if (isset($_POST['delete'])) {
                     <td><?php echo htmlspecialchars($userInfo['gender']); ?></td>
                     <td>
                     <?php if (!empty($userInfo['photo'])): ?>
-    <img src="uploads/<?php echo htmlspecialchars($userInfo['photo']); ?>" 
+    <img src="../../../pic/User/<?php echo htmlspecialchars($userInfo['photo']); ?>" 
          alt="User Photo" 
          style="height: 100px; object-fit: cover;">
 <?php else: ?>

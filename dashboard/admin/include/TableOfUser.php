@@ -6,14 +6,60 @@ $usersResult = mysqli_query($conn, "SELECT users_info.IDno, users_info.Fname, us
 user_details.course, user_details.yrLVL AS year, user_details.section 
 FROM users_info
 JOIN user_details ON users_info.IDno = user_details.IDno");
+
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
+    $id = $_POST['id'] ?? '';
+
+    if ($id) {
+        // Fetch the user details to get the photo path
+        $stmt = $conn->prepare("SELECT photo FROM users_info WHERE IDno = ?");
+        $stmt->bind_param("s", $id);
+
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                $photoToDelete = $user['photo'] ?? '';
+
+                // Delete the user record
+                $deleteStmt = $conn->prepare("DELETE FROM users_info WHERE IDno = ?");
+                $deleteStmt->bind_param("s", $id);
+
+                if ($deleteStmt->execute()) {
+                    // Check if the photo exists and delete it from the directory
+                    if ($photoToDelete && file_exists("../../pic/User/" . $photoToDelete)) {
+                        unlink("../../pic/User/" . $photoToDelete);
+                    }
+                    echo json_encode(['success' => true]);
+                    exit();
+                } else {
+                    echo json_encode(['success' => false, 'message' => "Error deleting user: " . $deleteStmt->error]);
+                    exit();
+                }
+                $deleteStmt->close();
+            } else {
+                echo json_encode(['success' => false, 'message' => "No user found with that ID."]);
+                exit();
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => "Error executing query: " . $stmt->error]);
+            exit();
+        }
+        $stmt->close();
+    } else {
+        echo json_encode(['success' => false, 'message' => "No user ID provided."]);
+        exit();
+    }
+}
+
+// HTML and other content remains the same
 ?>
 
 <body>
-
 <div class="body_contain">
     <h2>User Management</h2>
     
-    <!-- Table displaying users -->
     <div class="tableofuser">
         <table id="usersTable" class="table table-striped table-bordered dt-responsive">
             <thead>
@@ -37,18 +83,8 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
                         <td><?php echo htmlspecialchars($row['year']); ?></td>
                         <td><?php echo htmlspecialchars($row['section']); ?></td>
                         <td>
-                            <!-- View Button -->
-                            <a href="include/user_details.php?id=<?php echo htmlspecialchars($row['IDno']); ?>"
-                             class="btn btn-info btn-sm" style="text-decoration:none; "> 
-                                View
-                            </a>
-
-                            
-                            <!-- Delete Button -->
-                            <button class="btn btn-danger btn-sm" 
-                                    onclick="deleteUser('<?php echo htmlspecialchars($row['IDno']); ?>')">
-                                Delete
-                            </button>
+                            <a href="include/user_details.php?id=<?php echo htmlspecialchars($row['IDno']); ?>" class="btn btn-info btn-sm" style="text-decoration:none;">View</a>
+                            <button class="btn btn-danger btn-sm" onclick="deleteUser('<?php echo htmlspecialchars($row['IDno']); ?>')">Delete</button>
                         </td>
                     </tr>
                 <?php endwhile; ?>
@@ -100,10 +136,10 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
                         if (response.success) {
                             swal("Deleted!", "User has been deleted successfully.", "success")
                             .then(() => {
-                                location.reload(true); // Force reload from server
+                                location.reload(true);
                             });
                         } else {
-                            swal("Error!", "Failed to delete user: " + response.message, "error");
+                            swal("Error!", response.message, "error");
                         }
                     } else {
                         swal("Error!", "Error: " + xhr.status, "error");
@@ -130,32 +166,7 @@ JOIN user_details ON users_info.IDno = user_details.IDno");
     }
 </script>
 
-<!-- SweetAlert and Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<?php
-// Handle the delete action
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'delete') {
-        $id = $_POST['id'];
-
-        // Prepare and execute the delete statement
-        $stmt = $conn->prepare("DELETE FROM users_info WHERE IDno = ?");
-        $stmt->bind_param("s", $id);
-        
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Could not delete user.']);
-        }
-        
-        $stmt->close();
-    }
-}
-
-// Close the database connection
-mysqli_close($conn);
-?>
 
 </body>

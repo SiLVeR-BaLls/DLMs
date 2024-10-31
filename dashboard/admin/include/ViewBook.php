@@ -5,6 +5,9 @@ include '../../config.php';
 $message = "";
 $message_type = "";
 
+// Define the target directory for photos
+$targetDir = '../../../pic/Book/';
+
 // Get the book title from the query string
 $title = $_GET['title'] ?? '';
 
@@ -23,6 +26,60 @@ if ($title) {
         } else {
             $book = $result->fetch_assoc();
             
+            // Handle photo upload
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                // Validate image format
+                $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+                $file_type = mime_content_type($_FILES['photo']['tmp_name']);
+
+                if (!in_array($file_type, $allowed_types)) {
+                    echo "<script>alert('Invalid image format. The image format should be JPG, PNG, or GIF.');</script>";
+                    echo '<script>window.history.back();</script>';
+                    exit;
+                }
+
+                // Fetch the current photo from the database
+                $sql = "SELECT photo FROM Book WHERE B_title = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $title);
+                $stmt->execute();
+                $stmt->bind_result($currentPhoto);
+                $stmt->fetch();
+                $stmt->close();
+
+                // Delete the current photo from the server if it exists
+                if ($currentPhoto) {
+                    $current_photo_path = $targetDir . $currentPhoto;
+                    if (file_exists($current_photo_path)) {
+                        unlink($current_photo_path); // Delete the current photo
+                    }
+                }
+
+                // Check if the uploads directory exists; if not, create it
+                if (!is_dir($targetDir)) {
+                    mkdir($targetDir, 0755, true); // Create directory with appropriate permissions
+                }
+
+                // Set the photo name and ensure it is unique
+                $photo_name = pathinfo($_FILES['photo']['name'], PATHINFO_FILENAME);
+                $photo_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                $photo = $photo_name . "_" . time() . "." . $photo_extension; // Append timestamp to avoid collision
+                $targetFilePath = $targetDir . $photo;
+
+                // Move the uploaded file to the specified directory
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
+                    // Update the database with the new photo path
+                    $updateSql = "UPDATE Book SET photo = ? WHERE B_title = ?";
+                    $updateStmt = $conn->prepare($updateSql);
+                    $updateStmt->bind_param("ss", $photo, $title);
+                    $updateStmt->execute();
+                    $updateStmt->close();
+                } else {
+                    $message = "Error uploading photo.";
+                    $message_type = "error";
+                }
+            }
+
             // Fetch related data using a helper function
             function fetch_related_data($conn, $query, $title) {
                 $stmt = $conn->prepare($query);
@@ -52,7 +109,7 @@ if ($title) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Book</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -60,7 +117,7 @@ if ($title) {
         .book-card {
             margin-bottom: 1.5rem;
             padding: 1.5rem;
-            display:flex;
+            display: flex;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
@@ -82,18 +139,25 @@ if ($title) {
     <div class="body_contain">
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $message_type; ?>"><?php echo $message; ?></div>
-            <?php endif; ?>
-            <!-- return button -->
-            <a href="../index.php" class="btn btn-secondary"><</a>
-            
+        <?php endif; ?>
+        <!-- return button -->
+        <a href="../index.php" class="btn btn-secondary"><</a>
 
-            <!-- the title -->
+        <!-- the title -->    
+
         <?php if (isset($book)): ?>
-           <h4 class="book-title"><?php echo htmlspecialchars($book['B_title']); ?></h4>
-           <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-info">Edit</a>
-           <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">Add Copy</a>
-           <a href="BookList.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">list</a>
-           <div class="book-card">
+            <div class="text-center">
+                <?php if (!empty($book['photo'])): ?>
+                    <img src="<?php echo htmlspecialchars($book['photo']); ?>" alt="Book Photo" class="img-fluid" style="max-width: 300px; height: auto; margin-bottom: 1rem;">
+                <?php else: ?>
+                    <img src="../../../pic/Book" alt="Photo" class="img-fluid" style="max-width: 300px; height: auto; margin-bottom: 1rem;">
+                <?php endif; ?>
+            </div>
+            <h4 class="book-title"><?php echo htmlspecialchars($book['B_title']); ?></h4>
+            <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-info">Edit</a>
+            <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">Add Copy</a>
+            <a href="BookList.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">List</a>
+            <div class="book-card">
                 <div class="table table-custom">
                     <p><strong>Subtitle:</strong><br><?php echo htmlspecialchars($book['subtitle']); ?></p>
                     <p><strong>Author:</strong><br><?php echo htmlspecialchars($book['author']); ?></p>
@@ -119,8 +183,6 @@ if ($title) {
                     <p><strong>Other Details:</strong><br><?php echo htmlspecialchars($book['Odetail']); ?></p>
                     <p><strong>Size:</strong><br><?php echo htmlspecialchars($book['size']); ?></p>
                 </div>
-<!-- start here -->
-
             </div>
 
             <div class="row">
