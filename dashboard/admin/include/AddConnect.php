@@ -46,62 +46,66 @@ if ($conn->connect_error) {
             // Insert into Book table
             $sql = "INSERT INTO Book (B_title, subtitle, author, edition, LCCN, ISBN, ISSN, MT, ST, place, publisher, Pdate, copyright, extent, Odetail, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             if (!executeStatement($conn, $sql, "ssssssssssssssss", $B_title, $subtitle, $author, $edition, $LCCN, $ISBN, $ISSN, $MT, $ST, $place, $publisher, $Pdate, $copyright, $extent, $Odetail, $size)) {
-                $message .= "Error inserting book: " . $conn->error . "<br>";
+                $message = "Error inserting book: " . $conn->error;
                 $message_type = "error";
             } else {
-                $message .= "Book registration successful!";
+                $message = "Book registration successful!";
                 $message_type = "success";
 
-                // Verify the book was inserted
-                $last_id = $conn->insert_id; // Get the last inserted id
-                if ($last_id > 0) {
-                    // Prepare additional inserts
-                    $series = $_POST['series'] ?? '';
-                    $volume = $_POST['volume'] ?? '';
-                    $IL = $_POST['IL'] ?? '';
-                    $lexille = $_POST['lexille'] ?? '';
-                    $F_and_P = $_POST['F_and_P'] ?? '';
-                    $comments = $_POST['comments'] ?? '';
-                    $url = $_POST['url'] ?? '';
-                    $Description = $_POST['Description'] ?? '';
-                    $UTitle = $_POST['UTitle'] ?? '';
-                    $VForm = $_POST['VForm'] ?? '';
-                    $SUTitle = $_POST['SUTitle'] ?? '';
-                    $Co_Name = $_POST['Co_Name'] ?? '';
-                    $Co_Date = $_POST['Co_Date'] ?? '';
-                    $Co_Role = $_POST['Co_Role'] ?? '';
+                // Get the last inserted id
+                $last_id = $conn->insert_id;
 
-                    // Insert Series
-                    $sql = "INSERT INTO Series (B_title, title, volume, IL, lexille, F_and_P, comments) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                    executeStatement($conn, $sql, "ssissss", $B_title, $series, $volume, $IL, $lexille, $F_and_P, $comments);
+                // Prepare additional inserts
+                $series = $_POST['series'] ?? '';
+                $volume = $_POST['volume'] ?? '';
+                $IL = $_POST['IL'] ?? '';
+                $lexille = $_POST['lexille'] ?? '';
+                $F_and_P = $_POST['F_and_P'] ?? '';
+                $comments = $_POST['comments'] ?? '';
+                $url = $_POST['url'] ?? '';
+                $Description = $_POST['Description'] ?? '';
+                $UTitle = $_POST['UTitle'] ?? '';
+                $VForm = $_POST['VForm'] ?? '';
+                $SUTitle = $_POST['SUTitle'] ?? '';
 
-                    // Insert Subject
-                    $Sub_Head = $_POST['Sub_Head'] ?? '';
-                    $Sub_Head_input = $_POST['Sub_Head_input'] ?? '';
-                    $Sub_Body_1 = $_POST['Sub_Body_1'] ?? '';
-                    $Sub_input_1 = $_POST['Sub_input_1'] ?? '';
-                    $Sub_Body_2 = $_POST['Sub_Body_2'] ?? '';
-                    $Sub_input_2 = $_POST['Sub_input_2'] ?? '';
-                    $Sub_Body_3 = $_POST['Sub_Body_3'] ?? '';
-                    $Sub_input_3 = $_POST['Sub_input_3'] ?? '';
+                // Insert Series
+                $sql = "INSERT INTO Series (B_title, title, volume, IL, lexille, F_and_P, comments) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                executeStatement($conn, $sql, "ssissss", $B_title, $series, $volume, $IL, $lexille, $F_and_P, $comments);
 
-                    $sql = "INSERT INTO Subject (B_title, Sub_Head, Sub_Head_input, Sub_Body_1, Sub_input_1, Sub_Body_2, Sub_input_2, Sub_Body_3, Sub_input_3) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    executeStatement($conn, $sql, "sssssssss", $B_title, $Sub_Head, $Sub_Head_input, $Sub_Body_1, $Sub_input_1, $Sub_Body_2, $Sub_input_2, $Sub_Body_3, $Sub_input_3);
+                // Insert Subject
+                $Sub_Head = $_POST['Sub_Head'] ?? '';
+                $Sub_Head_input = $_POST['Sub_Head_input'] ?? '';
+                $Sub_Body_1 = $_POST['Sub_Body_1'] ?? '';
+                $Sub_input_1 = $_POST['Sub_input_1'] ?? '';
+                $Sub_Body_2 = $_POST['Sub_Body_2'] ?? '';
+                $Sub_input_2 = $_POST['Sub_input_2'] ?? '';
+                $Sub_Body_3 = $_POST['Sub_Body_3'] ?? '';
+                $Sub_input_3 = $_POST['Sub_input_3'] ?? '';
 
-                    // Insert Resource
-                    $sql = "INSERT INTO Resource (B_title, url, Description) VALUES (?, ?, ?)";
-                    executeStatement($conn, $sql, "sss", $B_title, $url, $Description);
+                $sql = "INSERT INTO Subject (B_title, Sub_Head, Sub_Head_input, Sub_Body_1, Sub_input_1, Sub_Body_2, Sub_input_2, Sub_Body_3, Sub_input_3) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                executeStatement($conn, $sql, "sssssssss", $B_title, $Sub_Head, $Sub_Head_input, $Sub_Body_1, $Sub_input_1, $Sub_Body_2, $Sub_input_2, $Sub_Body_3, $Sub_input_3);
 
-                    // Insert Alternate Title
-                    $sql = "INSERT INTO AlternateTitle (B_title, UTitle, VForm, SUTitle) VALUES (?, ?, ?, ?)";
-                    executeStatement($conn, $sql, "ssss", $B_title, $UTitle, $VForm, $SUTitle);
+                // Insert Resource
+                $sql = "INSERT INTO Resource (B_title, url, Description) VALUES (?, ?, ?)";
+                executeStatement($conn, $sql, "sss", $B_title, $url, $Description);
 
-                    // Insert CoAuthor
-                    $sql = "INSERT INTO CoAuthor (B_title, Co_Name, Co_Date, Co_Role) VALUES (?, ?, ?, ?)";
-                    executeStatement($conn, $sql, "ssss", $B_title, $Co_Name, $Co_Date, $Co_Role);
-                } else {
-                    $message = "Failed to register the book, cannot insert series.";
-                    $message_type = "error";
+                // Insert Alternate Title
+                $sql = "INSERT INTO AlternateTitle (B_title, UTitle, VForm, SUTitle) VALUES (?, ?, ?, ?)";
+                executeStatement($conn, $sql, "ssss", $B_title, $UTitle, $VForm, $SUTitle);
+
+                // Insert CoAuthors
+                $coAuthors = $_POST['Co_Name'] ?? [];
+                $coAuthorDates = $_POST['Co_Date'] ?? [];
+                $coAuthorRoles = $_POST['Co_Role'] ?? [];
+
+                foreach ($coAuthors as $index => $coAuthor) {
+                    $coAuthorDate = $coAuthorDates[$index] ?? '';
+                    $coAuthorRole = $coAuthorRoles[$index] ?? '';
+
+                    // Prepare statement for co-authors
+                    $stmt = $conn->prepare("INSERT INTO coauthor (B_title, Co_Name, Co_Date, Co_Role) VALUES (?, ?, ?, ?)");
+                    $stmt->bind_param("ssss", $B_title, $coAuthor, $coAuthorDate, $coAuthorRole);
+                    $stmt->execute();
                 }
             }
         }
@@ -114,6 +118,9 @@ if ($conn->connect_error) {
 // Function to execute a prepared statement and return success status
 function executeStatement($conn, $sql, $types, ...$params) {
     $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        return false; // Return false if the statement preparation fails
+    }
     $stmt->bind_param($types, ...$params);
     $result = $stmt->execute();
     $stmt->close();
@@ -137,7 +144,7 @@ function executeStatement($conn, $sql, $types, ...$params) {
                     title: 'Success!',
                     text: message,
                     didClose: () => {
-                        window.location.href = '../BrowseUser.php'; // Redirect to the index page
+                        window.location.href = '../index.php'; // Redirect to the index page
                     }
                 });
             } else {

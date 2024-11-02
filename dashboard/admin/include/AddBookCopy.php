@@ -105,6 +105,20 @@ if ($title) {
                 <input type="text" class="form-control" id="callNumber" name="callNumber" required>
             </div>
 
+            <!-- Rating -->
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <select class="form-select" id="rating" name="rating" required>
+                    <option value="">Select a Rating</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+
+
             <!-- Purchase Price -->
             <div class="mb-3">
                 <label for="purchasePrice" class="form-label">Purchase Price</label>

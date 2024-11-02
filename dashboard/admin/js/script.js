@@ -90,105 +90,31 @@ window.onclick = function(event) {
     }
 };
 
-// for co_author
-let currentEditIndex = null; // Track the index of the entry being edited
+// for co_authotr
+document.getElementById('addCoAuthor').addEventListener('click', function() {
+    const coAuthorsContainer = document.getElementById('coAuthorsContainer');
+    const newCoAuthor = document.createElement('div');
+    newCoAuthor.classList.add('form-co-author');
+    newCoAuthor.innerHTML = `
+        <div class="form-book">
+            <label for="Co_Name[]">Name</label>
+            <input type="text" id="Co_Name" name="Co_Name[]" placeholder="Enter co-author's name" required>
+        </div>
+        <div class="form-book">
+            <label for="Co_Date[]">Date</label>
+            <input type="date" id="Co_Date" name="Co_Date[]" required>
+        </div>
+        <div class="form-book">
+            <label for="Co_Role[]">Role</label>
+            <input type="text" id="Co_Role" name="Co_Role[]" placeholder="Enter co-author's role" required>
+        </div>
+        <button type="button" class="removeCoAuthor">Remove</button>
+    `;
+    coAuthorsContainer.appendChild(newCoAuthor);
+});
 
-function openCoAuthorModal() {
-    document.getElementById('coAuthorModal').style.display = 'block';
-}
-
-function closeCoAuthorModal() {
-    document.getElementById('coAuthorModal').style.display = 'none';
-    resetForm();
-}
-
-function resetForm() {
-    document.getElementById('Co_Name').value = '';
-    document.getElementById('Co_Date').value = '';
-    document.getElementById('Co_Role').value = '';
-    currentEditIndex = null;
-}
-
-function submitCoAuthor() {
-    const nameInput = document.getElementById('Co_Name');
-    const dateInput = document.getElementById('Co_Date');
-    const roleInput = document.getElementById('Co_Role');
-
-    const nameText = nameInput.value.trim();
-    const dateText = dateInput.value;
-    const roleText = roleInput.value.trim();
-
-    if (nameText) {
-        const coAuthorsDisplay = document.getElementById('coAuthorsDisplay');
-        const newCoAuthor = document.createElement('div');
-        newCoAuthor.innerHTML = `${nameText} - ${dateText ? dateText : 'No Date'} - ${roleText ? roleText : 'No Role'} 
-            <button type="button" onclick="openEditCoAuthorModal(${coAuthorsDisplay.children.length})">Edit</button>
-            <button type="button" onclick="deleteCoAuthor(${coAuthorsDisplay.children.length})">Delete</button>`;
-        coAuthorsDisplay.appendChild(newCoAuthor);
-        
-        resetForm();
-        closeCoAuthorModal(); // Close the modal
-
-        // Send to the server
-        fetch('addCoAuthor.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `name=${encodeURIComponent(nameText)}&date=${encodeURIComponent(dateText)}&role=${encodeURIComponent(roleText)}`
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data); // Handle response from the server
-        })
-        .catch(error => console.error('Error:', error));
-    } else {
-        alert("Please enter a co-author's name.");
+document.getElementById('coAuthorsContainer').addEventListener('click', function(e) {
+    if (e.target.classList.contains('removeCoAuthor')) {
+        e.target.parentElement.remove();
     }
-}
-
-function openEditCoAuthorModal(index) {
-    const coAuthorsDisplay = document.getElementById('coAuthorsDisplay');
-    const entry = coAuthorsDisplay.children[index];
-    
-    // Extract existing values
-    const [name, date, role] = entry.innerText.split(' - ').map(text => text.trim().split(' ')[0]);
-    
-    document.getElementById('editCo_Name').value = name;
-    document.getElementById('editCo_Date').value = date;
-    document.getElementById('editCo_Role').value = role;
-
-    currentEditIndex = index; // Set the current edit index
-    document.getElementById('editCoAuthorModal').style.display = 'block'; // Open modal for editing
-}
-
-function closeEditCoAuthorModal() {
-    document.getElementById('editCoAuthorModal').style.display = 'none';
-}
-
-function saveEditedCoAuthor() {
-    const nameInput = document.getElementById('editCo_Name');
-    const dateInput = document.getElementById('editCo_Date');
-    const roleInput = document.getElementById('editCo_Role');
-
-    const nameText = nameInput.value.trim();
-    const dateText = dateInput.value;
-    const roleText = roleInput.value.trim();
-
-    if (nameText && currentEditIndex !== null) {
-        const coAuthorsDisplay = document.getElementById('coAuthorsDisplay');
-        const entry = coAuthorsDisplay.children[currentEditIndex];
-        entry.innerHTML = `${nameText} - ${dateText ? dateText : 'No Date'} - ${roleText ? roleText : 'No Role'} 
-            <button type="button" onclick="openEditCoAuthorModal(${currentEditIndex})">Edit</button>
-            <button type="button" onclick="deleteCoAuthor(${currentEditIndex})">Delete</button>`;
-        
-        closeEditCoAuthorModal(); // Close the edit modal
-    } else {
-        alert("Please enter a co-author's name.");
-    }
-}
-
-function deleteCoAuthor(index) {
-    const coAuthorsDisplay = document.getElementById('coAuthorsDisplay');
-    coAuthorsDisplay.removeChild(coAuthorsDisplay.children[index]);
-}
+});

@@ -2,7 +2,7 @@
     <div class="content">
         <!-- Sidebar Section -->
         <div class="sidebar">
-            <button onclick="showSection('title-section')" selected>Brief Title</button>
+            <button onclick="showSection('title-section')">Brief Title</button>
             <button onclick="showSection('series/note')">Series/Note</button>
             <button onclick="showSection('subject')">Subject</button>
             <button onclick="showSection('resources')">Resources</button>
@@ -51,20 +51,33 @@
                     <div class="form-book">
                         <label for="MT">Material Type</label>
                         <select name="MT" id="MT">
-                            <option value="book">Book</option>
-                            <option value="computer_file">Computer File</option>
-                            <option value="ebook">Electronic Book (E-Book)</option>
-                            <option value="artifact">Artifact</option>
+                            <option selected value="">Book</option>
+                            <option value="">Computer File</option>
+                            <option value="">Electronic Book (E-Book)</option>
+                            <option value="">Equipment</option>
+                            <option value="">Kit</option>
+                            <option value="">Manuscript Language Material</option>
+                            <option value="">Map</option>
+                            <option value="">Mixed Material</option>
+                            <option value="">Music (Printed)</option>
+                            <option value="">Picture</option>
+                            <option value="">Serial</option>
+                            <option value="">Musical Sound Recoding</option>
+                            <option value="">NonMusical Sound Recoding</option>
+                            <option value="">Video</option>
                         </select>
                     </div>
 
                     <div class="form-book">
                         <label for="ST">SubType</label>
                         <select name="ST" id="ST">
-                            <option value="not_assigned">No SubType Assigned</option>
+                            <option value="not_assigned" selected>No SubType Assigned</option>
                             <option value="Braille">Braille</option>
                             <option value="Hardcover">Hardcover</option>
-                            <option value="LargePrint">Large Print</option>
+                            <option value="LargePrint">Paperback</option>
+                            <option value="LargePrint">Picture Book (ref.)</option>
+                            <option value="LargePrint">Dictionary (ref.)</option>
+                            <option value="LargePrint">Other</option>
                         </select>
                     </div>
 
@@ -105,29 +118,49 @@
                 <div class="main-content" id="series/note">
                     <h1>Series Info</h1>
                     <div class="form-book">
-                        <label for="title">Title</label>
-                        <input type="text" id="title" name="title">
-                    </div>
-                    <div class="form-book">
                         <label for="volume">Volume</label>
                         <input type="text" id="volume" name="volume">
                     </div>
                     <div class="form-book">
                         <label for="IL">Interest Level</label>
                         <select id="IL" name="IL">
-                            <option value="">Select Interest Level</option>
+                            <option value=""></option>
+                            <option value="">Preschool</option>
+                            <option value="">K-3</option>
+                            <option value="">3-6</option>
+                            <option value="">All Juvenile</option>
+                            <option value="">5-8</option>
+                            <option value="">1-10</option>
+                            <option value="">All Secondary</option>
+                            <option value="">All Grades</option>
+                            <option value="">Young Adult</option>
+                            <option value="">Professionals</option>
                         </select>
                     </div>
                     <div class="form-book">
                         <label for="lexille">Lexile</label>
                         <select id="lexille" name="lexille">
                             <option value="">No Code</option>
+                            <option value="">Adult Directed Text (AD)</option>
+                            <option value="">Beginning Reading (BR)</option>
+                            <option value="">Graphic Novel (GN)</option>
+                            <option value="">High Low (HL)</option>
+                            <option value="">Illustrated Glossary (IG)</option>
+                            <option value="">Non-Confirming Text (NC)</option>
+                            <option value="">Non Prose Text (NP)</option>
                         </select>
                     </div>
                     <div class="form-book">
                         <label for="F_and_P">Fountas and Pinnell</label>
                         <select id="F_and_P" name="F_and_P">
-                            <option value="">Any Level</option>
+                        <option value="">Any Level</option>
+                        <option value="">Text Level Gradient</option>
+                        <option value="">Benchmark Assessment System</option>
+                        <option value="">Instructional Practices</option>
+                        <option value="">Sample Text Levels</option>
+                        <option value="">Assessment Tools</option>
+                        <option value="">Literacy Continuum</option>
+                        <option value="">Reading Strategies</option>
                         </select>
                     </div>
 
@@ -220,60 +253,28 @@
                     </div>
 
                     <h1>Co-Authors, Illustrator, Editor, etc.</h1>
-                    <button type="button" onclick="openCoAuthorModal()">Add Co-Author</button>
-                    <div id="coAuthorsDisplay"></div>
-
-                    <!-- Co-Author Modal -->
-                    <div id="coAuthorModal" class="modal" style="display:none;">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeCoAuthorModal()">&times;</span>
-                            <h2>Add Co-Author</h2>
-                            <div class="form-book">
-                                <label for="Co_Name">Name</label>
-                                <input type="text" id="Co_Name" name="Co_Name" placeholder="Enter co-author's name">
-                            </div>
-                            <div class="form-book">
-                                <label for="Co_Date">Date</label>
-                                <input type="date" id="Co_Date" name="Co_Date">
-                            </div>
-                            <div class="form-book">
-                                <label for="Co_Role">Role</label>
-                                <input type="text" id="Co_Role" name="Co_Role" placeholder="Enter co-author's role">
-                            </div>
-                            <input type="hidden" name="coAuthors" id="coAuthorsInput">
-                            <div class="modal-actions">
-                                <button type="button" onclick="submitCoAuthor()">Submit</button>
-                                <button type="button" onclick="closeCoAuthorModal()">Cancel</button>
+                    <div class="form-group">
+                        <div id="coAuthorsContainer">
+                            <div class="form-co-author">
+                                <div class="form-book">
+                                    <label for="Co_Name[]">Name</label>
+                                    <input type="text" id="Co_Name" name="Co_Name[]" placeholder="Enter co-author's name" required>
+                                </div>
+                                <div class="form-book">
+                                    <label for="Co_Date[]">Date</label>
+                                    <input type="date" id="Co_Date" name="Co_Date[]" required>
+                                </div>
+                                <div class="form-book">
+                                    <label for="Co_Role[]">Role</label>
+                                    <input type="text" id="Co_Role" name="Co_Role[]" placeholder="Enter co-author's role" required>
+                                </div>
                             </div>
                         </div>
+                        <button type="button" id="addCoAuthor">Add Co-Author</button>
                     </div>
 
-                    <!-- Edit Co-Author Modal -->
-                    <div id="editCoAuthorModal" class="modal" style="display:none;">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeEditCoAuthorModal()">&times;</span>
-                            <h2>Edit Co-Author</h2>
-                            <div class="form-book">
-                                <label for="editCo_Name">Name</label>
-                                <input type="text" id="editCo_Name" name="Co_Name">
-                            </div>
-                            <div class="form-book">
-                                <label for="editCo_Date">Date</label>
-                                <input type="date" id="editCo_Date" name="Co_Date">
-                            </div>
-                            <div class="form-book">
-                                <label for="editCo_Role">Role</label>
-                                <input type="text" id="editCo_Role" name="Co_Role">
-                            </div>
-                            <div class="modal-actions">
-                                <button type="button" onclick="saveEditedCoAuthor()">Save</button>
-                                <button type="button" onclick="closeEditCoAuthorModal()">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Common Action Buttons -->
                 </div>
-
-                <!-- Common Action Buttons -->
                 <div class="action-buttons">
                     <button type="submit">Add</button>
                     <button type="button" class="reset" onclick="resetCommonForm()">Reset</button>
@@ -281,5 +282,4 @@
             </div>
         </form>
     </div>
-
 </body>

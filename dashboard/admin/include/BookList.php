@@ -28,11 +28,9 @@ if (!$result) {
 </head>
 <body>
     <div class="container mt-4">
-        
+
         <h2>Book List</h2>
-        <?php if ($book_title): ?>
             <a href="ViewBook.php?title=<?php echo urlencode($book_title); ?>" class="btn btn-primary mb-3">List</a>
-        <?php endif; ?>
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $message_type; ?>">
                 <?php echo htmlspecialchars($message); ?>
@@ -42,6 +40,7 @@ if (!$result) {
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Title</th>
                     <th>Copy ID</th>
                     <th>Call Number</th>
@@ -49,6 +48,8 @@ if (!$result) {
                     <th>Vendor</th>
                     <th>Funding Source</th>
                     <th>Sublocation</th>
+                    <th>Rating</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,6 +57,7 @@ if (!$result) {
                 if ($result && $result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>
+                            <td>" . htmlspecialchars($row['ID']) . "</td>
                             <td>" . htmlspecialchars($row['B_title']) . "</td>
                             <td>" . htmlspecialchars($row['copy_ID']) . "</td>
                             <td>" . htmlspecialchars($row['callNumber']) . "</td>
@@ -63,6 +65,10 @@ if (!$result) {
                             <td>" . htmlspecialchars($row['vendor']) . "</td>
                             <td>" . htmlspecialchars($row['fundingSource']) . "</td>
                             <td>" . htmlspecialchars($row['Sublocation']) . "</td>
+                            <td>" . htmlspecialchars($row['rating']) . "</td>
+                            <td>
+                                <a href='ViewCopy.php?ID=" . urlencode($row['ID']) . "' class='btn btn-info'>View Copy</a>
+                            </td>
                         </tr>";
                     }
                 } else {

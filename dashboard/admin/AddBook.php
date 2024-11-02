@@ -13,8 +13,7 @@ include 'include/admin_connect.php';
     <link rel="stylesheet" href="css/booktable.css">     
     <link rel="stylesheet" href="css/styles.css">     
 
-    <script src="js/script.js"></script>
-
+    
     <title>Admin Dashboard</title>
     
 </head>
@@ -35,4 +34,5 @@ include 'include/admin_connect.php';
     <?php include 'include/footer.php'; ?>
 
 </body>
+<script src="js/script.js"></script>
 </html>
