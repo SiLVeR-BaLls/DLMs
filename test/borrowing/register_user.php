@@ -1,30 +1,28 @@
-<?php
-include 'db.php';
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-
-    $sql = "INSERT INTO users (username) VALUES (?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-
-    header("Location: view_users.php");
-}
-?>
-
+<!-- register_user.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
     <title>Register User</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<?php
+include 'navbar.php'; // Include the navbar at the top of the page
+
+?>
+
+
     <h2>Register User</h2>
-    <form method="POST">
+    <form action="register_user_action.php" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
-        <button type="submit">Register</button>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <button type="submit">Register User</button>
     </form>
 </body>
 </html>

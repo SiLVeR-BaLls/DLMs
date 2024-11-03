@@ -1,10 +1,9 @@
 <?php
-// db.php - Connect to MySQL database
-
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "library_system";
+$dbname = "lib_bor_ret";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

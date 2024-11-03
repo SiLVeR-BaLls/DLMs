@@ -1,35 +1,34 @@
 <?php
-include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $author = $_POST['author'];
-
-    $sql = "INSERT INTO books (title, author) VALUES (?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $title, $author);
-    $stmt->execute();
-
-    header("Location: view_books.php");
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
     <title>Register Book</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<?php
+include 'navbar.php'; // Include the navbar at the top of the page
+
+?>
+
+
     <h2>Register Book</h2>
-    <form method="POST">
-        <label for="title">Title:</label>
+    <form action="register_book_action.php" method="POST">
+        <label for="title">Book Title:</label>
         <input type="text" id="title" name="title" required>
-        
+        <br>
         <label for="author">Author:</label>
         <input type="text" id="author" name="author" required>
-        
-        <button type="submit">Register</button>
+        <br>
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required>
+        <br>
+        <button type="submit">Register Book</button>
     </form>
 </body>
 </html>

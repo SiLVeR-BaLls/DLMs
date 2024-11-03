@@ -41,6 +41,7 @@ if (!$result) {
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Status</th>
                     <th>Title</th>
                     <th>Copy ID</th>
                     <th>Call Number</th>
@@ -58,6 +59,7 @@ if (!$result) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>
                             <td>" . htmlspecialchars($row['ID']) . "</td>
+                            <td>" . htmlspecialchars($row['status']) . "</td>
                             <td>" . htmlspecialchars($row['B_title']) . "</td>
                             <td>" . htmlspecialchars($row['copy_ID']) . "</td>
                             <td>" . htmlspecialchars($row['callNumber']) . "</td>
