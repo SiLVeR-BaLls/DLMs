@@ -102,11 +102,11 @@ document.getElementById('addCoAuthor').addEventListener('click', function() {
         </div>
         <div class="form-book">
             <label for="Co_Date[]">Date</label>
-            <input type="date" id="Co_Date" name="Co_Date[]" required>
+            <input type="date" id="Co_Date" name="Co_Date[]" >
         </div>
         <div class="form-book">
             <label for="Co_Role[]">Role</label>
-            <input type="text" id="Co_Role" name="Co_Role[]" placeholder="Enter co-author's role" required>
+            <input type="text" id="Co_Role" name="Co_Role[]" placeholder="Enter co-author's role" >
         </div>
         <button type="button" class="removeCoAuthor">Remove</button>
     `;
