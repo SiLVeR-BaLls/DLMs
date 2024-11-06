@@ -203,8 +203,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 <?php if ($user['photo']): ?>
                     <img src="../../../pic/User/<?php echo htmlspecialchars($user['photo']); ?>" alt="User Photo" class="img-thumbnail" style="max-width: 200px; margin-top: 10px;">
                 <?php endif; ?>
-                <label>Upload Photo:</label>
-                <input type="file" class="form-control" name="photo" accept="image/*">
+                <label for="photo" >Upload Photo:</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
             </div>
 
             <p class="top"><b class="tile">Site Information</b></p>

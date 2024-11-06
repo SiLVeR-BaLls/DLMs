@@ -23,7 +23,10 @@ include '../config.php'; // Include the configuration file for database connecti
 echo "<h1>Borrow</h1>";
 
 // Fetch all available book_copies along with their authors
-$query = "SELECT * FROM book join book_copies WHERE status = 'available'";
+$query = "SELECT * 
+FROM book 
+join book_copies 
+WHERE status = 'available'";
 $result = $conn->query($query); // Execute the query
 ?>
 
@@ -38,16 +41,34 @@ $result = $conn->query($query); // Execute the query
     <br>
     <?php
     if ($result && $result->num_rows > 0) {
+        // Start the table structure
+        echo "<table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>L</th>
+                        <th>Book ID</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>";
+
         while ($row = $result->fetch_assoc()) {
-            echo " 
-            <label for='ID'>
-            {$row['B_title']} by {$row['author']} NO. {$row['ID']}
-            </label>
-            <input  type='checkbox' name='ID[]' value='{$row['ID']}'>
-            <br>";
+            // For each book, output a table row
+            echo "
+            <tr>
+                <td>{$row['B_title']}</td>
+                <td>{$row['author']}</td>
+                <td>{$row['circulationType']}</td>
+                <td>{$row['ID']}</td>
+                <td><input type='checkbox' name='ID[]' value='{$row['ID']}'></td>
+            </tr>";
         }
+
+        echo "</tbody></table>";
     } else {
-        echo "No available books.";
+        echo "<p>No available books.</p>";
     }
     ?>
     

@@ -94,15 +94,14 @@ if ( $title) {
 // Handle form submission for updating book details
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     // Process file upload
-    $photoPath = '';
+    $photoPath = $book['photo']; // Default to existing photo
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
 
 
 
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
-        // Validate file type
         $fileType = mime_content_type($_FILES['photo']['tmp_name']);
-        $fileSize = $_FILES['photo']['size']; // Get the file size
+        $fileSize = $_FILES['photo']['size'];
 
         if (!in_array($fileType, $allowedTypes) || $fileSize > 2 * 1024 * 1024) { // 2 MB limit
             $message = "Invalid image format or file too large.";
@@ -119,9 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
             }
 
             // Handle new file upload
-            $fileName = basename($_FILES['photo']['name']);
-            $photoPath = uniqid() . '_' . $fileName;
-            move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $photoPath);
+            $fileName = uniqid() . '_' . basename($_FILES['photo']['name']);
+            if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $fileName)) {
+                $photoPath = $fileName;
+            } else {
+                $message = "Failed to upload photo.";
+                $message_type = "error";
+            }
         }
     }
 
@@ -244,13 +247,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <h4 class="book-title">Editing: <?php echo htmlspecialchars($book['B_title']); ?></h4>
             <button onclick="history.back();" class="btn btn-secondary mb-3">Back to Browse</button>
             <form method="POST" enctype="multipart/form-data" class="book-card">
-                <div class="form-group">
-                    <label for="photo">Book Photo:</label>
-                    <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
-                    <?php if (!empty($book['photo'])): ?>
-                        <img src="../../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="Book Photo"id="photo" name="photo" class="img-thumbnail" style="max-width: 200px; margin-top: 10px;">
-                    <?php endif; ?>
-                </div>
+              
+
+                    <!-- photo  -->
+            <div class="form-group">
+                <label for="photo" >Upload Photo:</label>
+                <?php if ($book['photo']): ?>
+                    <img src="../../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="book Photo" class="img-thumbnail" style="max-width: 200px; margin-top: 10px;">
+                <?php endif; ?>
+                <input type="file" id="photo" class="form-control" name="photo" accept="image/*">
+            </div>
+            
                         <!-- brief title -->
                 <div class="row">
                     <h3>Title</h3>

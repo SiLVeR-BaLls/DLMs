@@ -28,9 +28,8 @@ if (!$result) {
 </head>
 <body>
     <div class="container mt-4">
-
         <h2>Book List</h2>
-            <a href="ViewBook.php?title=<?php echo urlencode($book_title); ?>" class="btn btn-primary mb-3">List</a>
+        <a href="ViewBook.php?title=<?php echo urlencode($book_title); ?>" class="btn btn-primary mb-3">List</a>
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $message_type; ?>">
                 <?php echo htmlspecialchars($message); ?>
@@ -74,12 +73,25 @@ if (!$result) {
                         </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='7'>No books available.</td></tr>";
+                    echo "<tr><td colspan='11'>No books available.</td></tr>";
                 }
                 ?>
             </tbody>
         </table>
     </div>
+
+    <script>
+    // Check if the page has already been refreshed
+    if (!sessionStorage.getItem('hasRefreshed')) {
+        // Set the 'hasRefreshed' flag before the page reload
+        sessionStorage.setItem('hasRefreshed', 'true');
+
+        // Reload the page after a short delay (1 second)
+        setTimeout(function() {
+            location.reload();
+        }, 1000);
+    }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

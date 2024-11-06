@@ -12,11 +12,25 @@ if ($conn->connect_error) {
     $message = "Connection failed: " . $conn->connect_error;
     $message_type = "danger"; // Danger type for error messages
 } else {
-    // Fetch all books or records from the database
-    $sql = "SELECT B_title, author, 
-            (SELECT GROUP_CONCAT(Co_Name SEPARATOR ', ') FROM CoAuthor WHERE B_title = Book.B_title) AS coauthors, 
-            LCCN, ISBN, ISSN, MT AS MaterialType, extent 
-            FROM Book";
+    // Modify SQL query to fetch book information along with copies data
+    $sql = "SELECT 
+                Book.B_title, 
+                Book.author, 
+                (SELECT GROUP_CONCAT(Co_Name SEPARATOR ', ') FROM CoAuthor WHERE B_title = Book.B_title) AS coauthors, 
+                Book.LCCN, 
+                Book.ISBN, 
+                Book.ISSN, 
+                Book.MT AS MaterialType, 
+                Book.extent,
+                COUNT(CASE WHEN Book_copies.status = 'Available' THEN 1 END) AS available_count, 
+                COUNT(CASE WHEN Book_copies.status = 'Borrowed' THEN 1 END) AS borrowed_count,
+                COUNT(Book_copies.ID) AS total_count
+            FROM 
+                Book 
+            LEFT JOIN 
+                Book_copies ON Book.B_title = Book_copies.B_title
+            GROUP BY 
+                Book.B_title, Book.author, Book.LCCN, Book.ISBN, Book.ISSN, Book.MT, Book.extent";
     $result = $conn->query($sql); // Execute the query and get the result
 }
 ?>
@@ -76,6 +90,7 @@ if ($conn->connect_error) {
                     <th>ISSN</th>
                     <th>Material Type</th>
                     <th>Extent</th>
+                    <th>Copies (Available/Borrowed)</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -92,13 +107,16 @@ if ($conn->connect_error) {
                             <td class="material-type"><?php echo htmlspecialchars($row['MaterialType']); ?></td>
                             <td><?php echo htmlspecialchars($row['extent']); ?></td>
                             <td>
+                                <?php echo $row['available_count']; ?> / <?php echo $row['total_count']; ?> <!-- Show available / total copies -->
+                            </td>
+                            <td>
                                 <a href="include/ViewBook.php?title=<?php echo urlencode($row['B_title']); ?>" class="btn btn-info btn-sm">View</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="9" class="text-center">No books or research found.</td>
+                        <td colspan="10" class="text-center">No books or research found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

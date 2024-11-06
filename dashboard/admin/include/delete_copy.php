@@ -24,8 +24,7 @@ if ($ID) {
     $message_type = "warning";
 }
 
-// Redirect to the book list after a short delay
-header("Refresh: 2; url=book_list.php");
+// Redirect to the book list after a short delay using JavaScript
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +34,13 @@ header("Refresh: 2; url=book_list.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Copy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Use JavaScript to handle the page redirection -->
+    <script>
+        setTimeout(function() {
+            history.go(-2); // Go back 2 pages in history (the previous pages)
+        }, 2000); // 2-second delay before navigating back
+    </script>
 </head>
 <body>
     <div class="container mt-4">
@@ -42,7 +48,7 @@ header("Refresh: 2; url=book_list.php");
         <div class="alert alert-<?php echo $message_type; ?>">
             <?php echo htmlspecialchars($message); ?>
         </div>
-        <a href="BookList.php" class="btn btn-primary">Back to Book List</a>
+        <button onclick="history.go(-2);" class="btn btn-secondary mb-3">Back to Browse</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
