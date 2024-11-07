@@ -8,6 +8,7 @@
         <span class="bar"></span>
     </div>
     <ul class="navbar-nav" id="nav-links">
+    <li><a href="Report.php" class="link">Report</a></li>
     <li><a href="BorrowDisplay.php" class="link">Borrowed</a></li>
     <li><a href="ReturnBook.php" class="link">Return</a></li>
     <li><a href="Borrow.php" class="link">Borrow</a></li>

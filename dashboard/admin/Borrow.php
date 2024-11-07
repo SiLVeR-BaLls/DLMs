@@ -1,80 +1,58 @@
-<?php 
-?>
-
+<!-- Borrow.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" type="x-icon" href="../../pic/scr/book.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">   
+    <link rel="stylesheet" href="css/styles.css">
     <title>Borrowing</title>
 </head>
-
-
 <body>
-    
-<?php 
-include 'include/header.php';
-include 'include/navbar.php'; 
-include '../config.php'; // Include the configuration file for database connection
+    <?php include 'include/header.php'; include 'include/navbar.php'; ?>
+    <h1>Borrow</h1>
 
-echo "<h1>Borrow</h1>";
+    <center>
+        <form action="include/BorrowConnect.php" method="POST">
+            <div class="form-group">
+                <label for="IDno">User ID:</label>
+                <input type="text" id="IDno" name="IDno" required oninput="searchUser()">
+                <div id="userSearchResult" class="search-result"></div>
+            </div>
 
-// Fetch all available book_copies along with their authors
-$query = "SELECT * 
-FROM book 
-join book_copies 
-WHERE status = 'available'";
-$result = $conn->query($query); // Execute the query
-?>
+            <div class="form-group">
+                <label for="bookID">Book ID:</label>
+                <input type="text" id="bookID" name="bookID" required oninput="searchBook()">
+                <div id="bookSearchResult" class="search-result"></div>
+            </div>
 
+            <button type="submit" class="btn btn-primary mt-3">Approve Borrowing</button>
+        </form>
+    </center>
 
-<center>
-<form action="include/BorrowConnect.php" method="POST">
-    <label for="IDno">User ID:</label>
-    <input type="text" id="IDno" name="IDno" required>
-    <br>
-    <br>
-    <h3>Select Books to Borrow:</h3>
-    <br>
-    <?php
-    if ($result && $result->num_rows > 0) {
-        // Start the table structure
-        echo "<table class='table table-bordered'>
-                <thead>
-                    <tr>
-                        <th>Book Title</th>
-                        <th>Author</th>
-                        <th>L</th>
-                        <th>Book ID</th>
-                        <th>Select</th>
-                    </tr>
-                </thead>
-                <tbody>";
-
-        while ($row = $result->fetch_assoc()) {
-            // For each book, output a table row
-            echo "
-            <tr>
-                <td>{$row['B_title']}</td>
-                <td>{$row['author']}</td>
-                <td>{$row['circulationType']}</td>
-                <td>{$row['ID']}</td>
-                <td><input type='checkbox' name='ID[]' value='{$row['ID']}'></td>
-            </tr>";
+    <script>
+        // JavaScript functions to handle search
+        function searchUser() {
+            const IDno = document.getElementById('IDno').value;
+            if (IDno.length > 2) { // Start search after 2 characters
+                fetch(`UserSearch.php?IDno=${IDno}`)
+                    .then(response => response.text())
+                    .then(data => document.getElementById('userSearchResult').innerHTML = data);
+            } else {
+                document.getElementById('userSearchResult').innerHTML = "";
+            }
         }
 
-        echo "</tbody></table>";
-    } else {
-        echo "<p>No available books.</p>";
-    }
-    ?>
-    
-    <br>
-    <button type="submit">Borrow Selected Books</button>
-</form>
-</center>
+        function searchBook() {
+            const bookID = document.getElementById('bookID').value;
+            if (bookID.length > 2) { // Start search after 2 characters
+                fetch(`BookSearch.php?bookID=${bookID}`)
+                    .then(response => response.text())
+                    .then(data => document.getElementById('bookSearchResult').innerHTML = data);
+            } else {
+                document.getElementById('bookSearchResult').innerHTML = "";
+            }
+        }
+    </script>
 </body>
 </html>
