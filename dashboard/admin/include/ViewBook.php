@@ -147,10 +147,8 @@ if ($title) {
 
         <?php if (isset($book)): ?>
             <div class="text-center">
-                <?php if (!empty($book['photo'])): ?>
-                    <img src="<?php echo htmlspecialchars($book['photo']); ?>" alt="Book Photo" class="img-fluid" style="max-width: 300px; height: auto; margin-bottom: 1rem;">
-                <?php else: ?>
-                    <img src="../../../pic/Book" alt="Photo" class="img-fluid" style="max-width: 300px; height: auto; margin-bottom: 1rem;">
+                <?php if ($book['photo']): ?>
+                    <img src="../../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="book Photo" class="img-thumbnail" style="max-width: 200px; margin-top: 10px;">
                 <?php endif; ?>
             </div>
             <h4 class="book-title"><?php echo htmlspecialchars($book['B_title']); ?></h4>
