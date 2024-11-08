@@ -8,12 +8,12 @@
         <span class="bar"></span>
     </div>
     <ul class="navbar-nav" id="nav-links">
-    <li><a href="Report.php" class="link">Report</a></li>
-    <li><a href="BorrowDisplay.php" class="link">Borrowed</a></li>
-    <li><a href="ReturnBook.php" class="link">Return</a></li>
-    <li><a href="Borrow.php" class="link">Borrow</a></li>
-    <li><a href="index.php" class="link">Browse</a></li>
-    <li><a href="QRscan/index.php" class="link">Attendance</a></li>
+        <li><a href="Report.php" class="link">Report</a></li>
+        <li><a href="BorrowDisplay.php" class="link">Borrowed</a></li>
+        <li><a href="ReturnBook.php" class="link">Return</a></li>
+        <li><a href="Borrow.php" class="link">Borrow</a></li>
+        <li><a href="index.php" class="link">Browse</a></li>
+        <li><a href="QRscan/index.php" class="link">Attendance</a></li>
         <li><a href="AddBook.php" class="link">Catalog</a></li>
         <li><a href="BrowseUser.php" class="link">Browse Users</a></li>
         <li><a href="pending.php" class="link">Pending User</a></li>

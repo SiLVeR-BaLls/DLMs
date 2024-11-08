@@ -1,4 +1,4 @@
-<body>
+
     <div class="content">
         <!-- Sidebar Section -->
         <div class="sidebar">
@@ -282,4 +282,3 @@
             </div>
         </form>
     </div>
-</body>

@@ -24,6 +24,19 @@ include '../config.php'; // include database connection file
             font-size: 1.2rem;
             z-index: 10;
         }
+
+        @media
+
+(max-width: 917px) {
+    .close {
+        display: none; /* Hides the date and cover columns */
+    }
+    
+    .open{
+      background-color: pink;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -107,35 +120,35 @@ include '../config.php'; // include database connection file
             echo "<table class='table table-bordered'>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Borrow ID</th>
-                            <th>Username</th>
-                            <th>First Name</th>
-                            <th>Surename</th>
-                            <th>Book Title</th>
-                            <th>Author</th>
-                            <th>Borrow Date</th>
-                            <th>College</th> <!-- Added College column -->
-                            <th>Course</th> <!-- Added College column -->
-                            <th>Action</th>
+                            <th class='open'>ID</th>
+                            <th class='close'>Borrow ID</th>
+                            <th class='open'>Username</th>
+                            <th class='open'>First Name</th>
+                            <th class='close'>Surename</th>
+                            <th class='close'>Book Title</th>
+                            <th class='open'>Author</th>
+                            <th class='close'>Borrow Date</th>
+                            <th class='close'>College</th> <!-- Added College column -->
+                            <th class='close'>Course</th> <!-- Added College column -->
+                            <th class='open'>Action</th>
                         </tr>
                     </thead>
                     <tbody>";
 
             // Loop through each record and display the data
             while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>" . htmlspecialchars($row['ID']) . "</td>
-                        <td>" . htmlspecialchars($row['borrow_id']) . "</td>
-                        <td>" . htmlspecialchars($row['IDno']) . "</td>
-                        <td>" . htmlspecialchars($row['Fname']) . "</td>
-                        <td>" . htmlspecialchars($row['Sname']) . "</td>
-                        <td>" . htmlspecialchars($row['B_title']) . "</td>
-                        <td>" . htmlspecialchars($row['author']) . "</td>
-                        <td>" . htmlspecialchars($row['borrow_date']) . "</td>
-                        <td>" . htmlspecialchars($row['college']) . "</td> <!-- Displaying College -->
-                        <td>" . htmlspecialchars($row['course']) . "</td> <!-- Displaying College -->
-                        <td>
+                echo "<tr>open
+                        <td class='open'>" . htmlspecialchars($row['ID']) . "</td>
+                        <td class='close'>" . htmlspecialchars($row['borrow_id']) . "</td>
+                        <td class='open'>" . htmlspecialchars($row['IDno']) . "</td>
+                        <td class='open'>" . htmlspecialchars($row['Fname']) . "</td>
+                        <td class='close'>" . htmlspecialchars($row['Sname']) . "</td>
+                        <td class='close'>" . htmlspecialchars($row['B_title']) . "</td>
+                        <td class='open'>" . htmlspecialchars($row['author']) . "</td>
+                        <td class='close'>" . htmlspecialchars($row['borrow_date']) . "</td>
+                        <td class='close'>" . htmlspecialchars($row['college']) . "</td> <!-- Displaying College -->
+                        <td class='close'>" . htmlspecialchars($row['course']) . "</td> <!-- Displaying College -->
+                        <td class='open'>
                             <form action='include/ReturnConnect.php' method='POST'>
                                 <input type='hidden' name='ID' value='" . htmlspecialchars($row['ID']) . "'>
                                 <input type='submit' value='Return' class='btn btn-danger'>

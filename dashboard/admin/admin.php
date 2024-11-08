@@ -20,21 +20,17 @@ include 'include/admin_connect.php';
     <title>Admin Dashboard</title>
     
 </head>
-<body>
-    
+ 
+<body >
+    <!-- modify this  -->
+     <!-- header set at the top horizontal -->
+        <?php include 'include/header.php'; ?>
+    <!-- same here -->
+        <?php include 'include/navbar.php'; ?>
+    <!-- the navbar set at the right side vertical -->
+        <?php include 'include/sidebar.php'; ?>
 
 
-
-    <?php include 'include/header.php'; ?>
-    <?php include 'include/navbar.php'; ?>
-
-    <?php if (!$isLoggedIn): ?>
-                <?php include('include/log_in(ifnoaccount).php'); ?>
-
-    <?php else: ?>
-                <?php include('include/profile.php'); ?>
-
-<?php endif; ?>
 <?php include 'include/footer.php'; ?>
 
 

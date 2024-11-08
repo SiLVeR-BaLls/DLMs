@@ -88,32 +88,7 @@
         transform: scale(1.1);
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .table thead {
-            display: none;
-        }
 
-        .table tbody tr {
-            display: block;
-            margin-bottom: 1rem;
-        }
-
-        .table td {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem;
-            font-size: 0.9rem;
-            border: none;
-            border-bottom: 2px solid #333;
-        }
-
-        .table td::before {
-            content: attr(data-label);
-            font-weight: bold;
-            color: #333;
-        }
-    }
 </style>
 <p><strong>Welcome,
         <?php echo htmlspecialchars($_SESSION['admin']['username']); ?>!
