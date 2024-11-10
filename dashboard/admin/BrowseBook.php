@@ -1,9 +1,12 @@
 <?php
 
-
 // Initialize variables for messages
 $message = ""; // Variable to store messages
 $message_type = ""; // Variable to store message type (e.g., success, error)
+
+// Default number of books per page
+$default_limit = 10;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $default_limit;
 
 // Check connection to the database
 if ($conn->connect_error) {
@@ -11,7 +14,11 @@ if ($conn->connect_error) {
     $message = "Connection failed: " . $conn->connect_error;
     $message_type = "danger"; // Danger type for error messages
 } else {
-    // Modify SQL query to fetch book information along with copies data
+    // Pagination setup
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page
+    $offset = ($page - 1) * $limit; // Calculate the offset
+
+    // Modify SQL query to fetch book information along with copies data with pagination
     $sql = "SELECT 
                 Book.B_title, 
                 Book.author, 
@@ -29,11 +36,26 @@ if ($conn->connect_error) {
             LEFT JOIN 
                 Book_copies ON Book.B_title = Book_copies.B_title
             GROUP BY 
-                Book.B_title, Book.author, Book.LCCN, Book.ISBN, Book.ISSN, Book.MT, Book.extent";
-    $result = $conn->query($sql); // Execute the query and get the result
-}
-?>
+                Book.B_title, Book.author, Book.LCCN, Book.ISBN, Book.ISSN, Book.MT, Book.extent
+            LIMIT $limit OFFSET $offset";
 
+    $result = $conn->query($sql); // Execute the query and get the result
+
+    // Get the total number of rows (for pagination calculation)
+    $count_sql = "SELECT COUNT(DISTINCT Book.B_title) AS total_books
+                  FROM Book
+                  LEFT JOIN Book_copies ON Book.B_title = Book_copies.B_title";
+    $count_result = $conn->query($count_sql);
+    $total_books = $count_result->fetch_assoc()['total_books'];
+
+    // Calculate the total number of pages
+    $total_pages = ceil($total_books / $limit);
+}
+
+?>
+<style>
+    
+</style>
 <body>
 <div class="container">
     <!-- Alert message for connection error or success -->
@@ -62,11 +84,16 @@ if ($conn->connect_error) {
         </div>
 
         <!-- Search Input -->
-        <div class="col-md-8">
+        <div class="col-md-4">
             <label for="searchInput">Search:</label>
             <input type="text" id="searchInput" class="form-control" placeholder="Enter search term...">
         </div>
+        
+        
     </div>
+ 
+
+    <!-- Books per Page Selector -->
 
     <!-- Responsive Books Table -->
     <div class="table-responsive">
@@ -113,6 +140,161 @@ if ($conn->connect_error) {
             </tbody>
         </table>
     </div>
+
+<style>/* Pagination Styling */
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none; /* Remove default list markers */
+    padding-left: 0; /* Remove left padding */
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #666;
+    border-radius: 8px;
+    color: #ddd;
+    background-color: #444;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #555;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #777;
+    background-color: #444;
+    border-color: #666;
+    pointer-events: none;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #555;
+    border-color: #888;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* Active page item hover */
+.pagination .page-item.active .page-link:hover {
+    background-color: #666;
+    border-color: #888;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Pagination container holding both pagination and books per page */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Books per Page dropdown aligned to the right */
+.books-per-page-container {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.books-per-page-container label {
+    margin-right: 10px;
+    color: #ddd;
+}
+
+.books-per-page-container .form-control {
+    width: 5vw;
+    background-color: #555;
+    border-color: #888;
+    color: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.books-per-page-container .form-control:focus {
+    background-color: #555;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* Styling for dropdown options */
+.books-per-page-container .form-control option {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Dropdown option hover */
+.books-per-page-container .form-control option:hover {
+    background-color: #666;
+}
+
+/* Smaller pagination size */
+.pagination-sm .page-link {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+</style>
+    <!-- Pagination -->
+<div class="pagination-container">
+    <!-- Pagination links in the center -->
+    <div class="pagination">
+        <?php if ($total_pages > 1): ?>
+            <ul class="pagination justify-content-center">
+                <!-- Previous Page Link -->
+                <?php if ($page > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>">Previous</a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                <?php endif; ?>
+
+                <!-- Page Number Links -->
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                        <a class="page-link" href="?page=<?php echo $i; ?>&limit=<?php echo $limit; ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <!-- Next Page Link -->
+                <?php if ($page < $total_pages): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>">Next</a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+
+    <!-- Books per Page dropdown to the right -->
+    <div class="books-per-page-container">
+        <select id="booksPerPage" class="form-control" onchange="updateBooksPerPage()">
+            <option value="10" <?php echo ($limit == 10) ? 'selected' : ''; ?>>10</option>
+            <option value="20" <?php echo ($limit == 20) ? 'selected' : ''; ?>>20</option>
+            <option value="50" <?php echo ($limit == 50) ? 'selected' : ''; ?>>50</option>
+            <option value="100" <?php echo ($limit == 100) ? 'selected' : ''; ?>>100</option>
+        </select>
+    </div>
+</div>
+
+
 </div>
 
 <!-- Include jQuery and Bootstrap Bundle (for Bootstrap components) -->
@@ -121,6 +303,13 @@ if ($conn->connect_error) {
 
 <!-- JavaScript to filter the table based on search input and search type -->
 <script>
+    function updateBooksPerPage() {
+        var limit = document.getElementById('booksPerPage').value;
+        var url = new URL(window.location.href);
+        url.searchParams.set('limit', limit); // Update the URL with the selected limit
+        window.location.href = url; // Reload the page with new limit
+    }
+
     $(document).ready(function() {
         // Event listener for input changes
         $('#searchInput').on('keyup', filterTable); // Trigger filter on keyup in search input

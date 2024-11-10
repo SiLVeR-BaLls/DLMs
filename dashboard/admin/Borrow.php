@@ -18,7 +18,6 @@ include '../config.php'; // Include the configuration file for database connecti
 <style>
     /* Center the form and apply basic styles */
     .borrowing {
-        gap: 10rem;
         margin: 0;
         padding: 0px;
         display: flex;
@@ -75,6 +74,7 @@ include '../config.php'; // Include the configuration file for database connecti
     .group-box {
         font-weight: bold;
         margin: 10px;
+        padding:10px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -96,11 +96,11 @@ include '../config.php'; // Include the configuration file for database connecti
     /* Styling for the user search result container */
     .search-result {
         top: 40px;
-        width: 100%;
+        max-width: 10rem;
         background-color: white;
         border: 1px solid #ced4da;
         max-height: 150px;
-        overflow-y: auto;
+        overflow-y: scroll;
     }
 
     /* Styling for buttons */
@@ -134,6 +134,7 @@ include '../config.php'; // Include the configuration file for database connecti
 
     /* Styling for the book-specific search result container */
     #bookSearchResult_0 {
+        padding: 10px;
         top: 40px;
         width: 100%;
         background-color: white;
@@ -160,7 +161,20 @@ include '../config.php'; // Include the configuration file for database connecti
         <h1>Borrow a Book</h1>
         <center>
             <form action="include/BorrowConnect.php" method="POST">
+
+                <!-- Books Section Container -->
                 <div class="borrowing">
+                    <div class="books-container" id="bookContainer">
+                        <div class="form-group">
+                            <div class="group-box">
+                                <label for="bookID_0">Book ID:</label>
+                                <input type="text" id="bookID_0" name="bookID[]" class="form-control" required
+                                    oninput="searchBook(0)">
+                                <div id="bookSearchResult_0" class="search-result"></div>
+                            </div>
+                        </div>
+                    </div>
+                
                     <!-- User Information Container -->
                     <div class="user-container">
                         <div class="form-group">
@@ -171,25 +185,15 @@ include '../config.php'; // Include the configuration file for database connecti
                                 <div id="userSearchResult" class="search-result"></div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Books Section Container -->
-                    <div class="books-container" id="bookContainer">
-                        <div class="form-group">
-                            <div class="group-box">
-                                <label for="bookID_0">Book ID:</label><br>
-                                <input type="text" id="bookID_0" name="bookID[]" class="form-control" required
-                                    oninput="searchBook(0)">
-                                <div id="bookSearchResult_0" class="search-result"></div>
-                            </div>
+                        <div class="btn-container">
+                            <button type="button" class="btn btn-secondary" onclick="addBook()">Add Another Book</button>
+                            <button type="submit" class="btn btn-primary">Approve Borrowing</button>
                         </div>
                     </div>
+
+
                 </div>
                 <!-- Button Container -->
-                <div class="btn-container">
-                    <button type="button" class="btn btn-secondary" onclick="addBook()">Add Another Book</button>
-                    <button type="submit" class="btn btn-primary">Approve Borrowing</button>
-                </div>
 
             </form>
         </center>
@@ -233,18 +237,28 @@ include '../config.php'; // Include the configuration file for database connecti
 
             const newBookInput = document.createElement('div');
             newBookInput.classList.add('form-group');
+            newBookInput.setAttribute('id', `bookGroup_${newBookIndex}`); // Unique ID for each book field
+
             newBookInput.innerHTML = `
                 <div class="group-box">
-                    <label for="bookID_${newBookIndex}">Book ID:</label><br>
+                    <label for="bookID_${newBookIndex}">Book ID:</label>
                     <input type="text" id="bookID_${newBookIndex}" name="bookID[]" class="form-control" required oninput="searchBook(${newBookIndex})">
                     <div id="bookSearchResult_${newBookIndex}" class="search-result"></div>
+                    <button type="button" class="btn btn-danger mt-2" onclick="removeBook(${newBookIndex})">Remove Book</button>
+
                 </div>
             
                 `;
             container.appendChild(newBookInput);
         }
 
-
+        // Remove a specific book input field
+        function removeBook(index) {
+        const bookGroup = document.getElementById(`bookGroup_${index}`);
+        if (bookGroup) {
+            bookGroup.remove();
+        }
+    }
 
 
     </script>

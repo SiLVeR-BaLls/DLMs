@@ -11,6 +11,7 @@ include '../config.php'; // include database connection file
     <link rel="stylesheet" href="css/styles.css">   
     <title>Borrowed Books</title>
     <style>
+        /* CSS for making search container responsive */
         .no-books-alert {
             position: absolute;
             top: 50%;
@@ -25,18 +26,68 @@ include '../config.php'; // include database connection file
             z-index: 10;
         }
 
-        @media
+        .search-container {
+            position:relative;
+            width: 100%;
+            margin: 0;
+            padding: 0px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            align-items: center;
+            margin-bottom: 10px;
 
-(max-width: 917px) {
-    .close {
-        display: none; /* Hides the date and cover columns */
-    }
-    
-    .open{
-      background-color: pink;
-    }
+        }
+
+
+.clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 18px;
+    display: none; /* Hide the button initially */
 }
 
+/* Optional: Change button color on hover */
+.clear-btn:hover {
+    color: #f44336;
+}
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-group button {
+            margin: 5px;
+            width: auto;
+        }
+
+        /* Make buttons active visually */
+        .btn-group button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Adjusting the table for responsiveness */
+        table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 0 5%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -49,15 +100,19 @@ include '../config.php'; // include database connection file
         <h2>Borrowed Books</h2>
 
         <!-- Search Form -->
-        <form method="GET" class="mb-4">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Enter search term" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+        <form method="GET" class="mb-4 search-container">
+                <div class="btn-group"><div class="search-container">
+                    <input type="text" name="search" class="form-control" id="searchInput" placeholder="Enter search term" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                </div>
+                
                 <!-- Search by Title Button -->
-                <button type="submit" name="search_by" value="title" class="btn btn-primary">Search by Title</button>
+                <button type="submit" name="search_by" value="title" class="btn btn-info <?php echo (isset($_GET['search_by']) && $_GET['search_by'] == 'title') ? 'active' : ''; ?>">Search by Title</button>
                 <!-- Search by Author Button -->
-                <button type="submit" name="search_by" value="author" class="btn btn-primary">Search by Author</button>
+                <button type="submit" name="search_by" value="author" class="btn btn-info <?php echo (isset($_GET['search_by']) && $_GET['search_by'] == 'author') ? 'active' : ''; ?>">Search by Author</button>
+                <!-- Search by User Button -->
+                <button type="submit" name="search_by" value="user" class="btn btn-info <?php echo (isset($_GET['search_by']) && $_GET['search_by'] == 'user') ? 'active' : ''; ?>">Search by User</button>
                 <!-- Search All Button (Optional) -->
-                <button type="submit" name="search_by" value="all" class="btn btn-primary">Search All</button>
+                <button type="submit" name="search_by" value="all" class="btn btn-info <?php echo (isset($_GET['search_by']) && $_GET['search_by'] == 'all') ? 'active' : ''; ?>">Search All</button>
             </div>
         </form>
 
@@ -76,34 +131,32 @@ include '../config.php'; // include database connection file
              ui.Sname, 
              bc.B_title, 
              b.author,
-             ud.college,  -- Use 'college' instead of 'collage'
-             ud.course  -- Use 'college' instead of 'collage'
+             ud.college,  
+             ud.course  
           FROM borrow_book AS bb
           JOIN users_info AS ui ON bb.IDno = ui.IDno
           JOIN user_details AS ud ON bb.IDno = ud.IDno
           JOIN book_copies AS bc ON bb.ID = bc.ID
           JOIN book AS b ON bc.B_title = b.B_title
           WHERE bb.return_date IS NULL";
-          
-
-          
-
-  // Only borrowed books that haven't been returned yet
 
         // If search term is provided, modify the query to filter results
         if (!empty($searchTerm) && !empty($searchBy)) {
             $searchTerm = $conn->real_escape_string($searchTerm); // Prevent SQL injection
 
-            // Perform LIKE search based on selected criteria (Title or Author)
+            // Perform LIKE search based on selected criteria (Title, Author, or User)
             if ($searchBy == 'title') {
                 // Search by title using LIKE
                 $query .= " AND bc.B_title LIKE '%$searchTerm%'";
             } elseif ($searchBy == 'author') {
                 // Search by author using LIKE
                 $query .= " AND b.author LIKE '%$searchTerm%'";
+            } elseif ($searchBy == 'user') {
+                // Search by user (First Name or Surname) using LIKE
+                $query .= " AND (ui.Fname LIKE '%$searchTerm%' OR ui.Sname LIKE '%$searchTerm%' OR ui.IDno LIKE '%$searchTerm%')";
             } elseif ($searchBy == 'all') {
                 // Search in both title and author
-                $query .= " AND (bc.B_title LIKE '%$searchTerm%' OR b.author LIKE '%$searchTerm%')";
+                $query .= " AND (bc.B_title LIKE '%$searchTerm%' OR b.author LIKE '%$searchTerm%' OR ui.Fname LIKE '%$searchTerm%' OR ui.Sname LIKE '%$searchTerm%')";
             }
         }
 
@@ -117,14 +170,15 @@ include '../config.php'; // include database connection file
 
         // Check if there are any results
         if ($result && $result->num_rows > 0) {
-            echo "<table class='table table-bordered'>
-                    <thead>
+            echo "<div class='table-responsive'>
+                    <table class='table table-striped table-bordered'>
+                     <thead class='thead-dark'>
                         <tr>
                             <th class='open'>ID</th>
                             <th class='close'>Borrow ID</th>
                             <th class='open'>Username</th>
                             <th class='open'>First Name</th>
-                            <th class='close'>Surename</th>
+                            <th class='close'>Surname</th>
                             <th class='close'>Book Title</th>
                             <th class='open'>Author</th>
                             <th class='close'>Borrow Date</th>
@@ -156,7 +210,7 @@ include '../config.php'; // include database connection file
                         </td>
                       </tr>";
             }
-            echo "</tbody></table>";
+            echo "</tbody></table></div>";
         } else {
             // No records found, display a warning message outside the table
             echo "<div class='no-books-alert'>No borrowed books found.</div>";
