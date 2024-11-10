@@ -85,7 +85,7 @@ include '../config.php';
         <?php include 'include/sidebar.php'; ?>
         </div>
         <div class="profile">
-        <?php include 'include/profile.php'; ?>
+        <?php include 'include/b.php'; ?>
         </div>
     </div>
 

@@ -1,7 +1,4 @@
-<!-- retunbook.php -->
-
-<?php include '../config.php'; // Include the configuration file for database connection
-
+<?php 
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +17,7 @@
 <?php 
 include 'include/header.php';
 include 'include/navbar.php'; 
+include '../config.php'; // Include the configuration file for database connection
 ?>
 
 <center>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../../config.php';
 
 // Check if ID is set
@@ -9,7 +10,7 @@ if (isset($_GET['id'])) {
     $usersInfoResult = mysqli_query($conn, "SELECT * FROM users_info WHERE IDno = '$id'");
     $contactResult = mysqli_query($conn, "SELECT * FROM contact WHERE IDno = '$id'");
     $addressResult = mysqli_query($conn, "SELECT * FROM address WHERE IDno = '$id'");
-    $adminsInfoResult = mysqli_query($conn, "SELECT * FROM user_details WHERE IDno = '$id'");
+    $studentsInfoResult = mysqli_query($conn, "SELECT * FROM user_details WHERE IDno = '$id'");
 
     // Fetch data
     $userInfo = mysqli_fetch_assoc($usersInfoResult);
@@ -39,7 +40,7 @@ if (isset($_POST['delete'])) {
 <body class="bg-light">
     <div class="container mt-5">
         <a href="../BrowseUser.php" class="btn btn-secondary mb-3"><</a>
-        <p><strong>Welcome, <?php echo htmlspecialchars($_SESSION['admin']['username']); ?>!</strong></p>
+        <p><strong>Welcome, <?php echo htmlspecialchars($_SESSION['student']['username']); ?>!</strong></p>
 
         <h2 class="mt-4">Users Information</h2>
         <table class="table table-bordered table-striped">
@@ -123,7 +124,7 @@ if (isset($_POST['delete'])) {
             </tbody>
         </table>
 
-        <h2>Admins Information</h2>
+        <h2>students Information</h2>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -135,7 +136,7 @@ if (isset($_POST['delete'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = mysqli_fetch_assoc($adminsInfoResult)): ?>
+                <?php while ($row = mysqli_fetch_assoc($studentsInfoResult)): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['IDno']); ?></td>
                         <td><?php echo htmlspecialchars($row['college']); ?></td>

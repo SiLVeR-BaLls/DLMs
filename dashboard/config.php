@@ -1,5 +1,5 @@
 <?php // Configuration
-//for confirmation  of the user that it is adimin (well dont know how long)
+//for confirmation of the user that it is admin or student (well don't know how long)
 
 session_start();
 
@@ -16,7 +16,6 @@ $conn = mysqli_connect($db_host, $db_username, $db_password, $db_name);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
 
 // Initialize variables
 $isLoggedIn = false;
@@ -43,9 +42,11 @@ if (isset($_POST['submit'])) {
             // Redirect based on user type
             switch ($row['U_type']) {
                 case 'admin':
+                    $_SESSION['admin'] = $row; // Store admin info in session
                     header("Location: admin.php");  // Redirect to the admin dashboard
                     break;
                 case 'student':
+                    $_SESSION['student'] = $row; // Store student info in session
                     header("Location: student.php"); // Redirect to the student dashboard
                     break;
                 case 'staff':
@@ -67,22 +68,20 @@ if (isset($_POST['submit'])) {
     }
 }
 
-// Check if the user is logged in and is an admin
-if (!isset($_SESSION['admin'])) {
+// Check if the user is logged in and is either admin or student
+if (!isset($_SESSION['admin']) && !isset($_SESSION['student'])) {
     header('Location: ../../Registration/log_in.php'); // Redirect to the login page if not logged in
     exit();
 }
 
-// Assuming the U_type should be 'admin' for this page
-$requiredUserType = 'admin';
+// Fetch data for the logged-in user (admin or student)
+$userType = isset($_SESSION['admin']) ? 'admin' : 'student'; // Determine if the user is admin or student
+$idno = isset($_SESSION['admin']) ? $_SESSION['admin']['IDno'] : $_SESSION['student']['IDno']; // Get IDno from session based on user type
 
-
-// Fetch data for the logged-in admin
-$idno = $_SESSION['admin']['IDno'];
 $contactQuery = "SELECT * FROM contact WHERE IDno = ?";
 $addressQuery = "SELECT * FROM address WHERE IDno = ?";
-$adminsInfoQuery = "SELECT * FROM user_details WHERE IDno = ?";
 $usersInfoQuery = "SELECT * FROM users_info WHERE IDno = ?";
+$usersDetailQuery = "SELECT * FROM user_details WHERE IDno = ?";
 
 // Prepare and execute the contact query
 $stmtContact = $conn->prepare($contactQuery);
@@ -96,16 +95,19 @@ $stmtAddress->bind_param("s", $idno);
 $stmtAddress->execute();
 $addressResult = $stmtAddress->get_result();
 
-// Prepare and execute the admins info query
-$stmtAdminsInfo = $conn->prepare($adminsInfoQuery);
-$stmtAdminsInfo->bind_param("s", $idno);
-$stmtAdminsInfo->execute();
-$adminsInfoResult = $stmtAdminsInfo->get_result();
-
 // Prepare and execute the users info query
 $stmtUsersInfo = $conn->prepare($usersInfoQuery);
 $stmtUsersInfo->bind_param("s", $idno);
 $stmtUsersInfo->execute();
 $usersInfoResult = $stmtUsersInfo->get_result();
 
+// Prepare and execute the users info query
+$stmtUsersInfo = $conn->prepare($usersDetailQuery);
+$stmtUsersInfo->bind_param("s", $idno);
+$stmtUsersInfo->execute();
+$usersDetailResult = $stmtUsersInfo->get_result();
 ?>
+
+<!-- Your HTML content goes here -->
+<!-- Depending on user type (admin or student), you can display different content -->
+

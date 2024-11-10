@@ -1,6 +1,13 @@
 <?php
 // Configuration
-include '../../dashboard/config.php';
+// Configuration
+$db_host = 'localhost';
+$db_username = 'root';
+$db_password = '';
+$db_name = 'dlms';
+
+// Create connection
+$conn = new mysqli($db_host, $db_username, $db_password, $db_name);
 
 // Check connection
 if ($conn->connect_error) {
@@ -67,9 +74,10 @@ if ($conn->connect_error) {
             
             // Insert into user_details table
             $status ='active';
-            $sql = "INSERT INTO user_details (IDno, college, course, yrLVL, status) VALUES (?, ?, ?, ?, ?)";
+            $A_LVL = '3';
+            $sql = "INSERT INTO user_details (IDno, college, course, yrLVL, A_LVL, status) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $IDno, $college, $course,  $yrLVL, $status);
+            $stmt->bind_param("ssssss", $IDno, $college, $course,  $yrLVL, $A_LVL, $status);
             $stmt->execute();
 
                     // Insert into user_log table

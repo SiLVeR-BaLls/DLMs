@@ -1,13 +1,16 @@
-<!-- profile.php -->
 <style>
-       body {
+    /* General page styling */
+    body {
         background-color: #f8f8f8; /* Slightly lighter gray background */
         color: #333;
+        font-family: Arial, sans-serif;
     }
 
     /* Welcome message styling */
     p {
+        font-size: 1.25rem;
         margin-bottom: 1.5rem;
+        font-weight: bold;
     }
 
     /* Button styling */
@@ -43,7 +46,6 @@
     .table-bordered {
         border: 2px solid #333; /* 2px black border for tables */
         margin-bottom: 1.5rem;
-  
         background-color: #fff;
         border-spacing: 0; /* Ensures borders don't overlap */
         width: calc(100% - 20px); /* Adjust width to account for margin */
@@ -86,13 +88,19 @@
         transform: scale(1.1);
     }
 
+
 </style>
 <p><strong>Welcome,
-        <?php echo htmlspecialchars($_SESSION['admin']['username']); ?>!
+        <?php echo htmlspecialchars($_SESSION['student']['username']); ?>!
     </strong></p>
-<a href="../ID_card.php?id=<?php echo htmlspecialchars($_SESSION['admin']['IDno']); ?>" class="button">ID</a>
-<a href="include/edit_user.php?id=<?php echo htmlspecialchars($_SESSION['admin']['IDno']); ?>" class="button"
+<a href="../ID_card.php?id=<?php echo htmlspecialchars($_SESSION['student']['IDno']); ?>" class="button">ID</a>
+<a href="include/edit_user.php?id=<?php echo htmlspecialchars($_SESSION['student']['IDno']); ?>" class="button"
     style="margin-left: 5px;">Edit Profile</a>
+
+
+
+
+
 
 <h2>Users Information</h2>
 <table class="table table-bordered">
@@ -204,7 +212,7 @@
     </tbody>
 </table>
 
-<h2>Admins Information</h2>
+<h2>students Information</h2>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -217,7 +225,7 @@
         </tr>
     </thead>
     <tbody>
-        <?php while ($row = mysqli_fetch_assoc($usersDetailResult)): ?>
+        <?php while ($row = mysqli_fetch_assoc($studentsInfoResult)): ?>
         <tr>
             <td>
                 <?php echo htmlspecialchars($row['college']); ?>

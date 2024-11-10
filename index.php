@@ -9,7 +9,7 @@ if (isset($_SESSION['admin'])) {
     header("Location: dashboard/student/index.php");
     exit();
 } elseif (isset($_SESSION['visitor'])) {
-    header("Location: dashboard/visitor/index.php");
+    header("Location: dashboard/admin/index.php");
     exit();
 }
 ?>
