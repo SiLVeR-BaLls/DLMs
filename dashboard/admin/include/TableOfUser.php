@@ -1,5 +1,4 @@
 <?php
-include '../../dashboard/config.php';
 
 // Fetch users from the database
 $usersResult = mysqli_query($conn, "SELECT users_info.IDno, users_info.Fname, users_info.Sname, 

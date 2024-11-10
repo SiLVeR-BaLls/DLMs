@@ -1,6 +1,5 @@
 <?php
-include '../config.php'; // Include the configuration file for database connection
-include 'include/admin_connect.php'; // Include admin connection script
+
 
 // Initialize variables for messages
 $message = ""; // Variable to store messages

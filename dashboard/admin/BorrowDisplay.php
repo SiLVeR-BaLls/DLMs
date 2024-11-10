@@ -137,7 +137,7 @@ include '../config.php'; // include database connection file
 
             // Loop through each record and display the data
             while ($row = $result->fetch_assoc()) {
-                echo "<tr>open
+                echo "<tr>
                         <td class='open'>" . htmlspecialchars($row['ID']) . "</td>
                         <td class='close'>" . htmlspecialchars($row['borrow_id']) . "</td>
                         <td class='open'>" . htmlspecialchars($row['IDno']) . "</td>

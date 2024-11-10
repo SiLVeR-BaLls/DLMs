@@ -1,7 +1,6 @@
 <?php
 // admin_dashboard.php
 include '../config.php';
-include 'include/admin_connect.php';
 
 // Get the message and type from URL parameters
 $message = isset($_GET['message']) ? $_GET['message'] : '';
