@@ -1,8 +1,14 @@
 <?php
 
 // Fetch users from the database
-$usersResult = mysqli_query($conn, "SELECT users_info.IDno, users_info.Fname, users_info.Sname, 
-user_details.course, user_details.yrLVL AS year 
+$usersResult = mysqli_query($conn,
+"SELECT users_info.IDno,
+        users_info.Fname,
+        users_info.Sname, 
+        user_details.course, 
+        user_details.college, 
+        user_details.yrLVL 
+AS year 
 FROM users_info
 JOIN user_details ON users_info.IDno = user_details.IDno");
 
@@ -73,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Course</th>
+                    <th>College</th>
                     <th>Year</th>
                     <th>Action</th>
                 </tr>
@@ -84,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <td><?php echo htmlspecialchars($row['Fname']); ?></td>
                         <td><?php echo htmlspecialchars($row['Sname']); ?></td>
                         <td><?php echo htmlspecialchars($row['course']); ?></td>
+                        <td><?php echo htmlspecialchars($row['college']); ?></td>
                         <td><?php echo htmlspecialchars($row['year']); ?></td>
                         <td>
                             <a href="include/user_details.php?id=<?php echo htmlspecialchars($row['IDno']); ?>" class="btn btn-info btn-sm" style="text-decoration:none;">View</a>

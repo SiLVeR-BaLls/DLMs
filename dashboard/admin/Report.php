@@ -1,5 +1,5 @@
 <?php
-include '../config.php'; // include database connection file
+include '../config.php'; // Include database connection file
 ?>
 
 <!DOCTYPE html>
@@ -13,10 +13,15 @@ include '../config.php'; // include database connection file
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
     <style>
         .chart-container {
-            display:flex;
-            width: 25%;
-            margin: auto;
-            padding-top: 40px;
+            flex: 1;
+            margin: 10px;
+        }
+
+        .charts-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .chart-container canvas {
@@ -25,6 +30,12 @@ include '../config.php'; // include database connection file
 
         h2 {
             text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -95,98 +106,101 @@ include '../config.php'; // include database connection file
             }
         }
 
-        // Close the database connection
+        // Close the database connection after all operations are done
         $conn->close();
         ?>
 
         <!-- Create chart container -->
-        <div class="chart-container">
-            <h3>Borrowed Books by Course and Year</h3>
-            <canvas id="borrowedChart"></canvas>
+        <div class="charts-wrapper">
+            <div class="chart-container">
+                <h3 class="chart-title">Borrowed Books by Course and Year</h3>
+                <canvas id="borrowedChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">Returned Books by Course and Year</h3>
+                <canvas id="returnedChart"></canvas>
+            </div>
         </div>
 
-        <div class="chart-container">
-            <h3>Returned Books by Course and Year</h3>
-            <canvas id="returnedChart"></canvas>
-        </div>
-        
     </div>
 
     <script>
-        // Borrowed Books Chart
-        var borrowedLabels = <?php echo json_encode($borrowedLabels); ?>;
-        var borrowedData = <?php echo json_encode($borrowedData); ?>;
+    // Borrowed Books Chart (Now Green)
+    var borrowedLabels = <?php echo json_encode($borrowedLabels); ?>;
+    var borrowedData = <?php echo json_encode($borrowedData); ?>;
 
-        var ctxBorrowed = document.getElementById('borrowedChart').getContext('2d');
-        var borrowedChart = new Chart(ctxBorrowed, {
-            type: 'bar',
-            data: {
-                labels: borrowedLabels,
-                datasets: [{
-                    label: 'Borrowed Books',
-                    data: borrowedData,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Course (Year)'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Borrow Count'
-                        },
-                        beginAtZero: true
+    var ctxBorrowed = document.getElementById('borrowedChart').getContext('2d');
+    var borrowedChart = new Chart(ctxBorrowed, {
+        type: 'bar',
+        data: {
+            labels: borrowedLabels,
+            datasets: [{
+                label: 'Borrowed Books',
+                data: borrowedData,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)', // Green
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Course (Year)'
                     }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Borrow Count'
+                    },
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
 
-        // Returned Books Chart
-        var returnedLabels = <?php echo json_encode($returnedLabels); ?>;
-        var returnedData = <?php echo json_encode($returnedData); ?>;
+    // Returned Books Chart (Now Red)
+    var returnedLabels = <?php echo json_encode($returnedLabels); ?>;
+    var returnedData = <?php echo json_encode($returnedData); ?>;
 
-        var ctxReturned = document.getElementById('returnedChart').getContext('2d');
-        var returnedChart = new Chart(ctxReturned, {
-            type: 'bar',
-            data: {
-                labels: returnedLabels,
-                datasets: [{
-                    label: 'Returned Books',
-                    data: returnedData,
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)', // Green
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Course (Year)'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Return Count'
-                        },
-                        beginAtZero: true
+    var ctxReturned = document.getElementById('returnedChart').getContext('2d');
+    var returnedChart = new Chart(ctxReturned, {
+        type: 'bar',
+        data: {
+            labels: returnedLabels,
+            datasets: [{
+                label: 'Returned Books',
+                data: returnedData,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)', // Red
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Course (Year)'
                     }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Return Count'
+                    },
+                    beginAtZero: true
                 }
             }
-        });
-    </script>
+        }
+    });
+</script>
+
 
 </body>
 </html>

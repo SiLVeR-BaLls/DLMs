@@ -78,34 +78,29 @@ if (!isset($_SESSION['admin']) && !isset($_SESSION['student'])) {
 $userType = isset($_SESSION['admin']) ? 'admin' : 'student'; // Determine if the user is admin or student
 $idno = isset($_SESSION['admin']) ? $_SESSION['admin']['IDno'] : $_SESSION['student']['IDno']; // Get IDno from session based on user type
 
-$contactQuery = "SELECT * FROM contact WHERE IDno = ?";
-$addressQuery = "SELECT * FROM address WHERE IDno = ?";
-$usersInfoQuery = "SELECT * FROM users_info WHERE IDno = ?";
-$usersDetailQuery = "SELECT * FROM user_details WHERE IDno = ?";
 
-// Prepare and execute the contact query
-$stmtContact = $conn->prepare($contactQuery);
-$stmtContact->bind_param("s", $idno);
-$stmtContact->execute();
-$contactResult = $stmtContact->get_result();
+// Combined query with JOINs
+$combinedQuery = "
+    SELECT 
+        contact.email1, contact.email2, contact.con1, contact.con2,
+        address.municipality, address.barangay, address.province, address.DOB,
+        users_info.Fname, users_info.Sname, users_info.Mname, users_info.Ename, users_info.gender, users_info.photo,
+        user_details.college, user_details.course, user_details.yrLVL, user_details.A_LVL, user_details.status
+    FROM contact
+    JOIN address ON contact.IDno = address.IDno
+    JOIN users_info ON contact.IDno = users_info.IDno
+    JOIN user_details ON contact.IDno = user_details.IDno
+    WHERE contact.IDno = ?
+";
 
-// Prepare and execute the address query
-$stmtAddress = $conn->prepare($addressQuery);
-$stmtAddress->bind_param("s", $idno);
-$stmtAddress->execute();
-$addressResult = $stmtAddress->get_result();
+// Prepare and execute the combined query
+$stmt = $conn->prepare($combinedQuery);
+$stmt->bind_param("s", $idno);
+$stmt->execute();
+$result = $stmt->get_result();
+$userData = $result->fetch_assoc(); // Fetch data as an associative array
 
-// Prepare and execute the users info query
-$stmtUsersInfo = $conn->prepare($usersInfoQuery);
-$stmtUsersInfo->bind_param("s", $idno);
-$stmtUsersInfo->execute();
-$usersInfoResult = $stmtUsersInfo->get_result();
 
-// Prepare and execute the users info query
-$stmtUsersInfo = $conn->prepare($usersDetailQuery);
-$stmtUsersInfo->bind_param("s", $idno);
-$stmtUsersInfo->execute();
-$usersDetailResult = $stmtUsersInfo->get_result();
 ?>
 
 <!-- Your HTML content goes here -->
