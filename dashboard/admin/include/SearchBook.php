@@ -1,7 +1,7 @@
 <!-- booksearch.php -->
 <?php
 // Include the database configuration file for the connection
-include '../config.php';
+include '../../config.php';
 
 // Get the bookID from the request (use GET to fetch the search query)
 $bookID = isset($_GET['bookID']) ? $_GET['bookID'] : '';
@@ -30,12 +30,12 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<div class='book-item'>";
-        echo "<h5>Book ID: " . htmlspecialchars($row['ID']) . "</h5>";
-        echo "<p>  Title:   " . htmlspecialchars($row['B_title']) . "</p>";
-        echo "<p>  Author:   " . htmlspecialchars($row['callNumber']) . "</p>"; // assuming 'author' is a column
-        echo "<p>  Genre:   " . htmlspecialchars($row['author']) . "</p>";   // assuming 'genre' is a column
-        echo "<p>  Publication Year:   " . htmlspecialchars($row['publisher']) . "</p>"; // assuming 'pub_year' is a column
-        echo "<p>  Status:   " . htmlspecialchars($row['status']) . "</p>";
+        echo "<h5> <strong>Book ID: </strong> " . htmlspecialchars($row['ID']) . "</h5>";
+        echo "<p>   <strong>Title:  </strong>  " . htmlspecialchars($row['B_title']) . "</p>";
+        echo "<p>   <strong>Author: </strong>   " . htmlspecialchars($row['callNumber']) . "</p>"; // assuming 'author' is a column
+        echo "<p>   <strong>Genre:  </strong>  " . htmlspecialchars($row['author']) . "</p>";   // assuming 'genre' is a column
+        echo "<p>   <strong>Publication Year: </strong>   " . htmlspecialchars($row['publisher']) . "</p>"; // assuming 'pub_year' is a column
+        echo "<p>   <strong>Status: </strong>   " . htmlspecialchars($row['status']) . "</p>";
         echo "</div><hr>"; // Add a line break between results
     }
 } else {

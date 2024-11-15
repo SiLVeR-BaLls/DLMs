@@ -79,6 +79,14 @@ $userType = isset($_SESSION['admin']) ? 'admin' : 'student'; // Determine if the
 $idno = isset($_SESSION['admin']) ? $_SESSION['admin']['IDno'] : $_SESSION['student']['IDno']; // Get IDno from session based on user type
 
 
+// Retrieve the IDno from the session (either admin or student)
+$userID = isset($_SESSION['admin']) ? $_SESSION['admin']['IDno'] : (isset($_SESSION['student']) ? $_SESSION['student']['IDno'] : null);
+
+// Check if user is logged in
+if (!$userID) {
+    header("Location: ../../Registration/log_in.php"); // Redirect to login page if not logged in
+    exit();
+}
 // Combined query with JOINs
 $combinedQuery = "
     SELECT 
@@ -102,7 +110,3 @@ $userData = $result->fetch_assoc(); // Fetch data as an associative array
 
 
 ?>
-
-<!-- Your HTML content goes here -->
-<!-- Depending on user type (admin or student), you can display different content -->
-

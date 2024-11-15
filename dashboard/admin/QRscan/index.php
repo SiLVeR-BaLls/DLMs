@@ -1,190 +1,177 @@
-
 <?php
-include '../../config.php'; // Include the configuration file for database connection
+include '../../config.php'; // Include the database connection file
 
+$idno = $_SESSION['admin']['IDno'];
+$attendanceQuery = "SELECT a.ID, a.IDno, u.Fname, u.Sname, a.TIMEIN, a.TIMEOUT, a.LOGDATE, a.STATUS
+                    FROM attendance a
+                    JOIN users_info u ON a.IDno = u.IDno
+                    WHERE a.LOGDATE = CURDATE()";
+$query = $conn->query($attendanceQuery);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <!-- Character encoding and viewport settings -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>QR Code | Log in</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    
-    <!-- Online scripts and styles -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    
-    <!-- Custom styles camera button-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0-alpha.1/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        #divvideo {
-            box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+        /* Sidebar styles */
+        #mySidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.2);
         }
-        #stopCameraButton, #startCameraButton {
-            margin-top: 10px;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #stopCameraButton {
-            background-color: red;
-            color: white;
-            display: none; /* Initially hidden */
-        }
-        #stopCameraButton:hover {
-            background-color: darkred;
-        }
-        #startCameraButton {
-            background-color: green;
-            color: white;
-        }
-        #startCameraButton:hover {
-            background-color: darkgreen;
-        }
-        .top {
-    margin: 0px;
-    padding: 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: alabaster;
-  }
 
-  .logo{
-    width: 10rem;
-  }
+        #mySidebar a {
+            padding: 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #mySidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #attendanceTableWrapper {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            height: 100%;
+            overflow-y: auto;
+            color: black;
+        }
+
+        /* Overlay styling */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
     </style>
 </head>
 
-<body style="/*background-image: url(../../Registration/pic/polygon-scatter-haikei.png);*/ background-color: alabaster;">
+<body class="bg-gray-50 place-content-center">
+    <!-- Header Section -->
+    <div class="flex items-center justify-center bg-gray-200 p-4 shadow-md">
+        <a href="../index.php">
+            <img src="../../../Registration/pic/logo wu.png" alt="Logo" class="h-12 w-12 mr-4">
+        </a>
+        <strong class="text-lg font-semibold text-gray-800">Digital Library Management System</strong>
+    </div>
 
-
-<div class="top"  style="height: 10vh; margin:0px; padding:50px;  background-color: alabaster;">
-
-
-
-
-           <a href="../index.php"><img class="logo" src="../../../Registration/pic/logo wu.png" alt="Logo"></a>
-           <strong>Digital Library Management System</strong>
-          </div>
-          
-
-    <!-- Main Container -->
-    <div class="container">
-        <div class="row">
-
+    <!-- Main Content Area -->
+    <div class="container mx-auto">
+        <div class="flex justify-center items-center flex-wrap min-h-[80vh] pt-8">
             <!-- QR Code Scanner -->
-            <div class="col-md-4" style="padding:10px;background:#fff;border-radius: 5px;" id="divvideo">
-                <center><p class="login-box-msg"> <i class="glyphicon glyphicon-camera"></i> TAP HERE</p></center>
-                <video id="preview" width="100%" style="border-radius:10px;"></video>
+            <div class="w-full md:w-3/5 p-4 bg-white rounded-lg shadow-lg" id="divvideo" style="height: 450px;">
+                <video id="preview" class="w-full rounded-lg shadow-md"
+                    style="height: 350px; object-fit: cover;"></video>
                 <br>
-                <button id="stopCameraButton">Stop Camera</button>
-                <button id="startCameraButton">Start Camera</button>
-                <br><br>
-
-                <!-- Display Error and Success Messages -->
-                <?php
-                if(isset($_SESSION['error'])){
-                    echo "
-                    <div class='alert alert-danger alert-dismissible' style='background:red;color:#fff'>
-                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                        <h4><i class='icon fa fa-warning'></i> Error!</h4>
-                        ".$_SESSION['error']."
-                    </div>
-                    ";
-                    unset($_SESSION['error']);
-                }
-                if(isset($_SESSION['success'])){
-                    echo "
-                    <div class='alert alert-success alert-dismissible' style='background:green;color:#fff'>
-                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                        <h4><i class='icon fa fa-check'></i> Success!</h4>
-                        ".$_SESSION['success']."
-                    </div>
-                    ";
-                    unset($_SESSION['success']);
-                }
-                ?>
+                <button id="startCameraButton" class="bg-green-500 text-white py-1 px-2 rounded-lg mt-2">Start
+                    Camera</button>
+                <button id="stopCameraButton" class="bg-red-500 text-white py-1 px-2 rounded-lg mt-2 hidden">Stop
+                    Camera</button>
             </div>
-            
-            <!-- Form and Data Table -->
-            <div class="col-md-8">
-                <!-- Form for QR Code scanning -->
-                <form action="insert.php" method="post" class="form-horizontal" style="border-radius: 5px;padding:10px;background:#fff;" id="divvideo">
-                    <i class="glyphicon glyphicon-qrcode"></i> <label>SCAN QR CODE</label> <p id="time"></p>
-                    <input type="text" name="studentID" id="text" placeholder="scan qrcode" class="form-control" autofocus>
+
+            <!-- QR Code Form -->
+            <div class="w-full md:w-1/3 p-4">
+                <button id="openSidebarButton" class="bg-blue-500 text-white py-2 px-4 m-4 rounded-lg">Toggle
+                    Table</button>
+                <form id="qrForm" action="insert.php" method="post" class="bg-white p-6 rounded-lg shadow-lg">
+                    <label for="studentID" class="text-lg text-gray-600">SCAN QR CODE</label>
+                    <input type="text" name="studentID" id="text" placeholder="Scan QR Code"
+                        class="w-full p-3 mt-2 border rounded-lg focus:ring-2 focus:ring-green-300" autofocus>
                 </form>
-
-                <!-- Data Table for Attendance Records -->
-                <div style="border-radius: 5px;padding:10px;background:#fff;" id="divvideo">
-                    <table id="example1" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <td>ID</td>
-                                <td>User ID</td>
-                                <td>First Name</td>
-                                <td>Last Name</td>
-                                <td>Time In</td>
-                                <td>Time Out</td>
-                                <td>Log Date</td>
-                                <td>Status</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            // PHP to fetch and display attendance records
-                            $server = "localhost";
-                            $username = "root";
-                            $password = "";
-                            $dbname = "dlms";
-                        
-                            $conn = new mysqli($server, $username, $password, $dbname);
-                            $date = date('Y-m-d');
-                            if ($conn->connect_error) {
-                                die("Connection failed: " . $conn->connect_error);
-                            }
-                            $sql = "
-    SELECT a.ID, a.IDno, u.Fname, u.Sname, a.TIMEIN, a.TIMEOUT, a.LOGDATE, a.STATUS
-    FROM attendance a
-    JOIN users_info u ON a.IDno = u.IDno
-    WHERE a.LOGDATE = CURDATE()
-";
-
-                            $query = $conn->query($sql);
-                            while ($row = $query->fetch_assoc()) {
-                            ?>
-                                <tr>
-                                    <td><?php echo $row['ID']; ?></td>
-                                    <td><?php echo $row['IDno']; ?></td>
-                                    <td><?php echo $row['Fname']; ?></td>
-                                    <td><?php echo $row['Sname']; ?></td>
-                                    <td><?php echo $row['TIMEIN']; ?></td>
-                                    <td><?php echo $row['TIMEOUT']; ?></td>
-                                    <td><?php echo $row['LOGDATE']; ?></td>
-                                    <td><?php echo $row['STATUS'] == 1 ? 'Out' : ' In'; ?></td>
-                                </tr>
-                            <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                   
-                </div> 
-                
-                <!-- Export Button -->
-                <button type="submit" class="btn btn-success pull-right" onclick="Export()">
-                    <i class="fa fa-excel-o fa-fw"></i> Export to excel
-                </button>
             </div>
         </div>
     </div>
 
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div id="attendanceTableWrapper">
+            <h2 class="text-xl font-medium text-gray-600 mb-4">Attendance Records</h2>
+            <input type="text" id="searchInput" placeholder="Search..." class="w-full p-2 mb-4 border rounded-lg"
+                onkeyup="searchTable()">
+            <table id="attendanceTable" class="min-w-full table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-gray-700">ID</th>
+                        <th class="px-4 py-2 text-gray-700">User ID</th>
+                        <th class="px-4 py-2 text-gray-700">First Name</th>
+                        <th class="px-4 py-2 text-gray-700">Last Name</th>
+                        <th class="px-4 py-2 text-gray-700">Time In</th>
+                        <th class="px-4 py-2 text-gray-700">Time Out</th>
+                        <th class="px-4 py-2 text-gray-700">Log Date</th>
+                        <th class="px-4 py-2 text-gray-700">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <?php while ($row = $query->fetch_assoc()) { ?>
+                    <tr class="border-b">
+                        <td class="px-4 py-2">
+                            <?php echo $row['ID']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['IDno']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['Fname']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['Sname']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['TIMEIN']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['TIMEOUT']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['LOGDATE']; ?>
+                        </td>
+                        <td class="px-4 py-2">
+                            <?php echo $row['STATUS'] == 1 ? 'Out' : 'In'; ?>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+            <div id="pagination" class="flex justify-center mt-4">
+                <button onclick="prevPage()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-l">Previous</button>
+                <span id="pageInfo" class="px-4 py-2 bg-white border">Page 1</span>
+                <button onclick="nextPage()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-r">Next</button>
+            </div>
+            <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-lg mt-4" onclick="Export()">Export to
+                Excel</button>
+        </div>
+    </div>
+
+    <!-- Overlay to close sidebar when clicked outside -->
+    <div id="overlay" class="overlay" onclick="closeNav()"></div>
     <!-- JavaScript for exporting data -->
     <script>
         function Export() {
@@ -194,10 +181,36 @@ include '../../config.php'; // Include the configuration file for database conne
             }
         }
     </script>
-
-    <!-- JavaScript for QR Code scanning -->
+    <!-- JavaScript -->
     <script>
-        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        // Sidebar and overlay
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "90%";
+            document.getElementById("attendanceTableWrapper").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("attendanceTableWrapper").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+        document.getElementById("openSidebarButton").addEventListener("click", openNav);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sidebar and overlay functions
+            function openNav() {
+                document.getElementById("mySidebar").style.width = "90%";
+                document.getElementById("attendanceTableWrapper").style.display = "block";
+                document.getElementById("overlay").style.display = "block";
+            }
+            function closeNav() {
+                document.getElementById("mySidebar").style.width = "0";
+                document.getElementById("attendanceTableWrapper").style.display = "none";
+                document.getElementById("overlay").style.display = "none";
+            }
+            document.getElementById("openSidebarButton").addEventListener("click", openNav);
+
+     let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         let activeCamera = null;
 
         function startCamera() {
@@ -237,54 +250,68 @@ include '../../config.php'; // Include the configuration file for database conne
 
         // Start the camera by default
         startCamera();
-    </script>
-
-    <!-- JavaScript for updating time -->
-    <script type="text/javascript">
-        var timestamp = '<?=time();?>';
-        function updateTime() {
-            $('#time').html(new Date(timestamp * 1000).toLocaleString());
-            timestamp++;
-        }
-        $(function() {
-            setInterval(updateTime, 1000);
         });
     </script>
 
-    <!-- JavaScript libraries 
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
--->
-
-    <!-- JavaScript libraries -->
-    <script src="plugs/jquery.min.js"></script>
-    <script src="plugs/bootstrap.min.js"></script>
-    <script src="plugs/jquery.dataTables.min.js"></script>
-    <script src="plugs/dataTables.bootstrap4.min.js"></script>
-    <script src="plugs/dataTables.responsive.min.js"></script>
-    <script src="plugs/responsive.bootstrap4.min.js"></script>
-
-    <!-- DataTables initialization -->
     <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-            });
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
+        // JavaScript to handle pagination and search
+
+        let currentPage = 1;
+        const rowsPerPage = 10; // Number of rows per page
+
+        function displayTablePage(page) {
+            const table = document.getElementById("attendanceTable");
+            const rows = table.getElementsByTagName("tr");
+            const totalPages = Math.ceil((rows.length - 1) / rowsPerPage);
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+
+            for (let i = 1; i < rows.length; i++) {
+                rows[i].style.display = (i > page * rowsPerPage || i <= (page - 1) * rowsPerPage) ? "none" : "";
+            }
+            document.getElementById("pageInfo").innerText = `Page ${page} of ${totalPages}`;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTablePage(currentPage);
+            }
+        }
+
+        function nextPage() {
+            const table = document.getElementById("attendanceTable");
+            const rows = table.getElementsByTagName("tr");
+            const totalPages = Math.ceil((rows.length - 1) / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayTablePage(currentPage);
+            }
+        }
+
+        function searchTable() {
+            const input = document.getElementById("searchInput").value.toUpperCase();
+            const table = document.getElementById("attendanceTable");
+            const rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName("td");
+                let match = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toUpperCase().includes(input)) {
+                        match = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = match ? "" : "none";
+            }
+        }
+
+        // Display initial page
+        displayTablePage(currentPage);
     </script>
+
+
 </body>
+
 </html>

@@ -7,7 +7,7 @@ include '../config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DLMs</title>
+    <title>Add Book</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,7 +25,7 @@ include '../config.php';
         <!-- BrowseBook Content and Footer Section -->
         <div class="flex-grow">
             <!-- BrowseBook Content -->
-            <?php include 'include/TableOfUser.php'; ?>
+            <?php include 'include/AddbookTable.php'; ?>
 
             <!-- Footer at the Bottom -->
             <footer class="bg-blue-600 text-white p-4 mt-auto">

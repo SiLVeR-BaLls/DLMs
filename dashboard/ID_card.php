@@ -32,7 +32,7 @@ if ($isLoggedIn && $idNo) {
               FROM user_details 
               JOIN users_info ON user_details.IDno = users_info.IDno 
               JOIN user_log ON user_details.IDno = user_log.IDno 
-              WHERE user_details.IDno = ?;"; // Added semicolon here
+              WHERE user_details.IDno = ?;";
 
     // Prepare the statement
     if ($stmt = $conn->prepare($query)) {
@@ -74,28 +74,33 @@ mysqli_close($conn);
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
+            background-color: #f4f4f9;
         }
 
         /* ID Card styling */
         .id-card {
             display: flex;
             border: 1px solid #ddd;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 600px;
             height: 350px;
             background-color: white;
             overflow: hidden;
             margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
 
         .id-details {
             flex: 1;
-            padding: 20px;
+            padding-right: 15px;
             text-align: left;
         }
 
         .id-details h2 {
             margin: 10px 0;
+            font-size: 1.4rem;
+            color: #333;
         }
 
         .id-qr {
@@ -103,23 +108,49 @@ mysqli_close($conn);
             display: flex;
             justify-content: center;
             align-items: center;
+            padding-left: 15px;
             border-left: 1px solid #ddd;
-            padding: 20px;
         }
 
         #qrcode-display {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 120px;
+            height: 120px;
         }
 
         /* Profile photo styling */
         .profile-photo {
-            width: 100px; /* Set width for the profile photo */
-            height: 100px; /* Set height for the profile photo */
-            border-radius: 50%; /* Make it circular */
-            object-fit: cover; /* Cover the area */
-            margin: 20px auto; /* Center the photo */
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #007bff;
+        }
+
+        /* Button Styles */
+        .button {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 10px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .return-button {
+            background-color: #f44336;
+        }
+
+        .return-button:hover {
+            background-color: #d32f2f;
         }
 
         /* Print styles */
@@ -127,12 +158,17 @@ mysqli_close($conn);
             body {
                 background-color: white;
             }
+
             .id-card {
                 box-shadow: none;
                 width: auto;
                 height: auto;
                 margin: 0;
                 border-radius: 0;
+            }
+
+            .button {
+                display: none;
             }
         }
     </style>
@@ -144,11 +180,11 @@ mysqli_close($conn);
 <?php if ($studentInfo): ?>
     <div class="id-card" id="id-card">
         <div class="id-details">
-        <img src="../pic/User/<?php echo htmlspecialchars($studentInfo['photo']); ?>" alt="Profile Photo" class="profile-photo"
+            <img src="../pic/User/<?php echo htmlspecialchars($studentInfo['photo']); ?>" alt="Profile Photo" class="profile-photo"
                  onerror="this.onerror=null; this.src='../pic/User/default.png';"> <!-- Default image if fails -->
-            <h2><?php echo htmlspecialchars($studentInfo['Fname']) . ' ' . htmlspecialchars($studentInfo['Sname']); ?></h2> <!-- Display Full Name -->
-            <h3>ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h3> <!-- Display ID Number -->
-                        <p>Role: <?php echo htmlspecialchars($studentInfo['U_type']); ?></p> <!-- Display Role -->
+            <h2><?php echo htmlspecialchars($studentInfo['Fname']) . ' ' . htmlspecialchars($studentInfo['Sname']); ?></h2>
+            <h3>ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h3>
+            <p>Role: <?php echo htmlspecialchars($studentInfo['U_type']); ?></p>
             <p>Course: <?php echo htmlspecialchars($studentInfo['course']); ?></p>
             <p>Year and Section: <?php echo htmlspecialchars($studentInfo['yrLVL']); ?></p>
         </div>
@@ -182,8 +218,8 @@ mysqli_close($conn);
         }
     </script>
 
-    <button onclick="downloadIDCard()" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Download ID Card</button>
-    <button class="return-button" onclick="window.history.back()">Return</button> <!-- Return button -->
+    <button onclick="downloadIDCard()" class="button">Download ID Card</button>
+    <button class="return-button button" onclick="window.history.back()">Return</button>
 
 <?php endif; ?>
 
