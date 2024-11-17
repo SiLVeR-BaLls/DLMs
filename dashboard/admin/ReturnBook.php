@@ -3,8 +3,7 @@
 <?php
 include 'include/ReturnConnect.php';
 
-
-// Handle AJAX request to fetch borrow book details
+// Handle AJAX request to fetch borrow book details and rating
 if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
     $ID = $_GET['ID'];
 
@@ -12,7 +11,8 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
     $stmt = $conn->prepare("
         SELECT book.id, book.B_title, book.author, book.publisher, 
                book_copies.copy_ID, borrow_book.ID, borrow_book.IDno, 
-               borrow_book.borrow_date, borrow_book.return_date
+               borrow_book.borrow_date, borrow_book.return_date, 
+               book_copies.rating
         FROM borrow_book
         JOIN book_copies ON borrow_book.ID = book_copies.ID
         JOIN book ON book_copies.B_title = book.B_title
@@ -30,6 +30,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
         $response .= "<p><strong>Book Title:</strong> " . $borrow['B_title'] . "</p>";
         $response .= "<p><strong>Borrow Date:</strong> " . $borrow['borrow_date'] . "</p>";
         $response .= "<p><strong>Return Date:</strong> " . ($borrow['return_date'] ? $borrow['return_date'] : 'Not returned yet') . "</p>";
+        $response .= "<p><strong>Rating:</strong> <input type='number' id='rating' name='rating' value='" . $borrow['rating'] . "' min='1' max='5' class='w-20 p-1 border border-gray-300 rounded-md'></p>";
         echo $response;
     } else {
         echo "<p class='text-red-500'>No active borrow record found for this ID.</p>";
@@ -39,6 +40,21 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
     exit;
 }
 
+// Update the rating if the form is submitted
+if (isset($_POST['approve'])) {
+    $ID = $_POST['ID'];
+    $rating = $_POST['rating'];  // Get the rating from the form submission
+
+    // Update query to save the rating before returning the book
+    $stmt = $conn->prepare("UPDATE book_copies SET rating = ? WHERE ID = ?");
+    $stmt->bind_param("ii", $rating, $ID);
+    
+    if ($stmt->execute()) {
+        $successMessage = "Book return and rating update successful.";
+    } else {
+        $errorMessage = "Failed to update rating.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -122,6 +138,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
             <div class="mt-4">
                 <form method="POST" action="">
                     <input type="hidden" id="confirmID" name="ID">
+                    <input type="hidden" id="confirmRating" name="rating">
                     <button type="submit" name="approve" value="1" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Approve</button>
                     <button type="button" onclick="closePopUp('confirmationPopUp')" class="ml-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Reject</button>
                 </form>
@@ -130,7 +147,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
     </div>
 
     <script type="text/javascript">
-        // Function to fetch borrow book details based on the Borrow ID
+        // Function to fetch borrow book details and rating based on Borrow ID
         function fetchBorrowDetails() {
             var ID = document.getElementById("ID").value;
 
@@ -155,7 +172,9 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
         // Open confirmation dialog
         function openConfirmationDialog() {
             var ID = document.getElementById("ID").value;
+            var rating = document.getElementById("rating").value;
             document.getElementById("confirmID").value = ID;
+            document.getElementById("confirmRating").value = rating;
             document.getElementById("confirmationPopUp").style.display = 'flex';
         }
 
@@ -167,8 +186,3 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
 
 </body>
 </html>
-
-<?php
-// Close the database connection after the form submission
-$conn->close();
-?>

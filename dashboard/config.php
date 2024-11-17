@@ -17,6 +17,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+
+
 // Initialize variables
 $isLoggedIn = false;
 $error_message = "";

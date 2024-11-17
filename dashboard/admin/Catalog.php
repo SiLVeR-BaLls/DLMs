@@ -11,6 +11,7 @@ include '../config.php';
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/script.js"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
 
