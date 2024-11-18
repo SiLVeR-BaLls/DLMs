@@ -11,6 +11,24 @@ include '../config.php';
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        // Function to toggle the visibility of the sections based on navbar link clicks
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('returnedSection').classList.add('hidden');
+            document.getElementById('borrowedSection').classList.add('hidden');
+            document.getElementById('ratingSection').classList.add('hidden');
+
+            // Show the clicked section
+            document.getElementById(section).classList.remove('hidden');
+        }
+
+        // Set default section (Return) on page load
+        window.onload = function() {
+            showSection('returnedSection');
+        };
+    </script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
 
@@ -23,25 +41,44 @@ include '../config.php';
         <?php include 'include/sidebar.php'; ?>
 
         <!-- BrowseBook Content Section -->
-        <div class="flex-grow ">
-            <div class="flex">
-                <!-- Returned Book Report -->
-                <div class="w-1/2 p-4">
-                    <?php include 'include/returned_book_report.php'; ?>
-                </div>
+        <div class="flex-grow">
+            <!-- Navbar Section -->
+            <div class="sticky top-0 z-10 bg-white shadow-md mb-6">
+                <nav class="flex justify-evenly items-center p-4">
+                    <a href="javascript:void(0)" onclick="showSection('returnedSection')" class="text-blue-600 hover:text-blue-800 font-medium">Return</a>
+                    <a href="javascript:void(0)" onclick="showSection('borrowedSection')" class="text-green-600 hover:text-green-800 font-medium">Borrow</a>
+                    <a href="javascript:void(0)" onclick="showSection('ratingSection')" class="text-yellow-600 hover:text-yellow-800 font-medium">Rating</a>
+                </nav>
+            </div>
 
-                <!-- Borrowed Book Report -->
-                <div class="w-1/2 p-4">
-                    <?php include 'include/borrowed_book_report.php'; ?>
+            <!-- Content Sections -->
+            <div id="returnedSection" class="hidden">
+                <!-- Returned Book Report -->
+                <div class="bg-white p-6 rounded shadow-md max-w-full sm:max-w-4xl mx-auto">
+                    <?php include 'include/book_report_returned.php'; ?>
                 </div>
             </div>
-            <!-- Footer at the Bottom (outside the flex container) -->
-            <footer class="bg-blue-600 text-white p-4 mt-auto">
-                <?php include 'include/footer.php'; ?>
-            </footer>
+
+            <div id="borrowedSection" class="hidden">
+                <!-- Borrowed Book Report -->
+                <div class="bg-white p-6 rounded shadow-md max-w-full sm:max-w-4xl mx-auto">
+                    <?php include 'include/book_report_borrowed.php'; ?>
+                </div>
+            </div>
+
+            <div id="ratingSection" class="hidden">
+                <!-- Rating Report -->
+                <div class="bg-white p-6 rounded shadow-md max-w-full sm:max-w-4xl mx-auto">
+                    <?php include 'include/book_report_rating.php'; ?>
+                </div>
+            </div>
+            
+                <!-- Footer at the Bottom -->
+                <footer class="bg-blue-600 text-white p-4 mt-auto">
+                    <?php include 'include/footer.php'; ?>
+                </footer>
         </div>
     </main>
 
-    
 </body>
 </html>
