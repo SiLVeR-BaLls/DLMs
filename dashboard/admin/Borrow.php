@@ -150,10 +150,22 @@ function selectBook(bookID, title, index) {
                     </div>
 
                     <!-- Buttons Section (Flexbox Layout) -->
-                    <div class="flex items-center space-x-4 mt-4">
-                        <button type="button" class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 focus:outline-none focus:shadow-outline" onclick="addBook()">Add Another Book</button>
-                        <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline">Approve Borrowing</button>
-                    </div>
+<div class="flex sticky bottom-0  items-center justify-center space-x-4 py-4 shadow-md">
+    <!-- Add Another Book Button -->
+    <button 
+        type="button" 
+        class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition " onclick="addBook()">
+        Add Another Book
+    </button>
+
+    <!-- Approve Borrowing Button -->
+    <button 
+        type="submit" 
+        class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+        Approve Borrowing
+    </button>
+</div>
+
                 </form>
 
             </div>

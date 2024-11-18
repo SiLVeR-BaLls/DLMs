@@ -1,4 +1,4 @@
-<body class="bg-gray-100 flex">
+<body class="bg-gray-100 w-100px flex">
 
     <!-- Sticky Sidebar -->
     <aside class="w-64 bg-gray-800 text-white h-screen sticky top-0 flex flex-col">

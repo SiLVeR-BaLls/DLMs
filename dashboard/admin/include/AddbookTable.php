@@ -292,37 +292,34 @@
 
                     <h1 class="text-3xl font-bold text-blue-600 mb-6 mt-8">Co-Authors, Illustrator, Editor, etc.</h1>
                     <div id="coAuthorsContainer">
-                    <h1>Co-Authors, Illustrator, Editor, etc.</h1>
-    <div id="coAuthorsContainer">
-    <div class="form-group space-y-4">
-    <div id="coAuthorsContainer" class="space-y-2">
-        <!-- Dynamically added co-authors will be displayed here -->
-    </div>
-    
-    <!-- Co-author entry fields -->
-    <div class="form-book">
-        <label for="Co_Name[]" class="block text-sm font-medium text-gray-700">Co-Author's Name</label>
-        <input type="text" name="Co_Name[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full" placeholder="Enter co-author's name">
-    </div>
-    <div class="form-book">
-        <label for="Co_Date[]" class="block text-sm font-medium text-gray-700">Co-Author's Date</label>
-        <input type="date" name="Co_Date[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full">
-    </div>
-    <div class="form-book">
-        <label for="Co_Role[]" class="block text-sm font-medium text-gray-700">Co-Author's Role</label>
-        <input type="text" name="Co_Role[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full" placeholder="Enter co-author's role">
-    </div>
+    <h1 class="text-2xl font-semibold mb-4">Co-Authors, Illustrator, Editor, etc.</h1>
 
-    <button type="button" id="addCoAuthor" class="mt-4 bg-blue-500 text-white p-2 rounded-md">Add Another Co-Author</button>
-    
-    <!-- Hidden input field for B_title -->
+    <div class="space-y-6">
+        <!-- Dynamically added co-authors will be displayed here -->
+        <div id="coAuthorsList" class="space-y-4"></div>
+        
+        <!-- Co-author entry fields in a row layout -->
+        <div class="flex space-x-6">
+            <div class="flex-1">
+                <label for="Co_Name[]" class="block text-sm font-medium text-gray-700">Co-Author's Name</label>
+                <input type="text" name="Co_Name[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full" placeholder="Enter co-author's name">
+            </div>
+
+            <div class="flex-1">
+                <label for="Co_Date[]" class="block text-sm font-medium text-gray-700">Co-Author's Date</label>
+                <input type="date" name="Co_Date[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full">
+            </div>
+
+            <div class="flex-1">
+                <label for="Co_Role[]" class="block text-sm font-medium text-gray-700">Co-Author's Role</label>
+                <input type="text" name="Co_Role[]" class="mt-1 p-2 border border-gray-300 rounded-md w-full" placeholder="Enter co-author's role">
+            </div>
+        </div>
+
+        <button type="button" id="addCoAuthor" class="mt-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Add Another Co-Author</button>
+    </div>
 </div>
 
-
-
-
-                    </div>
-                </div>
 
                 
             </div>
@@ -361,19 +358,16 @@
         const newCoAuthorDisplay = document.createElement('div');
         newCoAuthorDisplay.classList.add('form-co-author');
         newCoAuthorDisplay.innerHTML = `
-            <div class="form-book">
-                <label>Name</label>
+            <div>
                 <span>${coName}</span>
-            </div>
-            <div class="form-book">
-                <label>Date</label>
+     
+                <label>-</label>
                 <span>${coDate}</span>
-            </div>
-            <div class="form-book">
-                <label>Role</label>
-                <span>${coRole}</span>
-            </div>
-            <button type="button" class="removeCoAuthor btn btn-danger">Remove</button>
+       
+                <label>-</label>
+                <span>(${coRole})</span>
+                <button type="button" class="removeCoAuthor  r-0">Remove</button>
+                </div>
         `;
         coAuthorsContainer.appendChild(newCoAuthorDisplay);
 
