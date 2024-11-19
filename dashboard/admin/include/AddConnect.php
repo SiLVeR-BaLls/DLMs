@@ -72,19 +72,6 @@ if ($conn->connect_error) {
                 $sql = "INSERT INTO Series (B_title, title, volume, IL, lexille, F_and_P, comments) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 executeStatement($conn, $sql, "ssissss", $B_title, $series, $volume, $IL, $lexille, $F_and_P, $comments);
 
-                // Insert Subject
-                $Sub_Head = $_POST['Sub_Head'] ?? '';
-                $Sub_Head_input = $_POST['Sub_Head_input'] ?? '';
-                $Sub_Body_1 = $_POST['Sub_Body_1'] ?? '';
-                $Sub_input_1 = $_POST['Sub_input_1'] ?? '';
-                $Sub_Body_2 = $_POST['Sub_Body_2'] ?? '';
-                $Sub_input_2 = $_POST['Sub_input_2'] ?? '';
-                $Sub_Body_3 = $_POST['Sub_Body_3'] ?? '';
-                $Sub_input_3 = $_POST['Sub_input_3'] ?? '';
-
-                $sql = "INSERT INTO Subject (B_title, Sub_Head, Sub_Head_input, Sub_Body_1, Sub_input_1, Sub_Body_2, Sub_input_2, Sub_Body_3, Sub_input_3) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                executeStatement($conn, $sql, "sssssssss", $B_title, $Sub_Head, $Sub_Head_input, $Sub_Body_1, $Sub_input_1, $Sub_Body_2, $Sub_input_2, $Sub_Body_3, $Sub_input_3);
-
                 // Insert Resource
                 $sql = "INSERT INTO Resource (B_title, url, Description) VALUES (?, ?, ?)";
                 executeStatement($conn, $sql, "sss", $B_title, $url, $Description);
@@ -106,6 +93,31 @@ if ($conn->connect_error) {
                     $stmt = $conn->prepare("INSERT INTO coauthor (B_title, Co_Name, Co_Date, Co_Role) VALUES (?, ?, ?, ?)");
                     $stmt->bind_param("ssss", $B_title, $coAuthor, $coAuthorDate, $coAuthorRole);
                     $stmt->execute();
+                }
+
+                // Insert Subject using foreach
+                $subHeads = $_POST['Sub_Head'] ?? [];
+                $subHeadsInputs = $_POST['Sub_Head_input'] ?? [];
+                $subBody1s = $_POST['Sub_Body_1'] ?? [];
+                $subInput1s = $_POST['Sub_input_1'] ?? [];
+                $subBody2s = $_POST['Sub_Body_2'] ?? [];
+                $subInput2s = $_POST['Sub_input_2'] ?? [];
+                $subBody3s = $_POST['Sub_Body_3'] ?? [];
+                $subInput3s = $_POST['Sub_input_3'] ?? [];
+
+                // Iterate over all the subject fields
+                foreach ($subHeads as $index => $subHead) {
+                    $subHeadInput = $subHeadsInputs[$index] ?? '';
+                    $subBody1 = $subBody1s[$index] ?? '';
+                    $subInput1 = $subInput1s[$index] ?? '';
+                    $subBody2 = $subBody2s[$index] ?? '';
+                    $subInput2 = $subInput2s[$index] ?? '';
+                    $subBody3 = $subBody3s[$index] ?? '';
+                    $subInput3 = $subInput3s[$index] ?? '';
+
+                    // Insert each subject
+                    $sql = "INSERT INTO Subject (B_title, Sub_Head, Sub_Head_input, Sub_Body_1, Sub_input_1, Sub_Body_2, Sub_input_2, Sub_Body_3, Sub_input_3) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    executeStatement($conn, $sql, "sssssssss", $B_title, $subHead, $subHeadInput, $subBody1, $subInput1, $subBody2, $subInput2, $subBody3, $subInput3);
                 }
             }
         }

@@ -171,7 +171,11 @@ function selectBook(bookID, title, index) {
             </div>
 
         </div>
-
+    </div>
+    <!-- Footer at the Bottom -->
+    <footer class="bg-blue-600 text-white p-4 mt-auto">
+                       <?php include 'include/footer.php'; ?>
+                   </footer>
     </main>
 
     <script>// Search for user based on user ID
@@ -261,6 +265,6 @@ function selectBook(bookID, title, index) {
     // We no longer clear the results when selecting a book
 }
 </script>
+           
 </body>
-
 </html>

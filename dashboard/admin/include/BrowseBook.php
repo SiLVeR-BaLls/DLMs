@@ -108,14 +108,14 @@ if ($conn->connect_error) {
                         $available_percentage = ($row['total_count'] > 0) ? ($row['available_count'] / $row['total_count']) * 100 : 0;
                         // Determine background color based on percentage
                         if ($available_percentage >= 50) {
-                            $bg_class = 'bg-green-500';
+                            $bg_class = 'bg-green-700';
                         } elseif ($available_percentage > 0) {
                             $bg_class = 'bg-yellow-500';
                         } else {
-                            $bg_class = 'bg-red-500';
+                            $bg_class = 'bg-red-800';
                         }
                         ?>
-                        <tr class="<?php echo $bg_class; ?> text-white">
+                        <tr class="border-y border-solid">
                             <td class="px-4 py-2 title"><?php echo htmlspecialchars($row['B_title']); ?></td>
                             <td class="px-4 py-2 author"><?php echo htmlspecialchars($row['author']); ?></td>
                             <td class="px-4 py-2 coauthors"><?php echo htmlspecialchars($row['coauthors']); ?></td>
@@ -124,7 +124,7 @@ if ($conn->connect_error) {
                             <td class="px-4 py-2 issn"><?php echo htmlspecialchars($row['ISSN']); ?></td>
                             <td class="px-4 py-2 materialType"><?php echo htmlspecialchars($row['MaterialType']); ?></td>
                             <td class="px-4 py-2 extent"><?php echo htmlspecialchars($row['extent']); ?></td>
-                            <td class="px-4 py-2">
+                            <td class="px-4 py-2 <?php echo $bg_class; ?>">
                                 <?php echo $row['available_count']; ?> / <?php echo $row['total_count']; ?>
                             </td>
                             <td class="px-4 py-2">
@@ -141,44 +141,44 @@ if ($conn->connect_error) {
         </table>
     </div>
 
-    <!-- Pagination and Books per Page Controls -->
-    <div class="mt-6 flex justify-between items-center space-x-2">
-        <div class="flex justify-center w-full space-x-2">
-            <?php if ($page > 1): ?>
-                <a href="?page=1&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                    << First
-                </a>
-                <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                    < Previous
-                </a>
-            <?php endif; ?>
+<!-- Pagination and Books per Page Controls -->
+<div class="mt-6 flex justify-between items-center space-x-2">
+    <div class="flex justify-center w-full space-x-2">
+        <?php if ($page > 1): ?>
+            <a href="?page=1&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
+                << First
+            </a>
+            <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
+                < Previous
+            </a>
+        <?php endif; ?>
 
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?php echo $i; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 <?php echo ($i == $page) ? 'bg-gray-800 text-white font-bold' : 'bg-gray-400 text-gray-800'; ?> rounded">
-                    <?php echo $i; ?>
-                </a>
-            <?php endfor; ?>
+        <!-- Show all page links -->
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?php echo $i; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 <?php echo ($i == $page) ? 'bg-gray-800 text-white font-bold' : 'bg-gray-400 text-gray-800'; ?> rounded">
+                <?php echo $i; ?>
+            </a>
+        <?php endfor; ?>
 
-            <?php if ($page < $total_pages): ?>
-                <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                    Next >
-                </a>
-                <a href="?page=<?php echo $total_pages; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                    Last >>
-                </a>
-            <?php endif; ?>
-        </div>
-
-        <!-- Books per page control (right side) -->
-        <div class="flex items-center">
-            <label for="limit" class="mr-2">Books per page:</label>
-            <select id="limit" name="limit" class="bg-gray-200 border border-gray-400 p-2 rounded" onchange="window.location.href = '?page=1&limit=' + this.value;">
-                <option value="5" <?php echo ($limit == 5) ? 'selected' : ''; ?>>5</option>
-                <option value="10" <?php echo ($limit == 10) ? 'selected' : ''; ?>>10</option>
-                <option value="15" <?php echo ($limit == 15) ? 'selected' : ''; ?>>15</option>
-                <option value="20" <?php echo ($limit == 20) ? 'selected' : ''; ?>>20</option>
-            </select>
-        </div>
+        <?php if ($page < $total_pages): ?>
+            <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
+                Next >
+            </a>
+            <a href="?page=<?php echo $total_pages; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
+                Last >>
+            </a>
+        <?php endif; ?>
+    </div>
+    <!-- Books per page control (right side) -->
+    <div class="flex items-center">
+        <label for="limit" class="mr-2">Books per page:</label>
+        <select id="limit" name="limit" class="bg-gray-200 border border-gray-400 p-2 rounded" onchange="window.location.href = '?page=1&limit=' + this.value;">
+            <option value="5" <?php echo ($limit == 5) ? 'selected' : ''; ?>>5</option>
+            <option value="10" <?php echo ($limit == 10) ? 'selected' : ''; ?>>10</option>
+            <option value="15" <?php echo ($limit == 15) ? 'selected' : ''; ?>>15</option>
+            <option value="20" <?php echo ($limit == 20) ? 'selected' : ''; ?>>20</option>
+        </select>
+    </div>
     </div>
 
 </div>

@@ -101,8 +101,8 @@ $query = $conn->query($attendanceQuery);
                 <button id="openSidebarButton" class="bg-blue-500 text-white py-2 px-4 m-4 rounded-lg">Toggle
                     Table</button>
                 <form id="qrForm" action="insert.php" method="post" class="bg-white p-6 rounded-lg shadow-lg">
-                    <label for="studentID" class="text-lg text-gray-600">SCAN QR CODE</label>
-                    <input type="text" name="studentID" id="text" placeholder="Scan QR Code"
+                    <label for="studentID" class="text-lg text-gray-600">ENTER ID:</label>
+                    <input type="text" name="studentID" id="text" placeholder="Enter ID"
                         class="w-full p-3 mt-2 border rounded-lg focus:ring-2 focus:ring-green-300" autofocus>
                 </form>
             </div>

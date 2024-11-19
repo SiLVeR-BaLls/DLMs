@@ -202,56 +202,69 @@
                 </div>
 
                 <!-- Subject Section -->
-                <div class="mb-8" id="subject">
-                    <h1 class="text-3xl font-bold text-blue-600 mb-6">Subject</h1>
-                    <div class="grid grid-cols-1 gap-4">
-                        <div>
-                            <label for="Sub_Head" class="block text-sm font-medium text-gray-700">Subject
-                                Heading</label>
-                            <select class="w-full px-4 py-2 border rounded-md" name="Sub_Head" id="Sub_Head">
-                                <option value="Tropical Heading">Tropical Heading</option>
-                                <option value="Personal Heading">Personal Heading</option>
-                                <option value="Geographic Heading">Geographic Heading</option>
-                                <option value="Local Heading">Local Heading</option>
-                            </select>
-                            <input type="text" name="Sub_Head_input" id="Sub_Head_input"
-                                class="w-full px-4 py-2 border rounded-md mt-2" placeholder="Enter subject heading">
-                        </div>
-                        <div>
-                            <label for="Sub_Body_1" class="block text-sm font-medium text-gray-700">Sub Body 1</label>
-                            <select class="w-full px-4 py-2 border rounded-md" name="Sub_Body_1" id="Sub_Body_1">
-                                <option value="General">General</option>
-                                <option value="Geographic">Geographic</option>
-                                <option value="Chronological">Chronological</option>
-                                <option value="Form">Form</option>
-                            </select>
-                            <input type="text" name="Sub_input_1" id="Sub_input_1"
-                                class="w-full px-4 py-2 border rounded-md mt-2" placeholder="Enter subheading details">
-                        </div>
-                        <div>
-                            <label for="Sub_Body_2" class="block text-sm font-medium text-gray-700">Sub Body 2</label>
-                            <select class="w-full px-4 py-2 border rounded-md" name="Sub_Body_2" id="Sub_Body_2">
-                                <option value="General">General</option>
-                                <option value="Geographic">Geographic</option>
-                                <option value="Chronological">Chronological</option>
-                                <option value="Form">Form</option>
-                            </select>
-                            <input type="text" name="Sub_input_2" id="Sub_input_2"
-                                class="w-full px-4 py-2 border rounded-md mt-2" placeholder="Enter subheading details">
-                        </div>
-                        <div>
-                            <label for="Sub_Body_3" class="block text-sm font-medium text-gray-700">Sub Body 3</label>
-                            <select class="w-full px-4 py-2 border rounded-md" name="Sub_Body_3" id="Sub_Body_3">
-                                <option value="General">General</option>
-                                <option value="Geographic">Geographic</option>
-                                <option value="Chronological">Chronological</option>
-                                <option value="Form">Form</option>
-                            </select>
-                            <input type="text" name="Sub_input_3" id="Sub_input_3"
-                                class="w-full px-4 py-2 border rounded-md mt-2" placeholder="Enter subheading details">
-                        </div>
-                    </div>
-                </div>
+<div class="mb-8" id="subject">
+<h1 class="text-2xl font-semibold text-blue-600 mb-4">Subject</h1>
+<div class="subject-item grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <!-- Subject Heading -->
+    <div>
+        <label for="Sub_Head" class="block text-sm text-gray-700">Subject Heading</label>
+        <select name="Sub_Head[]" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="Tropical Heading">Tropical Heading</option>
+            <option value="Personal Heading">Personal Heading</option>
+            <option value="Geographic Heading">Geographic Heading</option>
+            <option value="Local Heading">Local Heading</option>
+        </select>
+        <input type="text" name="Sub_Head_input[]" class="w-full px-3 py-2 border border-gray-300 rounded-md mt-2 focus:ring-2 focus:ring-blue-500" placeholder="Enter subject heading">
+    </div>
+
+    <!-- Sub Body 1 -->
+    <div>
+        <label for="Sub_Body_1" class="block text-sm text-gray-700">Sub Body 1</label>
+        <select name="Sub_Body_1[]" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="General">General</option>
+            <option value="Geographic">Geographic</option>
+            <option value="Chronological">Chronological</option>
+            <option value="Form">Form</option>
+        </select>
+        <input type="text" name="Sub_input_1[]" class="w-full px-3 py-2 border border-gray-300 rounded-md mt-2 focus:ring-2 focus:ring-blue-500" placeholder="Enter subheading details">
+    </div>
+
+    <!-- Sub Body 2 -->
+    <div>
+        <label for="Sub_Body_2" class="block text-sm text-gray-700">Sub Body 2</label>
+        <select name="Sub_Body_2[]" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="General">General</option>
+            <option value="Geographic">Geographic</option>
+            <option value="Chronological">Chronological</option>
+            <option value="Form">Form</option>
+        </select>
+        <input type="text" name="Sub_input_2[]" class="w-full px-3 py-2 border border-gray-300 rounded-md mt-2 focus:ring-2 focus:ring-blue-500" placeholder="Enter subheading details">
+    </div>
+
+    <!-- Sub Body 3 -->
+    <div>
+        <label for="Sub_Body_3" class="block text-sm text-gray-700">Sub Body 3</label>
+        <select name="Sub_Body_3[]" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="General">General</option>
+            <option value="Geographic">Geographic</option>
+            <option value="Chronological">Chronological</option>
+            <option value="Form">Form</option>
+        </select>
+        <input type="text" name="Sub_input_3[]" class="w-full px-3 py-2 border border-gray-300 rounded-md mt-2 focus:ring-2 focus:ring-blue-500" placeholder="Enter subheading details">
+    </div>
+</div>
+
+<!-- Button to Add Subject -->
+<button type="button" id="addSubject" class="bg-blue-500 text-white py-2 px-4 rounded-md mt-4">Add Subject</button>
+
+<!-- Container for dynamically added subjects -->
+<div id="subjectsContainer" class="mt-4"></div>
+
+
+
+
+</div>
+
 
                 <!-- Resources Section -->
                 <div class="mb-8" id="resources">
@@ -417,7 +430,102 @@ document.getElementById('coAuthorsContainer').addEventListener('click', function
         }
     }
 });
+</script>
+<script>
+<!-- for subject -->
+// Handle the adding of a subject entry
+document.getElementById('addSubject').addEventListener('click', function() {
+    // Get the values from the form fields
+    const subHead = document.querySelector('select[name="Sub_Head[]"]').value;
+    const subHeadInput = document.querySelector('input[name="Sub_Head_input[]"]').value;
+    const subBody1 = document.querySelector('select[name="Sub_Body_1[]"]').value;
+    const subInput1 = document.querySelector('input[name="Sub_input_1[]"]').value;
+    const subBody2 = document.querySelector('select[name="Sub_Body_2[]"]').value;
+    const subInput2 = document.querySelector('input[name="Sub_input_2[]"]').value;
+    const subBody3 = document.querySelector('select[name="Sub_Body_3[]"]').value;
+    const subInput3 = document.querySelector('input[name="Sub_input_3[]"]').value;
+
+    // Validate input before adding
+    if (subHead && subHeadInput && subBody1 && subInput1 && subBody2 && subInput2 && subBody3 && subInput3) {
+        // Create a new display element for the subject
+        const subjectsContainer = document.getElementById('subjectsContainer');
+        const newSubjectDisplay = document.createElement('div');
+        newSubjectDisplay.classList.add('subject-entry');
+        newSubjectDisplay.innerHTML = `
+            <div>
+                <span><strong>Heading:</strong> ${subHead} - ${subHeadInput}</span>
+                <br>
+                <span><strong>Body 1:</strong> ${subBody1} - ${subInput1}</span>
+                <br>
+                <span><strong>Body 2:</strong> ${subBody2} - ${subInput2}</span>
+                <br>
+                <span><strong>Body 3:</strong> ${subBody3} - ${subInput3}</span>
+                <button type="button" class="removeSubjectBtn">Remove</button>
+            </div>
+        `;
+        subjectsContainer.appendChild(newSubjectDisplay);
+
+        // Create hidden input fields for the new subject to submit via the form
+        const form = document.querySelector('form');
+
+        // Create hidden inputs for the subject data
+        const hiddenInputs = [
+            { name: 'Sub_Head[]', value: subHead },
+            { name: 'Sub_Head_input[]', value: subHeadInput },
+            { name: 'Sub_Body_1[]', value: subBody1 },
+            { name: 'Sub_input_1[]', value: subInput1 },
+            { name: 'Sub_Body_2[]', value: subBody2 },
+            { name: 'Sub_input_2[]', value: subInput2 },
+            { name: 'Sub_Body_3[]', value: subBody3 },
+            { name: 'Sub_input_3[]', value: subInput3 }
+        ];
+
+        hiddenInputs.forEach(inputData => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = inputData.name;
+            input.value = inputData.value;
+            form.appendChild(input);
+        });
+
+        // Clear the form inputs for the next entry
+        document.querySelector('select[name="Sub_Head[]"]').value = '';
+        document.querySelector('input[name="Sub_Head_input[]"]').value = '';
+        document.querySelector('select[name="Sub_Body_1[]"]').value = '';
+        document.querySelector('input[name="Sub_input_1[]"]').value = '';
+        document.querySelector('select[name="Sub_Body_2[]"]').value = '';
+        document.querySelector('input[name="Sub_input_2[]"]').value = '';
+        document.querySelector('select[name="Sub_Body_3[]"]').value = '';
+        document.querySelector('input[name="Sub_input_3[]"]').value = '';
+    } else {
+        alert("Please fill out all fields.");
+    }
+});
+
+// Handle the removal of a subject entry
+document.getElementById('subjectsContainer').addEventListener('click', function(e) {
+    if (e.target.classList.contains('removeSubjectBtn')) {
+        // Remove the subject display
+        e.target.parentElement.remove();
+
+        // Remove the corresponding hidden input fields
+        const subjectEntry = e.target.parentElement;
+        const subHead = subjectEntry.querySelector('span').textContent;
+
+        const hiddenInputs = document.querySelectorAll(`input[name='Sub_Head[]']`);
+        hiddenInputs.forEach(input => {
+            if (input.value === subHead) {
+                input.remove();
+            }
+        });
+    }
+});
+
+// Ensure form submission after adding subjects
+document.querySelector('form').addEventListener('submit', function(event) {
+    // You might want to debug here to see if the form is submitting correctly
+    console.log('Form is being submitted!');
+});
 
 </script>
-
 </body>

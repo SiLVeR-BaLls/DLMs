@@ -44,7 +44,7 @@
     $ratingResult = $conn->query($ratingQuery);
 
     // Arrays to store rating data for the chart
-    $ratingCounts = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+    $ratingCounts = [0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
     $booksByRating = [];
 
     // Fetch the rating data from the database
@@ -71,7 +71,7 @@
     <!-- Chart.js Scripts -->
 <script>
     // Rating Data for Bar Chart
-    const ratingLabels = ['1', '2', '3', '4', '5'];
+    const ratingLabels = ['0', '1', '2', '3', '4', '5'];
     const ratingData = <?php echo json_encode(array_values($ratingCounts)); ?>;
     const bookTitles = <?php echo json_encode($booksByRating); ?>;
 
