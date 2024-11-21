@@ -29,6 +29,7 @@ if ($conn->connect_error) {
     $vendor = $_POST['vendor'] ?? '';
     $fundingSource = $_POST['fundingSource'] ?? '';
     $rating = $_POST['rating'] ?? '';
+    $note = $_POST['note'] ?? '';
 
     // Validate required fields
     if (empty($copy_ID) || empty($callNumber) || empty($status) || empty($B_title)) {
@@ -39,10 +40,10 @@ if ($conn->connect_error) {
         $message_type = "error";
     } else {
         // Prepare the insert statement, including B_title
-        $sql = "INSERT INTO book_copies (copy_ID, status, callNumber, circulationType, dateAcquired, description1, description2, description3, number1, number2, number3, sublocation, vendor, fundingSource, rating, B_title) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO book_copies (copy_ID, status, callNumber, circulationType, dateAcquired, description1, description2, description3, number1, number2, number3, sublocation, vendor, fundingSource, rating, note, B_title) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("ssssssssssssssss", $copy_ID, $status, $callNumber, $circulationType, $dateAcquired, $description1, $description2, $description3, $number1, $number2, $number3, $sublocation, $vendor, $fundingSource, $rating, $B_title);
+            $stmt->bind_param("sssssssssssssssss", $copy_ID, $status, $callNumber, $circulationType, $dateAcquired, $description1, $description2, $description3, $number1, $number2, $number3, $sublocation, $vendor, $fundingSource, $rating, $note, $B_title);
 
             // Insert multiple copies without modifying copy_ID
             $conn->begin_transaction();

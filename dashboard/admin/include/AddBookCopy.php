@@ -56,6 +56,9 @@ if ($title) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Book Management</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .hidden {
@@ -71,163 +74,178 @@ if ($title) {
             <?php echo htmlspecialchars($message); ?>
         </div>
         <?php endif; ?>
+        <form action="CopyConnection.php" method="post" class="max-w-4xl mx-auto p-4 space-y-4">
 
-        <form action="CopyConnection.php" method="post">
+<!-- Display the title -->
+<h4 class="book-title text-center mb-4">
+    <?php echo htmlspecialchars($book['B_title']); ?>
+</h4>
+<a href="../ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary block mx-auto mb-6">List</a>
 
-            <!-- display the title -->
-            <h4 class="book-title">
-                <?php echo htmlspecialchars($book['B_title']); ?>
-            </h4>
-            <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary">list</a>
+<input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
 
-            <input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
+<!-- Status and Rating (Grouped in one row) -->
+<div class="flex flex-wrap gap-4 mb-4">
+    <!-- Status -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="status" class="form-label">Status</label>
+        <select id="status" name="status" class="form-select w-full">
+            <option selected>Available</option>
+            <option>Checked Out</option>
+            <option>Lost</option>
+        </select>
+    </div>
+
+    <!-- Rating -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="rating" class="form-label">Rating</label>
+        <select id="rating" name="rating" class="form-select w-full" required>
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+        </select>
+    </div>
+
+    <!-- Circulation Type -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="circulationType" class="form-label">Circulation Type</label>
+        <select id="circulationType" name="circulationType" class="form-select w-full">
+            <option selected>General Circulation</option>
+            <option>Reference</option>
+            <option>Reserve</option>
+        </select>
+    </div>
+
+    <!-- Date Acquired -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="dateAcquired" class="form-label">Date Acquired</label>
+        <input type="date" id="dateAcquired" name="dateAcquired" class="form-control w-full">
+    </div>
+</div>
+
+<!-- Copy Information Section (Grouped in one row) -->
+<h5 class="mt-4 mb-4 text-center">Copy Information</h5>
+<div class="flex flex-wrap gap-4 mb-4">
+    <!-- QR Code -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="copy_ID" class="form-label">QR Code</label>
+        <input type="text" id="copy_ID" name="copy_ID" class="form-control w-full" required>
+    </div>
+
+    <!-- Call Number -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="callNumber" class="form-label">Call Number</label>
+        <input type="text" id="callNumber" name="callNumber" class="form-control w-full" required>
+    </div>
+</div>
+
+<!-- Purchase Price and Notes (Grouped in one row) -->
+<div class="flex flex-wrap gap-4 mb-4">
+    <!-- Purchase Price -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="purchasePrice" class="form-label">Purchase Price</label>
+        <input type="number" step="0.1" id="purchasePrice" name="purchasePrice" class="form-control w-full">
+    </div>
+
+    <!-- Notes -->
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control w-full" id="notes" name="note" placeholder="Any additional information about the book"></textarea>
+    </div>
+</div>
+
+<!-- Accession and Number Fields Grouped Together Using Flex -->
+<h5 class="mt-4 mb-4 text-center">Accession and Number</h5>
+<div class="flex flex-wrap gap-4 mb-4">
+    <!-- Accession Fields Group -->
+    <div class="flex flex-wrap gap-4 w-full sm:w-1/2 lg:w-1/2 mb-4">
+        <!-- Accession 1 -->
+        <div class="w-full mb-4">
+            <label for="description1" class="form-label">Accession</label>
+            <input type="text" id="description1" name="description1" class="form-control w-full">
+        </div>
+
+        <!-- Accession 2 -->
+        <div class="w-full mb-4">
+            <label for="description2" class="form-label">Accession</label>
+            <input type="text" id="description2" name="description2" class="form-control w-full">
+        </div>
+
+        <!-- Accession 3 -->
+        <div class="w-full mb-4">
+            <label for="description3" class="form-label">Accession</label>
+            <input type="text" id="description3" name="description3" class="form-control w-full">
+        </div>
+    </div>
+
+    <!-- Number Fields Group -->
+    <div class="flex flex-wrap gap-4 w-full sm:w-1/2 lg:w-1/2 mb-4">
+        <!-- Number 1 -->
+        <div class="w-full mb-4">
+            <label for="number1" class="form-label">Number</label>
+            <input type="number" id="number1" name="number1" class="form-control w-full">
+        </div>
+
+        <!-- Number 2 -->
+        <div class="w-full mb-4">
+            <label for="number2" class="form-label">Number</label>
+            <input type="number" id="number2" name="number2" class="form-control w-full">
+        </div>
+
+        <!-- Number 3 -->
+        <div class="w-full mb-4">
+            <label for="number3" class="form-label">Number</label>
+            <input type="number" id="number3" name="number3" class="form-control w-full">
+        </div>
+    </div>
+</div>
+
+<!-- Copy Number -->
+<div class="mb-4">
+    <label for="copyNumber" class="form-label">Copy Number</label>
+    <input type="number" id="copyNumber" name="copyNumber" class="form-control w-full">
+</div>
+
+<!-- Group: Sublocation, Vendor, Funding Source (Grouped in one row) -->
+<h5 class="mt-4 mb-4 text-center">Additional Information</h5>
+<div class="flex justify-center gap-4 mb-4">
+    <!-- Sublocation -->
+    <div class="w-full sm:w-1/4 lg:w-1/4 mb-4">
+        <label for="sublocation" class="form-label">Sublocation</label>
+        <select id="sublocation" name="sublocation" class="form-select w-full">
+            <option selected>Technical Section</option>
+            <option>Circulation Section</option>
+            <option>Reference Section</option>
+        </select>
+    </div>
+
+    <!-- Vendor -->
+    <div class="w-full sm:w-1/4 lg:w-1/4 mb-4">
+        <label for="vendor" class="form-label">Vendor</label>
+        <select id="vendor" name="vendor" class="form-select w-full">
+            <option selected>DTFOS Bookstore</option>
+            <option>Other</option>
+        </select>
+    </div>
+
+    <!-- Funding Source -->
+    <div class="w-full sm:w-1/4 lg:w-1/4 mb-4">
+        <label for="fundingSource" class="form-label">Funding Source</label>
+        <select id="fundingSource" name="fundingSource" class="form-select w-full">
+            <option selected>Purchased</option>
+            <option>Donated</option>
+            <option>Other</option>
+        </select>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-primary mt-4 block mx-auto">Submit</button>
+</form>
 
 
-            <!-- Status -->
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select" id="status" name="status">
-                    <option selected>Available</option>
-                    <option>Checked Out</option>
-                    <option>Lost</option>
-                </select>
-            </div>
 
-            <!-- QR Code -->
-            <div class="mb-3">
-                <label for="copy_ID" class="form-label">QR Code</label>
-                <input type="text" class="form-control" id="copy_ID" name="copy_ID" required>
-            </div>
-
-            <!-- Call Number -->
-            <div class="mb-3">
-                <label for="callNumber" class="form-label">Call Number</label>
-                <input type="text" class="form-control" id="callNumber" name="callNumber" required>
-            </div>
-
-            <!-- Rating -->
-            <div class="mb-3">
-                <label for="rating" class="form-label">Rating</label>
-                <select class="form-select" id="rating" name="rating" required>
-                    <option value="">Select a Rating</option>
-                    <option value="1">1 Star</option>
-                    <option value="2">2 Stars</option>
-                    <option value="3">3 Stars</option>
-                    <option value="4">4 Stars</option>
-                    <option value="5">5 Stars</option>
-                </select>
-            </div>
-
-
-            <!-- Purchase Price -->
-            <div class="mb-3">
-                <label for="purchasePrice" class="form-label">Purchase Price</label>
-                <input type="number" step="0.01" class="form-control" id="purchasePrice" name="purchasePrice">
-            </div>
-
-            <!-- Circulation Type -->
-            <div class="mb-3">
-                <label for="circulationType" class="form-label">Circulation Type</label>
-                <select class="form-select" id="circulationType" name="circulationType">
-                    <option selected>General Circulation</option>
-                    <option>Reference</option>
-                    <option>Reserve</option>
-                </select>
-            </div>
-
-            <!-- Date Acquired -->
-            <div class="mb-3">
-                <label for="dateAcquired" class="form-label">Date Acquired</label>
-                <input type="date" class="form-control" id="dateAcquired" name="dateAcquired">
-            </div>
-
-            <!-- Notes -->
-            <div class="mb-3">
-                <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" name="notes"
-                    rows="2">There are no notes for this copy.</textarea>
-            </div>
-
-            <!-- Copy Information -->
-            <h5>Copy Information</h5>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="description1" class="form-label">Description 1</label>
-                    <input type="text" class="form-control" id="description1" name="description1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="number1" class="form-label">Number 1</label>
-                    <input type="number" class="form-control" id="number1" name="number1">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="description2" class="form-label">Description 2</label>
-                    <input type="text" class="form-control" id="description2" name="description2">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="number2" class="form-label">Number 2</label>
-                    <input type="number" class="form-control" id="number2" name="number2">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="description3" class="form-label">Description 3</label>
-                    <input type="text" class="form-control" id="description3" name="description3">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="number3" class="form-label">Number 3</label>
-                    <input type="number" class="form-control" id="number3" name="number3">
-                </div>
-            </div>
-
-            <!-- Copy Number -->
-            <div class="mb-3">
-                <label for="copyNumber" class="form-label">Copy Number</label>
-                <input type="number" class="form-control" id="copyNumber" name="copyNumber">
-            </div>
-
-            <!-- Sublocation -->
-            <div class="mb-3">
-                <label for="sublocation" class="form-label">Sublocation</label>
-                <select class="form-select" id="sublocation" name="sublocation">
-                    <option selected>Technical Section</option>
-                    <option>Circulation Section</option>
-                    <option>Reference Section</option>
-                </select>
-                <button type="button" class="btn btn-link" onclick="showSublocationInput()">Add New Sublocation</button>
-                <input type="text" class="form-control hidden" id="newSublocation" placeholder="Enter new sublocation">
-                <button type="button" class="btn btn-sm btn-outline-primary hidden" id="addSublocationBtn"
-                    onclick="addSublocation()">Add</button>
-            </div>
-
-            <!-- Vendor -->
-            <div class="mb-3">
-                <label for="vendor" class="form-label">Vendor</label>
-                <select class="form-select" id="vendor" name="vendor">
-                    <option selected>DTFOS Bookstore</option>
-                    <option>Other</option>
-                </select>
-                <button type="button" class="btn btn-link" onclick="showVendorInput()">Add New Vendor</button>
-                <input type="text" class="form-control hidden" id="newVendor" placeholder="Enter new vendor">
-                <button type="button" class="btn btn-sm btn-outline-primary hidden" id="addVendorBtn"
-                    onclick="addVendor()">Add</button>
-            </div>
-
-            <!-- Funding Source -->
-            <div class="mb-3">
-                <label for="fundingSource" class="form-label">Funding Source</label>
-                <select class="form-select" id="fundingSource" name="fundingSource">
-                    <option selected>Purchased</option>
-                    <option>Donated</option>
-                    <option>Other</option>
-                </select>
-                <button type="button" class="btn btn-link" onclick="showFundingSourceInput()">Add New Funding
-                    Source</button>
-                <input type="text" class="form-control hidden" id="newFundingSource"
-                    placeholder="Enter new funding source">
-                <button type="button" class="btn btn-sm btn-outline-primary hidden" id="addFundingSourceBtn"
-                    onclick="addFundingSource()">Add</button>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 

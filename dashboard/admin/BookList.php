@@ -69,10 +69,10 @@ if (!$result) {
                         <th class="py-2 px-4 border-b">Title</th>
                         <th class="py-2 px-4 border-b">Copy ID</th>
                         <th class="py-2 px-4 border-b">Call Number</th>
-                        <th class="py-2 px-4 border-b">Status</th>
                         <th class="py-2 px-4 border-b">Vendor</th>
                         <th class="py-2 px-4 border-b">Funding Source</th>
                         <th class="py-2 px-4 border-b">Sublocation</th>
+                        <th class="py-2 px-4 border-b">Note</th>
                         <th class="py-2 px-4 border-b">Rating</th>
                         <th class="py-2 px-4 border-b">Action</th>
                     </tr>
@@ -87,10 +87,10 @@ if (!$result) {
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['B_title']) . "</td>
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['copy_ID']) . "</td>
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['callNumber']) . "</td>
-                                <td class='py-2 px-4'>" . htmlspecialchars($row['status']) . "</td>
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['vendor']) . "</td>
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['fundingSource']) . "</td>
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['Sublocation']) . "</td>
+                                <td class='py-2 px-4'>" . htmlspecialchars($row['note']) . "</td>
                                 <td class='py-2 px-4'>" . htmlspecialchars($row['rating']) . "</td>
                                 <td class='py-2 px-4'>
                                     <a href='ViewCopy.php?ID=" . urlencode($row['ID']) . "' class='bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600'>View</a>

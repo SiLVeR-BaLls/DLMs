@@ -155,7 +155,7 @@ if ($title) {
                 <div class="flex justify-center gap-4 mt-4">
                     <a href="include/edit_book.php?title=<?php echo urlencode($book['B_title']); ?>"
                         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
-                    <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>"
+                    <a href="include/AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>"
                         class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Copy</a>
                     <a href="BookList.php?title=<?php echo urlencode($book['B_title']); ?>"
                         class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">List</a>
