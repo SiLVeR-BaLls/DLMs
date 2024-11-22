@@ -66,11 +66,10 @@ if ($id) {
 
 // Handle form submission for updating user details
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-    // Process file upload
     $photoPath = $user['photo']; // Default to existing photo
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
-    // Form input data
+    // Collect form data
     $IDno = $_POST['IDno'];
     $Fname = $_POST['Fname'];
     $Sname = $_POST['Sname'];
@@ -103,12 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 mkdir($uploadDir, 0755, true);
             }
 
-            // Delete existing photo if present
             if (!empty($user['photo'])) {
                 unlink($uploadDir . $user['photo']);
             }
 
-            // Handle new file upload
             $fileName = uniqid() . '_' . basename($_FILES['photo']['name']);
             if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $fileName)) {
                 $photoPath = $fileName;
@@ -119,9 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         }
     }
 
-    // If no errors occurred, update the user information
     if (empty($message)) {
-        // Update users_info table
+        // Update users_info
         $sql = "UPDATE users_info SET Fname=?, Sname=?, Mname=?, Ename=?, gender=?, photo=? WHERE IDno=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssssss", $Fname, $Sname, $Mname, $Ename, $gender, $photoPath, $IDno);
@@ -131,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         }
         $stmt->close();
 
-        // Update address table
+        // Update address
         $sql = "UPDATE address SET municipality=?, barangay=?, province=?, DOB=? WHERE IDno=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssss", $municipality, $barangay, $province, $DOB, $IDno);
@@ -141,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         }
         $stmt->close();
 
-        // Update user_details table
+        // Update user_details
         $sql = "UPDATE user_details SET college=?, course=?, yrLVL=? WHERE IDno=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssss", $college, $course, $yrLVL, $IDno);
@@ -151,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         }
         $stmt->close();
 
-        // Update contact table
+        // Update contact
         $sql = "UPDATE contact SET email1=?, email2=?, con1=?, con2=? WHERE IDno=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sssss", $email1, $email2, $con1, $con2, $IDno);

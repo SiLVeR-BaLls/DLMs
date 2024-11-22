@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $stmt->close();
     
     // Redirect after a successful update
-    header("Location: ../index.php?message=success&title=" . urlencode($title));
+    header("Location: ../ViewBook.php?message=success&title=" . urlencode($title));
     exit();
 }
 }

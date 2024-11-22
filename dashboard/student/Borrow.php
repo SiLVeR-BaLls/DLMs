@@ -1,5 +1,3 @@
-<!-- borrow.php -->
-
 <?php
 include '../config.php'; // Include the configuration file for database connection
 ?>
@@ -10,258 +8,263 @@ include '../config.php'; // Include the configuration file for database connecti
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Borrowing</title>
+    <title>Borrow</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS for Scrollable Search Results -->
+    <script>
+// Declare and initialize bookCount to keep track of the number of books
+let bookCount = 1;
+
+// Search for user based on user ID
+function searchUser() {
+    const IDno = document.getElementById('IDno').value;
+    if (IDno.length > 2) {
+        fetch(`UserSearch.php?IDno=${IDno}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('userSearchResult').innerHTML = data;
+                const results = document.getElementById('userSearchResult').getElementsByClassName('search-item');
+                Array.from(results).forEach(item => {
+                    item.addEventListener('click', () => {
+                        const selectedID = item.getAttribute('data-id');
+                        const selectedName = item.textContent;
+                        selectUser(selectedID, selectedName);
+                    });
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById('userSearchResult').innerHTML = "";
+    }
+}
+
+// Search for books based on book ID
+function searchBook(index) {
+    const bookID = document.getElementById(`bookID_${index}`).value;
+    if (bookID.length > 2) {
+        fetch(`SearchBook.php?bookID=${bookID}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById(`bookSearchResult_${index}`).innerHTML = data;
+                const results = document.getElementById(`bookSearchResult_${index}`).getElementsByClassName('search-item');
+                Array.from(results).forEach(item => {
+                    item.addEventListener('click', () => {
+                        const selectedBookID = item.getAttribute('data-id');
+                        const selectedTitle = item.textContent;
+                        selectBook(selectedBookID, selectedTitle, index);
+                    });
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById(`bookSearchResult_${index}`).innerHTML = "";
+    }
+}
+
+// Add a new book input field
+function addBook() {
+    const container = document.getElementById('bookContainer');
+    const newBookIndex = bookCount++; // Increment the bookCount each time
+
+    const newBookInput = document.createElement('div');
+    newBookInput.classList.add('form-group', 'flex', 'flex-col', 'space-y-2');
+    newBookInput.setAttribute('id', `bookGroup_${newBookIndex}`);
+
+    newBookInput.innerHTML = `
+        <label for="bookID_${newBookIndex}" class="font-semibold">Book ID:</label>
+        <div class="flex flex-col space-y-2">
+            <input type="text" id="bookID_${newBookIndex}" name="bookID[]" class="form-control shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required oninput="searchBook(${newBookIndex})">
+            <div id="bookSearchResult_${newBookIndex}" class="bookSearchResults mt-2"></div>
+        </div>
+        <button type="button" class="bg-red-500 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-red-700 focus:outline-none focus:shadow-outline" onclick="removeBook(${newBookIndex})">Remove Book</button>
+    `;
+    container.appendChild(newBookInput);
+}
+
+// Remove a specific book input field
+function removeBook(index) {
+    const bookGroup = document.getElementById(`bookGroup_${index}`);
+    if (bookGroup) {
+        bookGroup.remove();
+        bookCount--; // Decrease the bookCount when a book is removed
+    }
+}
+
+// Set user ID in the input field after selecting a result
+function selectUser(IDno, name) {
+    document.getElementById('IDno').value = IDno;
+    // We no longer clear the results when selecting a user
+}
+
+// Set book ID in the input field after selecting a result
+function selectBook(bookID, title, index) {
+    const inputField = document.getElementById(`bookID_${index}`);
+    inputField.value = bookID;
+    // We no longer clear the results when selecting a book
+}
+</script>
 
 </head>
-<style>
-    /* Center the form and apply basic styles */
-    .borrowing {
-        margin: 0;
-        padding: 0px;
-        display: flex;
-        justify-content: space-around;
-        background-color: #f8f9fa;
-        padding: 0 10%;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        align-items: baseline;
-    }
 
-    /* Container for the User Information Section */
-    .user-container {
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
+<body class="bg-gray-100 text-gray-900 m-0 p-0">
 
-    ;
-    }
+    <!-- Header -->
+    <?php include 'include/header.php'; ?>
 
-    /* Container for the Books Section */
-    .books-container {
-        margin-bottom: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
+    <!-- Main Content Area with Sidebar and BorrowBook Section -->
+    <main class="flex">
 
-    /* Container for Buttons */
-    .btn-container {
-        display: flex;
-        justify-content: flex-end;
-        right: 0;
-        margin-top: 20px;
-    }
+        <!-- Sidebar Section -->
+        <?php include 'include/sidebar.php'; ?>
 
-    /* Styling for the form group (inputs and labels) */
-    .form-group {
-        font-weight: bold;
-        margin: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-
-    }
-
-    /* Label styling */
-    .group-box {
-        font-weight: bold;
-        margin: 10px;
-        padding:10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-    }
-    }
-
-    /* Styling for input fields */
-    .form-control {
-        width: 10vw;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    /* Styling for the user search result container */
-    .search-result {
-        top: 40px;
-        max-width: 10rem;
-        background-color: white;
-        border: 1px solid #ced4da;
-        max-height: 150px;
-        overflow-y: scroll;
-    }
-
-    /* Styling for buttons */
-    .btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    /* Specific styles for secondary and primary buttons */
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-        border: none;
-    }
-
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border: none;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    /* Styling for the book-specific search result container */
-    #bookSearchResult_0 {
-        padding: 10px;
-        top: 40px;
-        width: 100%;
-        background-color: white;
-        border: 1px solid #ced4da;
-        max-height: 150px;
-        display: flex;
-        overflow-y: auto;
-    }
-
-    #userSearchResult {
-        top: 40px;
-        width: 100%;
-        background-color: white;
-        border: 1px solid #ced4da;
-        max-height: 150px;
-        display: flex;
-        overflow-y: auto;
-    }
-</style>
-
-<body>
-    <?php include 'include/header.php'; include 'include/navbar.php'; ?>
-    <div class="container mt-5">
-        <h1>Borrow a Book</h1>
-        <center>
-            <form action="include/BorrowConnect.php" method="POST">
-
-                <!-- Books Section Container -->
-                <div class="borrowing">
-                    <div class="books-container" id="bookContainer">
-                        <div class="form-group">
-                            <div class="group-box">
-                                <label for="bookID_0">Book ID:</label>
-                                <input type="text" id="bookID_0" name="bookID[]" class="form-control" required
-                                    oninput="searchBook(0)">
-                                <div id="bookSearchResult_0" class="search-result"></div>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <!-- User Information Container -->
-                    <div class="user-container">
-                        <div class="form-group">
-                            <div class="group-box">
-                                <label for="IDno">User ID:</label>
-                                <input type="text" id="IDno" name="IDno" class="form-control" required
-                                    oninput="searchUser()">
-                                <div id="userSearchResult" class="search-result"></div>
-                            </div>
-                        </div>
-                        <div class="btn-container">
-                            <button type="button" class="btn btn-secondary" onclick="addBook()">Add Another Book</button>
-                            <button type="submit" class="btn btn-primary">Approve Borrowing</button>
-                        </div>
-                    </div>
-
-
-                </div>
-                <!-- Button Container -->
-
-            </form>
-        </center>
-
-
-    </div>
-
-    <script>
-        let bookCount = 1; // Start with 1 book input field
-
-        // Search for user based on user ID
-        function searchUser() {
-            const IDno = document.getElementById('IDno').value;
-            if (IDno.length > 2) { // Start search after 3 characters
-                fetch(`UserSearch.php?IDno=${IDno}`)
-                    .then(response => response.text())
-                    .then(data => document.getElementById('userSearchResult').innerHTML = data)
-                    .catch(error => console.error('Error:', error));
-            } else {
-                document.getElementById('userSearchResult').innerHTML = "";
-            }
-        }
-
-        // Search for books based on book ID
-        function searchBook(index) {
-            const bookID = document.getElementById(`bookID_${index}`).value;
-            if (bookID.length > 2) { // Start search after 3 characters
-                fetch(`BookSearch.php?bookID=${bookID}`)
-                    .then(response => response.text())
-                    .then(data => document.getElementById(`bookSearchResult_${index}`).innerHTML = data)
-                    .catch(error => console.error('Error:', error));
-            } else {
-                document.getElementById(`bookSearchResult_${index}`).innerHTML = "";
-            }
-        }
-
-        // Add a new book input field
-        function addBook() {
-            const container = document.getElementById('bookContainer');
-            const newBookIndex = bookCount++;
-
-            const newBookInput = document.createElement('div');
-            newBookInput.classList.add('form-group');
-            newBookInput.setAttribute('id', `bookGroup_${newBookIndex}`); // Unique ID for each book field
-
-            newBookInput.innerHTML = `
-                <div class="group-box">
-                    <label for="bookID_${newBookIndex}">Book ID:</label>
-                    <input type="text" id="bookID_${newBookIndex}" name="bookID[]" class="form-control" required oninput="searchBook(${newBookIndex})">
-                    <div id="bookSearchResult_${newBookIndex}" class="search-result"></div>
-                    <button type="button" class="btn btn-danger mt-2" onclick="removeBook(${newBookIndex})">Remove Book</button>
-
-                </div>
+        <div class="flex flex-col p-4 w-full">
             
-                `;
-            container.appendChild(newBookInput);
-        }
+            <!-- BorrowBook Content -->
+            <h1 class="text-3xl font-semibold mb-4 text-center">Borrow a Book</h1>
+            <div class="flex flex-col">
 
-        // Remove a specific book input field
-        function removeBook(index) {
-        const bookGroup = document.getElementById(`bookGroup_${index}`);
-        if (bookGroup) {
-            bookGroup.remove();
-        }
+                <form action="include/BorrowConnect.php" method="POST">
+                    <div class="flex space-x-4 mb-4">
+                        <!-- User Information Section -->
+                        <div class="user-container flex flex-col space-y-2 w-1/2">
+                            <label for="IDno" class="font-semibold">User ID:</label>
+                            <div class="flex flex-col space-y-2">
+                                <input type="text" id="IDno" name="IDno" class="form-control shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required oninput="searchUser()">
+                                <div id="userSearchResult" class="bookSearchResults mt-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Book Section -->
+                        <div class="books-container flex flex-col space-y-4 w-1/2" id="bookContainer">
+                            <div class="form-group flex flex-col space-y-2" id="bookGroup_0">
+                                <label for="bookID_0" class="font-semibold">Book ID:</label>
+                                <div class="flex flex-col space-y-2">
+                                    <input type="text" id="bookID_0" name="bookID[]" class="form-control shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required oninput="searchBook(0)">
+                                    <div id="bookSearchResult_0" class="bookSearchResults mt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons Section (Flexbox Layout) -->
+<div class="flex sticky bottom-0  items-center justify-center space-x-4 py-4 shadow-md">
+    <!-- Add Another Book Button -->
+    <button 
+        type="button" 
+        class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition " onclick="addBook()">
+        Add Another Book
+    </button>
+
+    <!-- Approve Borrowing Button -->
+    <button 
+        type="submit" 
+        class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+        Approve Borrowing
+    </button>
+</div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- Footer at the Bottom -->
+    <footer class="bg-blue-600 text-white p-4 mt-auto">
+                       <?php include 'include/footer.php'; ?>
+                   </footer>
+    </main>
+
+    <script>// Search for user based on user ID
+function searchUser() {
+    const IDno = document.getElementById('IDno').value;
+    if (IDno.length > 2) {
+        fetch(`include/UserSearch.php?IDno=${IDno}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('userSearchResult').innerHTML = data;
+                const results = document.getElementById('userSearchResult').getElementsByClassName('search-item');
+                Array.from(results).forEach(item => {
+                    item.addEventListener('click', () => {
+                        const selectedID = item.getAttribute('data-id');
+                        const selectedName = item.textContent;
+                        selectUser(selectedID, selectedName);
+                    });
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById('userSearchResult').innerHTML = "";
     }
+}
 
+// Search for books based on book ID
+function searchBook(index) {
+    const bookID = document.getElementById(`bookID_${index}`).value;
+    if (bookID.length > 2) {
+        fetch(`include/SearchBook.php?bookID=${bookID}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById(`bookSearchResult_${index}`).innerHTML = data;
+                const results = document.getElementById(`bookSearchResult_${index}`).getElementsByClassName('search-item');
+                Array.from(results).forEach(item => {
+                    item.addEventListener('click', () => {
+                        const selectedBookID = item.getAttribute('data-id');
+                        const selectedTitle = item.textContent;
+                        selectBook(selectedBookID, selectedTitle, index);
+                    });
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById(`bookSearchResult_${index}`).innerHTML = "";
+    }
+}
 
-    </script>
+// Add a new book input field
+function addBook() {
+    const container = document.getElementById('bookContainer');
+    const newBookIndex = bookCount++;
+
+    const newBookInput = document.createElement('div');
+    newBookInput.classList.add('form-group', 'flex', 'flex-col', 'space-y-2');
+    newBookInput.setAttribute('id', `bookGroup_${newBookIndex}`);
+
+    newBookInput.innerHTML = `
+        <label for="bookID_${newBookIndex}" class="font-semibold">Book ID:</label>
+        <div class="flex flex-col space-y-2">
+            <input type="text" id="bookID_${newBookIndex}" name="bookID[]" class="form-control shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required oninput="searchBook(${newBookIndex})">
+            <div id="bookSearchResult_${newBookIndex}" class="bookSearchResults mt-2"></div>
+        </div>
+        <button type="button" class="bg-red-500 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-red-700 focus:outline-none focus:shadow-outline" onclick="removeBook(${newBookIndex})">Remove Book</button>
+    `;
+    container.appendChild(newBookInput);
+}
+
+// Remove a specific book input field
+function removeBook(index) {
+    const bookGroup = document.getElementById(`bookGroup_${index}`);
+    if (bookGroup) {
+        bookGroup.remove();
+    }
+}
+
+// Set user ID in the input field after selecting a result
+function selectUser(IDno, name) {
+    document.getElementById('IDno').value = IDno;
+    // We no longer clear the results when selecting a user
+}
+
+// Set book ID in the input field after selecting a result
+function selectBook(bookID, title, index) {
+    const inputField = document.getElementById(`bookID_${index}`);
+    inputField.value = bookID;
+    // We no longer clear the results when selecting a book
+}
+</script>
+           
 </body>
-
 </html>

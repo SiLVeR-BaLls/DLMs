@@ -33,6 +33,7 @@ body{
     margin: 0px;
     position: sticky;
     color: white;
+    z-index: 100;
 }
 
 
@@ -46,9 +47,7 @@ body{
 /* Navbar Links */
 .navbar-nav {
     margin-right:10px;
-    list-style: none;
-    display: flex;
-    flex-direction: row;
+    list-style: none;    flex-direction: row;
     align-items: center;
 }
 

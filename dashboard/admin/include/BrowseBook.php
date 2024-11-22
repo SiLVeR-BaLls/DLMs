@@ -5,7 +5,14 @@ $message_type = ""; // Variable to store message type (e.g. success, error)
 
 // Default number of books per page
 $default_limit = 10;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $default_limit;
+$limit = isset($_GET['limit']) ? $_GET['limit'] : $default_limit;
+
+// If 'all' is selected, set limit to a very high number
+if ($limit === 'all') {
+    $limit = PHP_INT_MAX; // Display all books
+} else {
+    $limit = (int) $limit;
+}
 
 // Check connection to the database
 if ($conn->connect_error) {
@@ -48,10 +55,9 @@ if ($conn->connect_error) {
     $total_books = $count_result->fetch_assoc()['total_books'];
 
     // Calculate the total number of pages
-    $total_pages = ceil($total_books / $limit);
+    $total_pages = ($limit === PHP_INT_MAX) ? 1 : ceil($total_books / $limit);
 }
 ?>
-
 <body class="bg-gray-100 text-gray-900">
 <div class="container mx-auto px-4 py-6">
 
@@ -61,14 +67,19 @@ if ($conn->connect_error) {
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
-    <!-- Search Controls --><div class="mb-6 px-4 flex justify-center items-center">
-    <!-- Search Type Selection and Search Input in One Line -->
+
+    <!-- Search Controls -->
+    <div class="mb-6 px-4 flex justify-between items-center">
+    <!-- Centered Search Controls -->
     <div class="flex flex-row gap-4 items-center">
         <!-- Search Input -->
-        <input type="text" id="searchInput" class="form-input block w-40 sm:w-60 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-700 text-sm" placeholder="Enter search term...">
-
+        <input type="text" id="searchInput" 
+            class="form-input block w-40 sm:w-60 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-700 text-sm" 
+            placeholder="Enter search term...">
+        
         <!-- Search Type Selection -->
-        <select id="searchType" class="form-select block w-40 sm:w-60 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-700 text-sm">
+        <select id="searchType" 
+            class="form-select block w-40 sm:w-60 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-700 text-sm">
             <option value="all">All</option>
             <option value="title">Title</option>
             <option value="author">Author</option>
@@ -80,10 +91,22 @@ if ($conn->connect_error) {
             <option value="extent">Extent</option>
         </select>
     </div>
+
+    <!-- Books Per Page Dropdown (Aligned to the Right) -->
+    <div class="flex items-center">
+        <label for="limit" class="mr-2">Books per page:</label>
+        <select id="limit" name="limit" 
+            class="bg-gray-200 border border-gray-400 p-2 rounded" 
+            onchange="window.location.href = '?page=1&limit=' + this.value;">
+            <option value="5" <?php echo ($limit == 5) ? 'selected' : ''; ?>>5</option>
+            <option value="10" <?php echo ($limit == 10) ? 'selected' : ''; ?>>10</option>
+            <option value="15" <?php echo ($limit == 15) ? 'selected' : ''; ?>>15</option>
+            <option value="20" <?php echo ($limit == 20) ? 'selected' : ''; ?>>20</option>
+            <option value="all" <?php echo ($limit == 'all') ? 'selected' : ''; ?>>All</option>
+        </select>
+    </div>
 </div>
 
-
-    <!-- Responsive Books Table -->
     <div class="overflow-x-auto bg-white rounded-lg shadow-md">
         <table class="min-w-full table-auto">
             <thead class="bg-gray-800 text-white">
@@ -96,26 +119,23 @@ if ($conn->connect_error) {
                     <th class="px-4 py-2">ISSN</th>
                     <th class="px-4 py-2">Material Type</th>
                     <th class="px-4 py-2">Extent</th>
-                    <th class="px-4 py-2">Copies (Available/Borrowed)</th>
-                    <th class="px-4 py-2">Actions</th>
+                    <th class="px-4 py-2">Copies</th>
                 </tr>
             </thead>
             <tbody id="bookTableBody">
                 <?php if ($result && $result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
-                        <?php
-                        // Calculate percentage of available copies
-                        $available_percentage = ($row['total_count'] > 0) ? ($row['available_count'] / $row['total_count']) * 100 : 0;
-                        // Determine background color based on percentage
-                        if ($available_percentage >= 50) {
-                            $bg_class = 'bg-green-700';
-                        } elseif ($available_percentage > 0) {
-                            $bg_class = 'bg-yellow-500';
-                        } else {
-                            $bg_class = 'bg-red-800';
-                        }
-                        ?>
-                        <tr class="border-y border-solid">
+                        <tr class="border-y border-solid cursor-pointer hover:bg-gray-200" 
+                            data-title="<?php echo htmlspecialchars($row['B_title']); ?>"
+                            data-author="<?php echo htmlspecialchars($row['author']); ?>"
+                            data-coauthors="<?php echo htmlspecialchars($row['coauthors']); ?>"
+                            data-lccn="<?php echo htmlspecialchars($row['LCCN']); ?>"
+                            data-isbn="<?php echo htmlspecialchars($row['ISBN']); ?>"
+                            data-issn="<?php echo htmlspecialchars($row['ISSN']); ?>"
+                            data-material-type="<?php echo htmlspecialchars($row['MaterialType']); ?>"
+                            data-extent="<?php echo htmlspecialchars($row['extent']); ?>"
+                            onclick="window.location.href='ViewBook.php?title=<?php echo urlencode($row['B_title']); ?>';"
+                            onmouseenter="showPopup(event, this)" onmouseleave="hidePopup()">
                             <td class="px-4 py-2 title"><?php echo htmlspecialchars($row['B_title']); ?></td>
                             <td class="px-4 py-2 author"><?php echo htmlspecialchars($row['author']); ?></td>
                             <td class="px-4 py-2 coauthors"><?php echo htmlspecialchars($row['coauthors']); ?></td>
@@ -124,51 +144,106 @@ if ($conn->connect_error) {
                             <td class="px-4 py-2 issn"><?php echo htmlspecialchars($row['ISSN']); ?></td>
                             <td class="px-4 py-2 materialType"><?php echo htmlspecialchars($row['MaterialType']); ?></td>
                             <td class="px-4 py-2 extent"><?php echo htmlspecialchars($row['extent']); ?></td>
-                            <td class="px-4 py-2 <?php echo $bg_class; ?>">
-                                <?php echo $row['available_count']; ?> / <?php echo $row['total_count']; ?>
-                            </td>
-                            <td class="px-4 py-2">
-                                <a href="ViewBook.php?title=<?php echo urlencode($row['B_title']); ?>" class="inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">View</a>
+                            <td class="px-4 py-2 flex justify-center gap-2">
+                                <?php if ($row['available_count'] > 0): ?>
+                                    <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
+                                        ✔
+                                    </div>
+                                <?php else: ?>
+                                    <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center">
+                                        ✖
+                                    </div>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="10" class="text-center py-4">No books found.</td>
+                        <td colspan="9" class="text-center py-4">No books found.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
     </div>
 
-<!-- Pagination and Books per Page Controls -->
+    <!-- Popup Container -->
+    <div id="popup" class="hidden absolute bg-white p-4 border shadow-lg rounded-lg z-50"></div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function showPopup(event, row) {
+            var popup = document.getElementById('popup');
+            var offsetX = event.clientX + 10; // Adjust the position of the popup relative to the mouse
+            var offsetY = event.clientY + 10;
+
+            popup.style.left = offsetX + 'px';
+            popup.style.top = offsetY + 'px';
+            popup.classList.remove('hidden');
+
+            var title = row.getAttribute('data-title');
+            var author = row.getAttribute('data-author');
+            var coauthors = row.getAttribute('data-coauthors');
+            var lccn = row.getAttribute('data-lccn');
+            var isbn = row.getAttribute('data-isbn');
+            var issn = row.getAttribute('data-issn');
+            var materialType = row.getAttribute('data-material-type');
+            var extent = row.getAttribute('data-extent');
+
+            popup.innerHTML = `
+                <strong>Title:</strong> ${title}<br>
+                <strong>Author:</strong> ${author}<br>
+                <strong>Co-authors:</strong> ${coauthors}<br>
+                <strong>LCCN:</strong> ${lccn}<br>
+                <strong>ISBN:</strong> ${isbn}<br>
+                <strong>ISSN:</strong> ${issn}<br>
+                <strong>Material Type:</strong> ${materialType}<br>
+                <strong>Extent:</strong> ${extent}
+            `;
+        }
+
+        function hidePopup() {
+            var popup = document.getElementById('popup');
+            popup.classList.add('hidden');
+        }
+    </script>
+
+
 <div class="mt-6 flex justify-between items-center space-x-2">
+    <!-- Pagination Controls -->
     <div class="flex justify-center w-full space-x-2">
-        <?php if ($page > 1): ?>
-            <a href="?page=1&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                << First
-            </a>
-            <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                < Previous
-            </a>
-        <?php endif; ?>
-
-        <!-- Show all page links -->
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <a href="?page=<?php echo $i; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 <?php echo ($i == $page) ? 'bg-gray-800 text-white font-bold' : 'bg-gray-400 text-gray-800'; ?> rounded">
-                <?php echo $i; ?>
-            </a>
-        <?php endfor; ?>
-
-        <?php if ($page < $total_pages): ?>
-            <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                Next >
-            </a>
-            <a href="?page=<?php echo $total_pages; ?>&limit=<?php echo $limit; ?>" class="px-4 py-2 bg-gray-800 text-white rounded">
-                Last >>
-            </a>
-        <?php endif; ?>
+        <!-- Page Number Controls -->
+        <div class="flex justify-center items-center">
+            <!-- First Page Button -->
+            <button class="text-blue-600 px-4 py-2 bg-white border rounded-lg hover:bg-blue-600 hover:text-white"
+                    <?php echo ($page <= 1) ? 'disabled' : ''; ?>
+                    onclick="window.location.href='?page=1&limit=<?php echo $limit; ?>'">
+                &laquo;
+            </button>
+            <!-- Previous Page Button -->
+            <button class="text-blue-600 px-4 py-2 bg-white border rounded-lg hover:bg-blue-600 hover:text-white"
+                    <?php echo ($page <= 1) ? 'disabled' : ''; ?>
+                    onclick="window.location.href='?page=<?php echo max($page - 1, 1); ?>&limit=<?php echo $limit; ?>'">
+                &lt;
+            </button>
+            <!-- Current Page Number -->
+            <span class="mx-4">Page <?php echo $page; ?> of <?php echo $total_pages; ?></span>
+            <!-- Next Page Button -->
+            <button class="text-blue-600 px-4 py-2 bg-white border rounded-lg hover:bg-blue-600 hover:text-white"
+                    <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>
+                    onclick="window.location.href='?page=<?php echo min($page + 1, $total_pages); ?>&limit=<?php echo $limit; ?>'">
+                &gt;
+            </button>
+            <!-- Last Page Button -->
+            <button class="text-blue-600 px-4 py-2 bg-white border rounded-lg hover:bg-blue-600 hover:text-white"
+                    <?php echo ($page >= $total_pages) ? 'disabled' : ''; ?>
+                    onclick="window.location.href='?page=<?php echo $total_pages; ?>&limit=<?php echo $limit; ?>'">
+                &raquo;
+            </button>
+        </div>
     </div>
+
     <!-- Books per page control (right side) -->
     <div class="flex items-center">
         <label for="limit" class="mr-2">Books per page:</label>
@@ -177,11 +252,11 @@ if ($conn->connect_error) {
             <option value="10" <?php echo ($limit == 10) ? 'selected' : ''; ?>>10</option>
             <option value="15" <?php echo ($limit == 15) ? 'selected' : ''; ?>>15</option>
             <option value="20" <?php echo ($limit == 20) ? 'selected' : ''; ?>>20</option>
+            <option value="all" <?php echo ($limit == 'all') ? 'selected' : ''; ?>>All</option>
         </select>
     </div>
-    </div>
-
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
@@ -255,6 +330,42 @@ if ($conn->connect_error) {
                 $(this).toggle(matchSearchType);
             });
         }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Hover event on table rows to show popup
+        $('tr').hover(function(event) {
+            // Get data attributes from the hovered row
+            var title = $(this).data('title');
+            var author = $(this).data('author');
+            var coauthors = $(this).data('coauthors');
+            var lccn = $(this).data('lccn');
+            var isbn = $(this).data('isbn');
+            var issn = $(this).data('issn');
+            var materialType = $(this).data('materialtype');
+            var extent = $(this).data('extent');
+
+            // Update the popup content
+            $('#popupTitle').text(title);
+            $('#popupAuthor').text(author);
+            $('#popupCoauthors').text(coauthors);
+            $('#popupLCCN').text(lccn);
+            $('#popupISBN').text(isbn);
+            $('#popupISSN').text(issn);
+            $('#popupMaterialType').text(materialType);
+            $('#popupExtent').text(extent);
+
+            // Show the popup near the mouse cursor
+            $('#popup').css({
+                left: event.pageX + 10,
+                top: event.pageY + 10
+            }).removeClass('hidden');
+        }, function() {
+            // Hide the popup when mouse leaves the row
+            $('#popup').addClass('hidden');
+        });
     });
 </script>
 </body>

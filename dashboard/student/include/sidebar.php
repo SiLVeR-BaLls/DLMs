@@ -1,11 +1,24 @@
-<div class="sidebar">
-    <h2>student Menu</h2>
-    <ul>
-        <li><a href="dashboard.php">Dashboard</a></li>
-        <li><a href="manage_users.php">Manage Users</a></li>
-        <li><a href="manage_books.php">Manage Books</a></li>
-        <li><a href="view_reports.php">View Reports</a></li>
-        <li><a href="settings.php">Settings</a></li>
-        <li><a href="logout.php">Logout</a></li>
-    </ul>
-</div>
+<body class="bg-blue-100 w-full flex">
+
+    <!-- Sticky Sidebar -->
+    <aside class="w-64 bg-blue-600 text-white h-screen sticky top-0 flex flex-col">
+        <div class="p-4 font-bold text-lg border-b border-blue-600">
+            Admin Panel
+        </div>
+        <nav class="flex-grow">
+            <ul class="space-y-1 py-4">
+                <!-- Individual links -->
+                <li><a href="index.php" class="block py-2 px-4 hover:bg-blue-700">Browse</a></li>
+                <li><a href="Myborrow.php" class="block py-2 px-4 hover:bg-blue-700">My Borrow</a></li>
+                <li><a href="student.php" class="block py-2 px-4 hover:bg-blue-700">Profile</a></li>
+                <li><a href="student.php" class="block py-2 px-4 hover:bg-blue-700">About</a></li>
+                <li><a href="student.php" class="block py-2 px-4 hover:bg-blue-700">Contact</a></li>
+                <!-- Dashboard Dropdown -->
+                
+            </ul>
+        </nav>
+    </aside>
+
+   
+
+</body>

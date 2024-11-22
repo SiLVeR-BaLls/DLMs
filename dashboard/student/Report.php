@@ -1,5 +1,5 @@
 <?php
-include '../config.php'; // include database connection file
+include '../config.php';
 ?>
 
 <!DOCTYPE html>
@@ -7,89 +7,78 @@ include '../config.php'; // include database connection file
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Borrowed Books Report</title>
-    <style>
-        .no-books-alert {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            z-index: 10;
+    <title>DLMs</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        // Function to toggle the visibility of the sections based on navbar link clicks
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('returnedSection').classList.add('hidden');
+            document.getElementById('borrowedSection').classList.add('hidden');
+            document.getElementById('ratingSection').classList.add('hidden');
+
+            // Show the clicked section
+            document.getElementById(section).classList.remove('hidden');
         }
 
-        .table-container {
-            margin-top: 30px;
-        }
-    </style>
+        // Set default section (Return) on page load
+        window.onload = function() {
+            showSection('returnedSection');
+        };
+    </script>
 </head>
-<body>
-    <?php 
-    include 'include/header.php';
-    include 'include/navbar.php'; 
-    ?>
+<body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
 
-    <div class="container mt-4">
-        <h2 class="text-center">Borrowed Books Report by Course</h2>
+    <!-- Header at the Top -->
+    <?php include 'include/header.php'; ?>
 
-        <?php
-        // Start SQL query to fetch borrow counts grouped by course
-        $query = "
-            SELECT 
-                ud.course, 
-                COUNT(bb.ID) AS borrow_count
-            FROM borrow_book AS bb
-            JOIN users_info AS ui ON bb.IDno = ui.IDno
-            JOIN user_details AS ud ON bb.IDno = ud.IDno
-            WHERE bb.return_date IS NULL
-            GROUP BY ud.course
-            ORDER BY borrow_count DESC
-        ";
+    <!-- Main Content Area with Sidebar and BrowseBook Section -->
+    <main class="flex flex-grow">
+        <!-- Sidebar Section -->
+        <?php include 'include/sidebar.php'; ?>
 
-        // Execute the query
-        $result = $conn->query($query);
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow">
+            <!-- Navbar Section -->
+            <div class="sticky top-0 z-10 bg-white shadow-md mb-6">
+                <nav class="flex justify-evenly items-center p-4">
+                    <a href="javascript:void(0)" onclick="showSection('returnedSection')" class="text-blue-600 hover:text-blue-800 font-medium">Return</a>
+                    <a href="javascript:void(0)" onclick="showSection('borrowedSection')" class="text-green-600 hover:text-green-800 font-medium">Borrow</a>
+                    <a href="javascript:void(0)" onclick="showSection('ratingSection')" class="text-yellow-600 hover:text-yellow-800 font-medium">Rating</a>
+                </nav>
+            </div>
 
-        // Check for query error
-        if (!$result) {
-            die("Error executing query: " . $conn->error);
-        }
+            <!-- Content Sections -->
+            <div id="returnedSection" class="hidden">
+                <!-- Returned Book Report -->
+                <div class="bg-white p-6 rounded shadow-md max-w-full sm:max-w-4xl mx-auto">
+                    <?php include 'include/book_report_returned.php'; ?>
+                </div>
+            </div>
 
-        // Check if there are any results
-        if ($result && $result->num_rows > 0) {
-            echo "<div class='table-container'>
-                    <div class='table-responsive'>
-                        <table class='table table-striped table-bordered'>
-                            <thead class='thead-dark'>
-                                <tr>
-                                    <th>Course</th>
-                                    <th>Borrow Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>";
+            <div id="borrowedSection" class="hidden">
+                <!-- Borrowed Book Report -->
+                <div class="bg-white p-6 rounded shadow-md max-w-full sm:max-w-4xl mx-auto">
+                    <?php include 'include/book_report_borrowed.php'; ?>
+                </div>
+            </div>
 
-            // Loop through each record and display the data
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>" . htmlspecialchars($row['course']) . "</td>
-                        <td>" . htmlspecialchars($row['borrow_count']) . "</td>
-                      </tr>";
-            }
-            echo "</tbody></table></div></div>";
-        } else {
-            // No records found, display a warning message
-            echo "<div class='no-books-alert'>No borrowed books found for any course.</div>";
-        }
+            <div id="ratingSection" class="hidden">
+                <!-- Rating Report -->
+                <div class="bg-white p-6 rounded shadow-md max-w-full sm:max-w-4xl mx-auto">
+                    <?php include 'include/book_report_rating.php'; ?>
+                </div>
+            </div>
+            
+                <!-- Footer at the Bottom -->
+                <footer class="bg-blue-600 text-white p-4 mt-auto">
+                    <?php include 'include/footer.php'; ?>
+                </footer>
+        </div>
+    </main>
 
-        // Close the database connection
-        $conn->close();
-        ?>
-    </div>
 </body>
 </html>

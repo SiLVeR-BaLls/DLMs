@@ -63,59 +63,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Copy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container mt-4">
-    <a href="viewcopy.php?ID=<?php echo urlencode($copy_data['ID']); ?>" class="btn btn-secondary">Return to Copy Details</a>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-8 px-4">
+        <a href="../viewcopy.php?ID=<?php echo urlencode($copy_data['ID']); ?>" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Return to Copy Details</a>
 
-        <h2>Edit Copy</h2>
+        <h2 class="text-2xl font-semibold mt-4 mb-4">Edit Copy</h2>
         <?php if ($message): ?>
-            <div class="alert alert-<?php echo $message_type; ?>">
+            <div class="p-4 mb-4 text-white <?php echo $message_type === 'success' ? 'bg-green-500' : ($message_type === 'warning' ? 'bg-yellow-500' : 'bg-red-500'); ?> rounded">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
 
         <?php if (!empty($copy_data)): ?>
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="B_title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="B_title" name="B_title" value="<?php echo htmlspecialchars($copy_data['B_title']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="copy_ID" class="form-label">Copy ID</label>
-                    <input type="text" class="form-control" id="copy_ID" name="copy_ID" value="<?php echo htmlspecialchars($copy_data['copy_ID']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="callNumber" class="form-label">Call Number</label>
-                    <input type="text" class="form-control" id="callNumber" name="callNumber" value="<?php echo htmlspecialchars($copy_data['callNumber']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <input type="text" class="form-control" id="status" name="status" value="<?php echo htmlspecialchars($copy_data['status']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="vendor" class="form-label">Vendor</label>
-                    <input type="text" class="form-control" id="vendor" name="vendor" value="<?php echo htmlspecialchars($copy_data['vendor']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="fundingSource" class="form-label">Funding Source</label>
-                    <input type="text" class="form-control" id="fundingSource" name="fundingSource" value="<?php echo htmlspecialchars($copy_data['fundingSource']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="Sublocation" class="form-label">Sublocation</label>
-                    <input type="text" class="form-control" id="Sublocation" name="Sublocation" value="<?php echo htmlspecialchars($copy_data['Sublocation']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="rating" class="form-label">Rating</label>
-                    <input type="text" class="form-control" id="rating" name="rating" value="<?php echo htmlspecialchars($copy_data['rating']); ?>" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Copy</button>
-                <a href="ViewCopy.php?ID=<?php echo urlencode($copy_data['ID']); ?>" class="btn btn-secondary">Cancel</a>
-            </form>
+            <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
+    <table class="table-auto w-full border-collapse border border-gray-300">
+        <tbody>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Title</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="B_title" name="B_title" value="<?php echo htmlspecialchars($copy_data['B_title']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Copy ID</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="copy_ID" name="copy_ID" value="<?php echo htmlspecialchars($copy_data['copy_ID']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Call Number</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="callNumber" name="callNumber" value="<?php echo htmlspecialchars($copy_data['callNumber']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Status</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="status" name="status" value="<?php echo htmlspecialchars($copy_data['status']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Vendor</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="vendor" name="vendor" value="<?php echo htmlspecialchars($copy_data['vendor']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Funding Source</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="fundingSource" name="fundingSource" value="<?php echo htmlspecialchars($copy_data['fundingSource']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Sublocation</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="Sublocation" name="Sublocation" value="<?php echo htmlspecialchars($copy_data['Sublocation']); ?>" required>
+                </td>
+            </tr>
+            <tr>
+                <td class="border border-gray-300 px-4 py-2 font-semibold">Rating</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="rating" name="rating" value="<?php echo htmlspecialchars($copy_data['rating']); ?>" required>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flex items-center justify-between mt-4">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
+    </div>
+</form>
+
         <?php endif; ?>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
