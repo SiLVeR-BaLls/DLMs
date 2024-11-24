@@ -1,28 +1,4 @@
-<?php
 
-// Combined query with JOINs
-$combinedQuery = "
-    SELECT 
-        contact.email1, contact.email2, contact.con1, contact.con2,
-        address.municipality, address.barangay, address.province, address.DOB,
-        users_info.Fname, users_info.Sname, users_info.Mname, users_info.Ename, users_info.gender, users_info.photo,
-        user_details.college, user_details.course, user_details.yrLVL, user_details.A_LVL, user_details.status
-    FROM contact
-    JOIN address ON contact.IDno = address.IDno
-    JOIN users_info ON contact.IDno = users_info.IDno
-    JOIN user_details ON contact.IDno = user_details.IDno
-    WHERE contact.IDno = ?
-";
-
-// Prepare and execute the combined query
-$stmt = $conn->prepare($combinedQuery);
-$stmt->bind_param("s", $idno);
-$stmt->execute();
-$result = $stmt->get_result();
-$userData = $result->fetch_assoc(); // Fetch data as an associative array
-
-
-?>
 <div class="flex items-center justify-between bg-gray-200 p-4 shadow-md">
     <!-- Left side: Logo and Title -->
     <div class="flex items-center">

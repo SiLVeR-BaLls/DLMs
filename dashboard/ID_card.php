@@ -30,16 +30,16 @@ if ($isLoggedIn && $idNo) {
         if ($result->num_rows > 0) {
             $studentInfo = $result->fetch_assoc();  // Fetch the student data
         } else {
-            echo "<p style='color: red;'>No student found with ID number: $idNo</p>";
+            echo "<p class='text-red-500'>No student found with ID number: $idNo</p>";
         }
 
         // Close the statement
         $stmt->close();
     } else {
-        echo "<p style='color: red;'>Error preparing statement: " . htmlspecialchars($conn->error) . "</p>";
+        echo "<p class='text-red-500'>Error preparing statement: " . htmlspecialchars($conn->error) . "</p>";
     }
 } else {
-    echo "<p style='color: red;'>User not logged in or ID not provided.</p>";
+    echo "<p class='text-red-500'>User not logged in or ID not provided.</p>";
 }
 
 // Close the connection
@@ -55,137 +55,38 @@ mysqli_close($conn);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-
-        /* ID Card styling */
-        .id-card {
-            display: flex;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            width: 600px;
-            height: 350px;
-            background-color: white;
-            overflow: hidden;
-            margin: 20px auto;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .id-details {
-            flex: 1;
-            padding-right: 15px;
-            text-align: left;
-        }
-
-        .id-details h2 {
-            margin: 10px 0;
-            font-size: 1.4rem;
-            color: #333;
-        }
-
-        .id-qr {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-left: 15px;
-            border-left: 1px solid #ddd;
-        }
-
-        #qrcode-display {
-            width: 120px;
-            height: 120px;
-        }
-
-        /* Profile photo styling */
-        .profile-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
-            border: 3px solid #007bff;
-        }
-
-        /* Button Styles */
-        .button {
-            padding: 12px 25px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s, transform 0.3s;
-            margin: 10px;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .return-button {
-            background-color: #f44336;
-        }
-
-        .return-button:hover {
-            background-color: #d32f2f;
-        }
-
-        /* Print styles */
-        @media print {
-            body {
-                background-color: white;
-            }
-
-            .id-card {
-                box-shadow: none;
-                width: auto;
-                height: auto;
-                margin: 0;
-                border-radius: 0;
-            }
-
-            .button {
-                display: none;
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 font-sans antialiased">
 
-<h1>ID Card Details</h1>
+<h1 class="text-3xl font-semibold text-center mb-8 text-gray-800">ID Card Details</h1>
 
 <?php if ($studentInfo): ?>
-    <div class="id-card" id="id-card">
-        <div class="id-details">
-            <img src="../pic/User/<?php echo htmlspecialchars($studentInfo['photo']); ?>" alt="Profile Photo" class="profile-photo"
+    <div class="max-w-4xl mx-auto p-6 bg-white flex shadow-lg rounded-lg" id="id-card">
+        <!-- Left Section: Profile -->
+        <div class="flex flex-col items-center bg-gray-100 p-6 rounded-lg shadow-md w-1/2 mr-6">
+            <img src="../pic/User/<?php echo htmlspecialchars($studentInfo['photo']); ?>" alt="Profile Photo" class="w-40 h-40 rounded-full object-cover mb-4"
                  onerror="this.onerror=null; this.src='../pic/User/default.png';"> <!-- Default image if fails -->
-            <h2><?php echo htmlspecialchars($studentInfo['Fname']) . ' ' . htmlspecialchars($studentInfo['Sname']); ?></h2>
-            <h3>ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h3>
-            <p>Role: <?php echo htmlspecialchars($studentInfo['U_type']); ?></p>
-            <p>Course: <?php echo htmlspecialchars($studentInfo['course']); ?></p>
-            <p>Year and Section: <?php echo htmlspecialchars($studentInfo['yrLVL']); ?></p>
+            <h2 class="text-2xl font-semibold text-center text-gray-800"><?php echo htmlspecialchars($studentInfo['Fname']) . ' ' . htmlspecialchars($studentInfo['Sname']); ?></h2>
+            <h3 class="text-sm text-gray-600">ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h3>
+            <p class="text-sm text-gray-600">Role: <?php echo htmlspecialchars($studentInfo['U_type']); ?></p>
+            <p class="text-sm text-gray-600">Course: <?php echo htmlspecialchars($studentInfo['course']); ?></p>
+            <p class="text-sm text-gray-600">Year and Section: <?php echo htmlspecialchars($studentInfo['yrLVL']); ?></p>
         </div>
-        <div class="id-qr">
-            <div id="qrcode-display"></div>
+        
+        <!-- Right Section: QR Code -->
+        <div class="flex justify-center items-center p-6 bg-white rounded-lg shadow-md w-1/2">
+            <div id="qrcode-display" class="w-80 h-80"></div> <!-- Increased size for QR code -->
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Generate QR code
+            // Generate QR code with enlarged size
             $('#qrcode-display').empty().qrcode({
                 text: "<?php echo htmlspecialchars($studentInfo['IDno']); ?>", // Generating QR code for the student ID
-                width: 128,
-                height: 128
+                width: 256,  // Increased width
+                height: 256  // Increased height
             });
         });
 
@@ -204,8 +105,15 @@ mysqli_close($conn);
         }
     </script>
 
-    <button onclick="downloadIDCard()" class="button">Download ID Card</button>
-    <button class="return-button button" onclick="window.history.back()">Return</button>
+    <!-- Centering the buttons using flexbox -->
+    <div class="mt-4 flex justify-center space-x-6">
+        <button onclick="downloadIDCard()" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            Download ID Card
+        </button>
+        <button class="px-6 py-2 bg-gray-300 text-black font-semibold rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200" onclick="window.history.back()">
+            Return
+        </button>
+    </div>
 
 <?php endif; ?>
 

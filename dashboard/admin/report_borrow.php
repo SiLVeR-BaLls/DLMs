@@ -14,7 +14,7 @@ include '../config.php';
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="flex flex-col min-h-screen truncate bg-gray-100 text-gray-900">
+<body class="flex flex-col min-h-screen bg-gray-100 truncate text-gray-900">
 
     <!-- Header at the Top -->
     <?php include 'include/header.php'; ?>
@@ -26,6 +26,7 @@ include '../config.php';
 
         <!-- BrowseBook Content Section -->
         <div class="flex-grow">
+            <!-- table -->
         <!-- Parent container with 100% width and 80% height -->
 <div class="w-full h-auto mx-auto"> <!-- This will take 100% of the container width and 80% of the viewport height -->
 
@@ -62,7 +63,7 @@ include '../config.php';
 
 <!-- Include Book Report Rating -->
 <div class="w-full">
-    <?php include 'include/book_report_returned.php'; ?>
+    <?php include 'include/book_report_borrowed.php'; ?>
 </div>
 </div>
 

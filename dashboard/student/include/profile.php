@@ -13,7 +13,7 @@
         <div class="bg-white p-8 rounded-xl shadow-xl flex items-center space-x-8">
             <div class="flex-shrink-0">
                 <!-- User photo -->
-                <div class="relative">
+                <div class="">
                     <?php if (!empty($userData['photo'])): ?>
                         <img class="w-48 h-72 object-cover rounded-lg" src="../../pic/User/<?php echo htmlspecialchars($userData['photo']); ?>" alt="User Photo">
                     <?php else: ?>

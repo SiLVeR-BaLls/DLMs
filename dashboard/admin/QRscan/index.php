@@ -86,9 +86,9 @@ $query = $conn->query($attendanceQuery);
     <div class="container mx-auto">
         <div class="flex justify-center items-center flex-wrap min-h-[80vh] pt-8">
             <!-- QR Code Scanner -->
-            <div class="w-full md:w-3/5 p-4 bg-white rounded-lg shadow-lg" id="divvideo" style="height: 450px;">
+            <div class="w-full md:w-5/6 p-4 bg-white rounded-lg shadow-lg" id="divvideo" style="height: 550px;">
                 <video id="preview" class="w-full rounded-lg shadow-md"
-                    style="height: 350px; object-fit: cover;"></video>
+                    style="height: 450px; object-fit: cover;"></video>
                 <br>
                 <button id="startCameraButton" class="bg-green-500 text-white py-1 px-2 rounded-lg mt-2">Start
                     Camera</button>
@@ -97,7 +97,7 @@ $query = $conn->query($attendanceQuery);
             </div>
 
             <!-- QR Code Form -->
-            <div class="w-full md:w-1/3 p-4">
+            <div class="w-full md:w-1/6 p-4">
                 <button id="openSidebarButton" class="bg-blue-500 text-white py-2 px-4 m-4 rounded-lg">Toggle
                     Table</button>
                 <form id="qrForm" action="insert.php" method="post" class="bg-white p-6 rounded-lg shadow-lg">

@@ -22,7 +22,7 @@ if (isset($_POST['studentID'])) {
     $text = $_POST['studentID'];
     
     // Check if the student ID exists in the `users_info` table
-    $checkID_sql = "SELECT * FROM users_info WHERE IDno = ?";
+    $checkID_sql = "SELECT * FROM user_log WHERE status = 'approved' AND IDno = ?"; // Assuming 'IDno' is the correct column name for the student ID
     $stmt = $conn->prepare($checkID_sql);
     $stmt->bind_param("s", $text);
     $stmt->execute();

@@ -5,32 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Book Ratings</title>
     <style>
-        .chart-container {
-            width: 97%; /* Reduce the container width by 3% */
-            margin: 0 auto;
-        }
-        #ratingsChart {
-            width: 100% !important; /* Ensure canvas takes the full container width */
-            height: 90% !important; /* Adjust the height (reduce by 10%) */
-        }
-    </style>
+    .chart-container {
+        width: 100%;
+        margin: 0 auto; /* Center the container */
+        height: 40%; /* Reduced height */
+    }
+    .ratingsChart {
+        width: 100%;
+        height: 40%; /* Reduced canvas height */
+    }
+</style>
 </head>
 <body class="bg-gray-100">
 
     <!-- Main Content -->
-    <main class="container mx-auto">
-        <section id="ratingSection">
-            <h2 class="text-2xl font-semibold mb-6 text-center">Book Ratings</h2>
-            <div class="charts-wrapper">
-                <!-- Chart container -->
-                <div class="chart-container">
-                    <h3 class="text-lg font-semibold mb-2">Ratings Distribution</h3>
-                    <canvas id="ratingsChart"></canvas>
+    <main class="container mx-auto" >
+        <h2 class="text-2xl font-semibold mb-6 text-center">Book Ratings</h2>
+        <div class="charts-wrapper">
+            <!-- Chart container with reduced height -->
+            <div class="chart-container w-auto">
+                <h3 class="text-lg font-semibold mb-2">Ratings Distribution</h3>
+                <canvas id="ratingsChart" class="ratingsChart" style="height: 350px;"></canvas>
                 </div>
-            </div>
-        </section>
+        </div>
     </main>
 
 <?php

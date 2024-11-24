@@ -64,6 +64,22 @@ function searchBook(index) {
     }
 }
 
+// Add a scroll event listener to the book container
+document.getElementById('bookContainer').addEventListener('scroll', () => {
+    const container = document.getElementById('bookContainer');
+    const detailsSection = document.getElementById('detailsSection');
+
+    // Check if the user has scrolled to the bottom
+    if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+        // Show the additional details section
+        detailsSection.classList.remove('hidden');
+    } else {
+        // Hide the details section when not at the bottom
+        detailsSection.classList.add('hidden');
+    }
+});
+
+
 // Add a new book input field
 function addBook() {
     const container = document.getElementById('bookContainer');
@@ -109,14 +125,13 @@ function selectBook(bookID, title, index) {
 
 </head>
 
-<body class="bg-gray-100 text-gray-900 m-0 p-0">
+<body class="bg-gray-100 text-gray-900 m-0 p-0 flex truncate flex-col min-h-screen">
 
     <!-- Header -->
     <?php include 'include/header.php'; ?>
 
     <!-- Main Content Area with Sidebar and BorrowBook Section -->
-    <main class="flex">
-
+    <main class="flex flex-1">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
 
@@ -137,46 +152,51 @@ function selectBook(bookID, title, index) {
                             </div>
                         </div>
 
-                        <!-- Book Section -->
-                        <div class="books-container flex flex-col space-y-4 w-1/2" id="bookContainer">
-                            <div class="form-group flex flex-col space-y-2" id="bookGroup_0">
-                                <label for="bookID_0" class="font-semibold">Book ID:</label>
-                                <div class="flex flex-col space-y-2">
-                                    <input type="text" id="bookID_0" name="bookID[]" class="form-control shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required oninput="searchBook(0)">
-                                    <div id="bookSearchResult_0" class="bookSearchResults mt-2"></div>
-                                </div>
-                            </div>
-                        </div>
+                       <!-- Book Section -->
+<div class="books-container overflow-y-scroll h-96 flex flex-col space-y-4 w-1/2" id="bookContainer">
+    <div class="form-group flex flex-col space-y-2" id="bookGroup_0">
+        <label for="bookID_0" class="font-semibold">Book ID:</label>
+        <div class="flex flex-col space-y-2">
+            <input type="text" id="bookID_0" name="bookID[]" 
+                class="form-control shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" 
+                required oninput="searchBook(0)">
+            <div id="bookSearchResult_0" class="bookSearchResults mt-2"></div>
+        </div>
+    </div>
+</div>
+
                     </div>
 
-                    <!-- Buttons Section (Flexbox Layout) -->
-<div class="flex sticky bottom-0  items-center justify-center space-x-4 py-4 shadow-md">
-    <!-- Add Another Book Button -->
-    <button 
-        type="button" 
-        class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition " onclick="addBook()">
-        Add Another Book
-    </button>
+                    <!-- Buttons Section -->
+                    <div class="flex sticky bottom-0 items-center justify-center space-x-4 py-4 shadow-md">
+                        <!-- Add Another Book Button -->
+                        <button 
+                            type="button" 
+                            class="bg-gray-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 transition" 
+                            onclick="addBook()">
+                            Add Another Book
+                        </button>
 
-    <!-- Approve Borrowing Button -->
-    <button 
-        type="submit" 
-        class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
-        Approve Borrowing
-    </button>
-</div>
+                        <!-- Approve Borrowing Button -->
+                        <button 
+                            type="submit" 
+                            class="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                            Approve Borrowing
+                        </button>
+                    </div>
 
                 </form>
 
             </div>
-
         </div>
-    </div>
-    <!-- Footer at the Bottom -->
-    <footer class="bg-blue-600 text-white p-4 mt-auto">
-                       <?php include 'include/footer.php'; ?>
-                   </footer>
     </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-blue-600 text-white p-4">
+        <?php include 'include/footer.php'; ?>
+    </footer>
+</body>
+
 
     <script>// Search for user based on user ID
 function searchUser() {
