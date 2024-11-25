@@ -77,8 +77,8 @@ if ($title) {
         <form action="CopyConnection.php" method="post" class="max-w-4xl mx-auto p-4 space-y-4">
 
 <!-- Display the title -->
-<h4 class="book-title text-center mb-4">
-    <?php echo htmlspecialchars($book['B_title']); ?>
+<h4 class="book-title text-center mb-4"><strong>
+    <?php echo htmlspecialchars($book['B_title']); ?></strong>
 </h4>
 <a href="../ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary block mx-auto mb-6">List</a>
 

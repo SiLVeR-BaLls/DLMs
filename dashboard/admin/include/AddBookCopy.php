@@ -64,11 +64,40 @@ if ($title) {
         .hidden {
             display: none;
         }
+        /* Style for the input fields */
+input.form-control, select.form-select, textarea.form-control {
+    border-left: 2px solid #333333; /* Darker border color */
+    border-bottom: 2px solid #333333; /* Darker bottom border */
+    border-top: none; /* No border on top */
+    border-right: none; /* No border on right */
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #f2f2f2; /* Light gray background */
+    color: #333333; /* Dark text color for better contrast */
+    transition: border-color 0.3s ease, background-color 0.3s ease; /* Smooth transition for border and background color */
+}
+
+/* Style for focus effect */
+input.form-control:focus, select.form-select:focus, textarea.form-control:focus {
+    border-color: #1d1d1d; /* Even darker border color on focus */
+    background-color: #e6e6e6; /* Slightly darker background when focused */
+    outline: none; /* Remove default focus outline */
+}
+
+/* Optional: Style the focus effect with a box-shadow for more emphasis */
+input.form-control:focus, select.form-select:focus, textarea.form-control:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Dark shadow for focus */
+}
+
+
+
     </style>
 </head>
 
 <body>
-    <div class="container mt-4">
+    <div class="container mt-4 ">
         <?php if ($message): ?>
         <div class="alert alert-<?php echo $message_type; ?>">
             <?php echo htmlspecialchars($message); ?>
@@ -77,15 +106,15 @@ if ($title) {
         <form action="CopyConnection.php" method="post" class="max-w-4xl mx-auto p-4 space-y-4">
 
 <!-- Display the title -->
-<h4 class="book-title text-center mb-4">
-    <?php echo htmlspecialchars($book['B_title']); ?>
+<h4 class="book-title text-center mb-4"><strong>
+    <?php echo htmlspecialchars($book['B_title']); ?></strong>
 </h4>
 <a href="../ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary block mx-auto mb-6">List</a>
 
 <input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
 
 <!-- Status and Rating (Grouped in one row) -->
-<div class="flex flex-wrap gap-4 mb-4">
+<div class="flex flex-wrap gap-4 justify-center mb-4">
     <!-- Status -->
     <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
         <label for="status" class="form-label">Status</label>
@@ -120,15 +149,16 @@ if ($title) {
 
     <!-- Date Acquired -->
     <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
-        <label for="dateAcquired" class="form-label">Date Acquired</label>
-        <input type="date" id="dateAcquired" name="dateAcquired" class="form-control w-full">
+        <label for="dateAcquired" class="form-label" >Date Acquired</label>
+        <input type="date" id="dateAcquired" name="dateAcquired" class="form-control w-full" required>
     </div>
 </div>
 
 <!-- Copy Information Section (Grouped in one row) -->
 <h5 class="mt-4 mb-4 text-center">Copy Information</h5>
-<div class="flex flex-wrap gap-4 mb-4">
+<div class="flex justify-center flex-wrap gap-4 mb-4">
     <!-- QR Code -->
+    <div class="flex justify-center flex-wrap gap-4 mb-4">
     <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
         <label for="copy_ID" class="form-label">QR Code</label>
         <input type="text" id="copy_ID" name="copy_ID" class="form-control w-full" required>
@@ -139,16 +169,18 @@ if ($title) {
         <label for="callNumber" class="form-label">Call Number</label>
         <input type="text" id="callNumber" name="callNumber" class="form-control w-full" required>
     </div>
-</div>
 
-<!-- Purchase Price and Notes (Grouped in one row) -->
-<div class="flex flex-wrap gap-4 mb-4">
     <!-- Purchase Price -->
     <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
         <label for="purchasePrice" class="form-label">Purchase Price</label>
         <input type="number" step="0.1" id="purchasePrice" name="purchasePrice" class="form-control w-full">
     </div>
-
+<!-- Copy Number -->
+<div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
+<label for="copyNumber" class="form-label">Copy Number</label>
+    <input type="number" id="copyNumber" name="copyNumber" class="form-control w-full">
+</div>
+</div>
     <!-- Notes -->
     <div class="w-full sm:w-1/2 lg:w-1/3 mb-4">
         <label for="notes" class="form-label">Notes</label>
@@ -158,55 +190,47 @@ if ($title) {
 
 <!-- Accession and Number Fields Grouped Together Using Flex -->
 <h5 class="mt-4 mb-4 text-center">Accession and Number</h5>
-<div class="flex flex-wrap gap-4 mb-4">
+<div class="flex justify-center flex-wrap gap-4">
     <!-- Accession Fields Group -->
-    <div class="flex flex-wrap gap-4 w-full sm:w-1/2 lg:w-1/2 mb-4">
+    <div class=" flex-col sm:flex-row gap-4 w-full sm:w-1/2 lg:w-1/3 mb-4">
         <!-- Accession 1 -->
+        <label for="description1" class="form-label w-full">Accession</label>
         <div class="w-full mb-4">
-            <label for="description1" class="form-label">Accession</label>
             <input type="text" id="description1" name="description1" class="form-control w-full">
         </div>
 
         <!-- Accession 2 -->
         <div class="w-full mb-4">
-            <label for="description2" class="form-label">Accession</label>
             <input type="text" id="description2" name="description2" class="form-control w-full">
         </div>
 
         <!-- Accession 3 -->
         <div class="w-full mb-4">
-            <label for="description3" class="form-label">Accession</label>
             <input type="text" id="description3" name="description3" class="form-control w-full">
         </div>
     </div>
 
     <!-- Number Fields Group -->
-    <div class="flex flex-wrap gap-4 w-full sm:w-1/2 lg:w-1/2 mb-4">
+    <div class=" flex-col sm:flex-row gap-4 w-full sm:w-1/2 lg:w-1/3 mb-4">
         <!-- Number 1 -->
+        <label for="number1" class="form-label w-full">Number</label>
         <div class="w-full mb-4">
-            <label for="number1" class="form-label">Number</label>
             <input type="number" id="number1" name="number1" class="form-control w-full">
         </div>
 
         <!-- Number 2 -->
         <div class="w-full mb-4">
-            <label for="number2" class="form-label">Number</label>
             <input type="number" id="number2" name="number2" class="form-control w-full">
         </div>
 
         <!-- Number 3 -->
         <div class="w-full mb-4">
-            <label for="number3" class="form-label">Number</label>
             <input type="number" id="number3" name="number3" class="form-control w-full">
         </div>
     </div>
 </div>
+            
 
-<!-- Copy Number -->
-<div class="mb-4">
-    <label for="copyNumber" class="form-label">Copy Number</label>
-    <input type="number" id="copyNumber" name="copyNumber" class="form-control w-full">
-</div>
 
 <!-- Group: Sublocation, Vendor, Funding Source (Grouped in one row) -->
 <h5 class="mt-4 mb-4 text-center">Additional Information</h5>
@@ -219,6 +243,11 @@ if ($title) {
             <option>Circulation Section</option>
             <option>Reference Section</option>
         </select>
+        <button type="button" class="btn btn-link text-gray-500 hover:text-gray-700 active:text-gray-900" onclick="showSublocationInput()">Add New Sublocation</button>
+        <div class="flex">
+        <input type="text" class="border-b border-gray-400 bg-gray-200 text-gray-700 p-2 px-3 w-40 mt-2 hidden focus:border-black" id="newSublocation" placeholder="Enter new sublocation">
+        <button type="button" class="btn btn-link text-gray-500 hover:text-gray-700 active:text-gray-900 hidden" id="addSublocationBtn" onclick="addSublocation()">Add</button>
+    </div>
     </div>
 
     <!-- Vendor -->
@@ -228,6 +257,11 @@ if ($title) {
             <option selected>DTFOS Bookstore</option>
             <option>Other</option>
         </select>
+        <button type="button" class="btn btn-link text-gray-500 hover:text-gray-700 active:text-gray-900" onclick="showVendorInput()">Add New Vendor</button>
+        <div class="flex">
+                <input type="text" class="border-b border-gray-400 bg-gray-200 text-gray-700 p-2 px-3 w-40 mt-2 hidden focus:border-black" id="newVendor" placeholder="Enter new vendor">
+                <button type="button" class="btn btn-link text-gray-500 hover:text-gray-700 active:text-gray-900 hidden" id="addVendorBtn" onclick="addVendor()">Add</button>
+    </div>
     </div>
 
     <!-- Funding Source -->
@@ -238,7 +272,14 @@ if ($title) {
             <option>Donated</option>
             <option>Other</option>
         </select>
+        <button type="button" class="btn btn-link text-gray-500 hover:text-gray-700 active:text-gray-900" onclick="showFundingSourceInput()">Add New Funding
+                    Source</button>
+                    <div class="flex">
+                <input type="text" class="border-b border-gray-400 bg-gray-200 text-gray-700 p-2 px-3 w-40 mt-2 hidden focus:border-black" id="newFundingSource"
+                    placeholder="Enter new funding source">
+                <button type="button" class="btn btn-link text-gray-500 hover:text-gray-700 active:text-gray-900 hidden" id="addFundingSourceBtn" onclick="addFundingSource()">Add</button>
     </div>
+</div>
 </div>
 
 <button type="submit" class="btn btn-primary mt-4 block mx-auto">Submit</button>

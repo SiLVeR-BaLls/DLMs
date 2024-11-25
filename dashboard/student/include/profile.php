@@ -25,7 +25,7 @@
             <!-- User Name and ID -->
             <div>
                 <h1 class="text-3xl font-bold text-gray-800">Profile of <?php echo htmlspecialchars($userData['Fname']); ?> <?php echo htmlspecialchars($userData['Sname']); ?></h1>
-                <p class="text-lg text-gray-600 mt-2">User ID: <?php echo htmlspecialchars($userData['idno'] ?? ''); ?></p>
+                <p class="text-lg text-gray-600 mt-2">User ID: <?php echo htmlspecialchars($userData['IDno']); ?></p>
                 <div class="mt-4 flex space-x-4">
                     <a href="../ID_card.php?id=<?php echo htmlspecialchars($_SESSION['student']['IDno']); ?>" class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700">View ID</a>
                     <a href="include/edit_user.php?id=<?php echo htmlspecialchars($_SESSION['student']['IDno']); ?>" class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700">Edit Profile</a>
@@ -47,6 +47,10 @@
                     <div>
                         <p class="font-semibold text-gray-600">Last Name</p>
                         <p class="text-gray-700"><?php echo htmlspecialchars($userData['Sname'] ?? ''); ?></p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-600">Middle Name</p>
+                        <p class="text-gray-700"><?php echo htmlspecialchars($userData['Mname'] ?? ''); ?></p>
                     </div>
                     <div>
                         <p class="font-semibold text-gray-600">Gender</p>
@@ -101,9 +105,9 @@
                 </div>
             </div>
 
-            <!-- student Information -->
+            <!--User Information -->
             <div>
-                <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">student Information</h2>
+                <h2 class="text-2xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-2">Users Information</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-4">
                     <div>
                         <p class="font-semibold text-gray-600">College</p>
