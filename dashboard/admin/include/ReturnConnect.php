@@ -59,6 +59,7 @@ $query = "SELECT
     ui.Sname, 
     bc.B_title, 
     b.author,
+    bb.due_date,
     ud.college,  
     ud.course  
 FROM borrow_book AS bb
