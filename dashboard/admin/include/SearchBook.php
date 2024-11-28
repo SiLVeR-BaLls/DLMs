@@ -1,6 +1,4 @@
-<!-- booksearch.php -->
 <?php
-// Include the database configuration file for the connection
 include '../../config.php';
 
 // Get the bookID from the request (use GET to fetch the search query)
@@ -10,9 +8,11 @@ $bookID = isset($_GET['bookID']) ? $_GET['bookID'] : '';
 $bookID = htmlspecialchars($bookID);
 
 // Query to search for books by a partial or exact match of the book ID
-$sql = "SELECT book_copies.ID, book_copies.copy_ID, book_copies.B_title, book_copies.status, book_copies.callNumber, 
-               book_copies.circulationType, book_copies.dateAcquired, book_copies.description1, book_copies.description2, book_copies.description3,
-               book.B_title AS book_title, book.author, book.ISBN, book.publisher, book.Pdate
+$sql = "SELECT 
+            book_copies.ID, book_copies.copy_ID, book_copies.B_title, book_copies.status, 
+            book_copies.callNumber, book_copies.circulationType, book_copies.dateAcquired, 
+            book_copies.description1, book_copies.description2, book_copies.description3,
+            book.B_title AS book_title, book.author, book.ISBN, book.publisher, book.Pdate
         FROM book_copies
         LEFT JOIN book ON book_copies.B_title = book.B_title
         WHERE book_copies.ID LIKE ?";
@@ -29,15 +29,33 @@ $result = $stmt->get_result();
 // Check if any books were found
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        echo "<div class='book-item'>";
-        echo "<h5> <strong>Book ID: </strong> " . htmlspecialchars($row['ID']) . "</h5>";
-        echo "<p>   <strong>Title:  </strong>  " . htmlspecialchars($row['B_title']) . "</p>";
-        echo "<p>   <strong>Author: </strong>   " . htmlspecialchars($row['callNumber']) . "</p>"; // assuming 'author' is a column
-        echo "<p>   <strong>Genre:  </strong>  " . htmlspecialchars($row['author']) . "</p>";   // assuming 'genre' is a column
-        echo "<p>   <strong>Publication Year: </strong>   " . htmlspecialchars($row['publisher']) . "</p>"; // assuming 'pub_year' is a column
-        echo "<p>   <strong>Status: </strong>   " . htmlspecialchars($row['status']) . "</p>";
-        echo "</div><hr>"; // Add a line break between results
-    }
+        // Sanitize output for safety
+        $bookID = htmlspecialchars($row['ID']);
+        $bookTitle = htmlspecialchars($row['book_title']);
+        $author = htmlspecialchars($row['author']);
+        $status = htmlspecialchars($row['status']);
+        $callNumber = htmlspecialchars($row['callNumber']);
+        $publisher = htmlspecialchars($row['publisher']);
+        $publicationYear = htmlspecialchars($row['Pdate']);
+
+        // Display each book result as a clickable div
+        echo "<div class='p-2 cursor-pointer hover:bg-gray-200 search-item' 
+        data-id='{$bookID}' 
+        data-title='{$bookTitle}' 
+        data-author='{$author}' 
+        data-callNumber='{$callNumber}' 
+        data-publisher='{$publisher}' 
+        data-publicationYear='{$publicationYear}' 
+        data-status='{$status}'>
+          <strong>Book ID:</strong> $bookID <br>
+          <strong>Title:</strong> $bookTitle <br>
+          <strong>Author:</strong> $author <br>
+          <strong>Genre:</strong> $callNumber <br>
+          <strong>Publisher:</strong> $publisher <br>
+          <strong>Year:</strong> $publicationYear <br>
+          <strong>Status:</strong> $status
+        </div><hr>";
+    }  
 } else {
     echo "<div class='no-results'>No book found with ID: " . htmlspecialchars($bookID) . "</div>";
 }

@@ -1,8 +1,7 @@
-<body class="bg-blue-100 w-full flex">
 
     <!-- Sticky Sidebar -->
-    <aside class="w-64 bg-blue-600 text-white h-screen sticky top-0 flex flex-col">
-        <div class="p-4 font-bold text-lg border-b border-blue-600">
+    <aside class="w-64 bg-blue-600 text-white sticky top-0 flex flex-col h-screen">
+    <div class="p-4 font-bold text-lg border-b border-blue-600">
             Admin Panel
         </div>
         <nav class="flex-grow">
@@ -50,6 +49,7 @@
  ml-4 mt-1 space-y-1">
                         <li><a href="admin.php" class="block py-2 px-4 hover:bg-blue-700">Profile</a></li>
                         <li><a href="Myborrow.php" class="block py-2 px-4 hover:bg-blue-700">My Borrow</a></li>
+                        <li><a href="Myreturn.php" class="block py-2 px-4 hover:bg-blue-700">My Returned</a></li>
                         <li><a href="../logout.php" id="logoutBtn" class="block py-2 px-4 hover:bg-blue-700">Logout</a></li>
                     </ul>
                 </li>
@@ -97,4 +97,5 @@
             }
         });
     </script>
-</body>
+
+

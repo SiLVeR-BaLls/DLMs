@@ -33,10 +33,11 @@ include '../config.php';
                     <button class="ml-2 text-sm" onclick="closePopup()">x</button>
                 </div>
             <?php endif; ?>
+            <div class="container mx-auto px-4 py-6 ">
 
-            <h2 class="text-xl font-semibold mb-4">Pending Users</h2>
+            <h2 class="text-3xl font-semibold mb-6">Pending Users</h2>
+            <div class="mb-6 px-4 flex justify-between items-center overflow-x-auto">
 
-            <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
                     <thead class="bg-gray-100 border-b">
                         <tr>
@@ -78,6 +79,7 @@ include '../config.php';
                         <?php endif; ?>
                     </tbody>
                 </table>
+            </div>
             </div>
 
             <!-- Footer at the Bottom -->

@@ -18,21 +18,21 @@ include '../config.php';
     <?php include 'include/header.php'; ?>
 
     <!-- Main Content Area with Sidebar and BrowseBook Section -->
-    <main class="flex ">
+    <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
 
-        <!-- BrowseBook Content and Footer Section -->
-        <div class="flex-grow">
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow p-4">
             <!-- BrowseBook Content -->
             <?php include 'include/BrowseBook.php'; ?>
-
-            <!-- Footer at the Bottom -->
-            <footer class="bg-blue-600 text-white p-4 mt-auto">
-                <?php include 'include/footer.php'; ?>
-            </footer>
         </div>
     </main>
+
+    <!-- Footer at the Bottom -->
+    <footer class="bg-blue-600 text-white p-4 mt-auto">
+        <?php include 'include/footer.php'; ?>
+    </footer>
 
 </body>
 </html>

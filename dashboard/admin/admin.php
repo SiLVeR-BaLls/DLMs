@@ -18,7 +18,7 @@ include '../config.php';
     <?php include 'include/header.php'; ?>
 
     <!-- Main Content Area with Sidebar and BrowseBook Section -->
-    <main class="flex ">
+    <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
 
