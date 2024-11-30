@@ -51,6 +51,28 @@
       }
   }
 
+
+  
+  // Handle extend action
+  if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['extendBook'])) {
+    $ID = $_POST["ID"];
+    $newDueDate = $_POST["newDueDate"];
+
+    if (!empty($ID) && !empty($newDueDate)) {
+        $stmt = $conn->prepare("UPDATE borrow_book SET due_date = ? WHERE ID = ?");
+        $stmt->bind_param("si", $newDueDate, $ID);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            $successMessage = "Due date extended successfully!";
+        } else {
+            $errorMessage = "Failed to extend due date.";
+        }
+    } else {
+        $errorMessage = "Borrow ID or new due date is missing.";
+    }
+}
+
   // Fetch borrowed books with optional search and filter
   $query = "
       SELECT 
@@ -198,99 +220,204 @@
         </footer>
     </main>
 
-  <!-- Modal pup up-->
-  <div id="adminModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-      <h3 class="text-xl font-semibold mb-4 text-center">Admin Approval</h3>
-      <form action="" method="POST" id="approvalForm">
-        <input type="hidden" name="ID" id="borrowId">
-        <div class="mb-4">
-          <p><strong>Borrow ID:</strong> <span id="borrowIdDisplay" class="font-medium text-gray-700"></span></p>
-          <p><strong>Book Title:</strong> <span id="bookTitle" class="font-medium text-gray-700"></span></p>
-          <p><strong>Author:</strong> <span id="author" class="font-medium text-gray-700"></span></p>
-          <p><strong>Publisher:</strong> <span id="publisher" class="font-medium text-gray-700"></span></p>
-          <p><strong>Borrow Date:</strong> <span id="borrowDate" class="font-medium text-gray-700"></span></p>
-          <p><strong>Rating:</strong>
-            <input type="number" id="rating" name="rating" min="0" max="5"
-              class="w-20 p-2 mt-2 border border-gray-300 rounded-md" value="">
-          </p>
-        </div>
-        <!-- buttons -->
+  <!-- Modal for Extend or Return -->
+<div id="actionModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xs">
+        <h3 class="text-xl font-semibold mb-4 text-center text-gray-900">Extend or Return?</h3>
         <div class="flex justify-between">
-          <button type="button" id="noBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md">Cancel</button>
-          <button type="submit" name="approve" class="bg-green-600 text-white px-4 py-2 rounded-md">Approve</button>
+            <button id="extendBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md">Extend</button>
+            <button id="returnBtn" class="bg-green-600 text-white px-4 py-2 rounded-md">Return</button>
         </div>
-      </form>
     </div>
-  </div>
+</div>
+
+<!-- Modal for Extend -->
+<div id="extendModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xs">
+        <h3 class="text-xl font-semibold mb-4 text-center text-gray-900">Extend Due Date</h3>
+        <form method="POST">
+            <input type="hidden" name="ID" id="borrowIdExtend">
+            <p><strong class="text-gray-900">Borrow ID:</strong> <span id="borrowIdExtendDisplay" class="font-medium text-gray-700"></span></p>
+
+            <p><strong class="text-gray-900">Book Title:</strong> <span id="bookTitleExtend" class="font-medium text-gray-700"></span></p>
+            <p><strong class="text-gray-900">Author:</strong> <span id="authorExtend" class="font-medium text-gray-700"></span></p>
+            <p><strong class="text-gray-900">Publisher:</strong> <span id="publisherExtend" class="font-medium text-gray-700"></span></p>
+            <label for="newDueDate" class="block mb-2 text-gray-900 font-bold">New Due Date:</label>
+            <input type="date" id="newDueDate" name="newDueDate" class="w-full p-2 border border-gray-300 rounded-md mb-4">
+            <div class="flex justify-between">
+                <button type="button" id="cancelExtendBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md">Cancel</button>
+                <button type="submit" name="extendBook" class="bg-blue-600 text-white px-4 py-2 rounded-md">OK</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal for Admin Approval -->
+<div id="adminModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xs">
+        <h3 class="text-xl font-semibold mb-4 text-center text-gray-900">Admin Approval</h3>
+        <form action="" method="POST" id="approvalForm">
+            <input type="hidden" name="ID" id="borrowId">
+            <div class="mb-4">
+                <p><strong class="text-gray-900">Borrow ID:</strong> <span id="borrowIdDisplay" class="font-medium text-gray-700"></span></p>
+                <p><strong class="text-gray-900">Book Title:</strong> <span id="bookTitle" class="font-medium text-gray-700"></span></p>
+                <p><strong class="text-gray-900">Author:</strong> <span id="author" class="font-medium text-gray-700"></span></p>
+                <p><strong class="text-gray-900">Publisher:</strong> <span id="publisher" class="font-medium text-gray-700"></span></p>
+                <p><strong class="text-gray-900">Borrow Date:</strong> <span id="borrowDate" class="font-medium text-gray-700"></span></p>
+                <p><strong class="text-gray-900">Rating:</strong>
+                    <input type="number" id="rating" name="rating" min="0" max="5" class="w-20 p-2 mt-2 border border-gray-300 rounded-md" value="">
+                </p>
+            </div>
+            <div class="flex justify-between">
+                <button type="button" id="noBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md">Cancel</button>
+                <button type="submit" name="approve" class="bg-green-600 text-white px-4 py-2 rounded-md">Approve</button>
+            </div>
+        </form>
+    </div>
+</div>
 
   <script>
-    // Live search functionality
-    $('#searchBox').on('input', function () {
-      var searchQuery = $(this).val();
-      var filterType = $('#filterType').val();
+   // Live search functionality with event delegation
+$('#searchBox').on('input', function () {
+    var searchQuery = $(this).val();
+    var filterType = $('#filterType').val();
 
-      $.ajax({
+    $.ajax({
         url: '', // Current page URL
         method: 'POST',
         data: { searchQuery, filterType },
         success: function (response) {
-          $('#booksTableContainer').html($(response).find('#booksTableContainer').html());
-        }
-      });
-    });
+            // Update the table content
+            $('#booksTableContainer').html($(response).find('#booksTableContainer').html());
 
+            // Rebind the event listeners for the newly loaded rows
+            bindRowClickEvent(); // Function to bind event listeners
+        }
+    });
+});
+
+// Function to bind the click event to rows
+function bindRowClickEvent() {
+    // Add event listener to all rows inside the table body (using event delegation)
+    $('#booksTableContainer tbody tr').on('click', function () {
+        var borrowId = $(this).data('id');
+        var bookTitle = $(this).find('td').eq(3).text(); // Assuming Book Title is in the 4th column
+        var author = $(this).find('td').eq(2).text(); // Assuming Author is in the 3rd column
+        var publisher = $(this).find('td').eq(3).text(); // Adjust if necessary
+        var borrowDate = $(this).find('td').eq(4).text();
+        var rating = $(this).data('rating');
+        var dueDate = $(this).find('td').eq(5).text();
+
+        // Set data for modal display
+        $('#borrowIdExtendDisplay').text(borrowId);
+        $('#borrowId').val(borrowId);
+        $('#borrowIdDisplay').text(borrowId);
+        $('#bookTitle').text(bookTitle);
+        $('#author').text(author);
+        $('#publisher').text(publisher);
+        $('#borrowDate').text(borrowDate);
+        $('#rating').val(rating); // Set rating value
+        $('#borrowIdExtend').val(borrowId);
+        $('#bookTitleExtend').text(bookTitle);
+        $('#authorExtend').text(author);
+        $('#publisherExtend').text(publisher);
+
+        // Show the action modal (extend or return)
+        $('#actionModal').removeClass('hidden');
+    });
+}
+
+// Initial binding when the page loads
+bindRowClickEvent();
     // Show approval modal
     $('.cursor-pointer').on('click', function () {
       $('#borrowId').val($(this).data('id'));
       $('#borrowIdDisplay').text($(this).data('id'));
       $('#bookTitle').text($(this).data('rating'));
-      $('#adminModal').removeClass('hidden');
+      $('#actionModal').removeClass('hidden');
     });
 
     // Hide modal
     $('#noBtn').on('click', function () {
-      $('#adminModal').addClass('hidden');
+      $('#actionModal').addClass('hidden');
     });
   </script>
 
-  <script>
-    // Handle click event on the rows to open the modal
-    document.querySelectorAll('tr.cursor-pointer').forEach(row => {
-      row.addEventListener('click', function () {
-        var borrowId = this.dataset.id;
-        var bookTitle = this.cells[3].innerText;
-        var author = this.cells[2].innerText;
-        var publisher = this.cells[3].innerText;
-        var borrowDate = this.cells[4].innerText;
-        var rating = this.dataset.rating;
 
-        document.getElementById('borrowId').value = borrowId;
-        document.getElementById('borrowIdDisplay').innerText = borrowId;
-        document.getElementById('bookTitle').innerText = bookTitle;
-        document.getElementById('author').innerText = author;
-        document.getElementById('publisher').innerText = publisher;
-        document.getElementById('borrowDate').innerText = borrowDate;
-        document.getElementById('rating').value = rating; // Set the rating value
+<script>
+  // Handle click event on the rows to open the action modal (Extend or Return)
+  document.querySelectorAll('tr.cursor-pointer').forEach(row => {
+    row.addEventListener('click', function () {
+      var borrowId = this.dataset.id;
+      var bookTitle = this.cells[3].innerText;
+      var author = this.cells[2].innerText;
+      var publisher = this.cells[3].innerText; // Assuming publisher is in the same column as title, adjust if necessary
+      var borrowDate = this.cells[4].innerText;
+      var rating = this.dataset.rating;
+      var dueDate = this.cells[5].innerText;
 
-        document.getElementById('adminModal').classList.remove('hidden');
-      });
+      // Set the data to be displayed in the modals
+      document.getElementById('borrowIdExtendDisplay').innerText = borrowId;
+
+      document.getElementById('borrowId').value = borrowId;
+      document.getElementById('borrowIdDisplay').innerText = borrowId;
+      document.getElementById('bookTitle').innerText = bookTitle;
+      document.getElementById('author').innerText = author;
+      document.getElementById('publisher').innerText = publisher;
+      document.getElementById('borrowDate').innerText = borrowDate;
+      document.getElementById('rating').value = rating; // Set the rating value
+      document.getElementById('borrowIdExtend').value = borrowId;
+      document.getElementById('bookTitleExtend').innerText = bookTitle;
+      document.getElementById('authorExtend').innerText = author;
+      document.getElementById('publisherExtend').innerText = publisher;
+
+      // Show the action modal first (Extend or Return)
+      document.getElementById('actionModal').classList.remove('hidden');
     });
+  });
 
-    // Handle clicking the 'No' button to close the modal
-    document.getElementById('noBtn').addEventListener('click', function () {
-      document.getElementById('adminModal').classList.add('hidden');
-    });
+  // Handle Extend button click (Hide action modal, show extend modal)
+  document.getElementById('extendBtn').addEventListener('click', function () {
+    document.getElementById('actionModal').classList.add('hidden'); // Hide action modal
+    document.getElementById('extendModal').classList.remove('hidden'); // Show extend modal
+  });
 
-    // Close the modal if clicked outside of the modal content
-    document.getElementById('adminModal').addEventListener('click', function (event) {
-      if (event.target === this) {
-        document.getElementById('adminModal').classList.add('hidden');
-      }
-    });
+  // Handle Return button click (Hide action modal, show admin modal)
+  document.getElementById('returnBtn').addEventListener('click', function () {
+    document.getElementById('actionModal').classList.add('hidden'); // Hide action modal
+    document.getElementById('adminModal').classList.remove('hidden'); // Show admin modal
+  });
 
+  // Cancel Extend Modal (close extend modal)
+  document.getElementById('cancelExtendBtn').addEventListener('click', function () {
+    document.getElementById('extendModal').classList.add('hidden'); // Hide extend modal
+  });
 
-  </script>
+  // Cancel Admin Modal (close admin modal)
+  document.getElementById('noBtn').addEventListener('click', function () {
+    document.getElementById('adminModal').classList.add('hidden'); // Hide admin modal
+  });
+
+  // Close modals if clicked outside of the modal content
+  document.getElementById('actionModal').addEventListener('click', function (event) {
+    if (event.target === this) {
+      document.getElementById('actionModal').classList.add('hidden'); // Hide action modal
+    }
+  });
+
+  document.getElementById('extendModal').addEventListener('click', function (event) {
+    if (event.target === this) {
+      document.getElementById('extendModal').classList.add('hidden'); // Hide extend modal
+    }
+  });
+
+  document.getElementById('adminModal').addEventListener('click', function (event) {
+    if (event.target === this) {
+      document.getElementById('adminModal').classList.add('hidden'); // Hide admin modal
+    }
+  });
+</script>
+
   
 </body>
 

@@ -9,6 +9,7 @@
                 <!-- Individual links -->
                 <li><a href="index.php" class="block py-2 px-4 hover:bg-blue-700">Browse</a></li>
                 <li><a href="QRscan/index.php" class="block py-2 px-4 hover:bg-blue-700">Attendance</a></li>
+                <!-- <li><a href="../../chat_app/index.php" class="block py-2 px-4 hover:bg-blue-700">Message</a></li> -->
 
                 <!-- Manage Books Dropdown -->
                 <li class="relative group">

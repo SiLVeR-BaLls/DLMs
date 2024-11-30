@@ -135,23 +135,35 @@ $stmt->close();
                             </div>
 
                             <div class="flex">
-                                <div class="font-semibold text-lg w-32">Rating:</div>
-                                <div class="text-gray-700 flex-grow">
-                                    <?php
-                                    // Get the rating value from the database
-                                    $rating = (int) $copy_data['rating'];
+  <div class="font-semibold text-lg w-32">Rating:</div>
+  <div class="text-gray-700 flex-grow">
+    <?php
+    // Get the rating value from the database
+    $rating = (int) $copy_data['rating'];
+    $maxStars = 5; // Maximum number of stars to display
 
-                                    // Display a star depending on the rating value
-                                    if ($rating == 0) {
-                                        // Show broken star (not glowing)
-                                        echo '<span class="text-gray-400">&#9734;</span>'; // Broken star
-                                    } else {
-                                        // Display glowing stars for rating > 0
-                                        echo '<span class="text-yellow-400">&#9733;</span>'; // Glowing star
-                                    }
-                                    ?>
-                                </div>
-                            </div>
+    // Loop through 5 stars
+    for ($i = 1; $i <= $maxStars; $i++) {
+        if ($i <= $rating) {
+            // Filled star with dynamic color based on rating
+            $starColor = match ($rating) {
+                5 => 'text-green-500',  // Green for 5 stars
+                4 => 'text-blue-500',   // Blue for 4 stars
+                3 => 'text-yellow-400', // Yellow for 3 stars
+                2 => 'text-orange-500', // Orange for 2 stars
+                1 => 'text-red-500',    // Red for 1 star
+                default => 'text-gray-400', // Gray for no rating
+            };
+            echo "<span class='{$starColor} text-3xl'>&#9733;</span>";  // Filled star
+        } else {
+            // Empty star if the rating is less than the current star index
+            echo '<span class="text-gray-400 text-3xl">&#9734;</span>';  // Empty star
+        }
+    }
+    ?>
+  </div>
+</div>
+
                         </div>
                     </div>
                 </div>

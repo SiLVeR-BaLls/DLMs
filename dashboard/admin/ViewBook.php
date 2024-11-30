@@ -140,9 +140,9 @@ if ($title) {
             <?php endif; ?>
 
             <?php if (isset($book)): ?>
-            <div class="text-center mb-6">
                 <a href="index.php" class="inline-block text-blue-500 hover:underline mb-4">&larr; Back</a>
-
+            <div class="text-center mb-6">
+                
                 <?php if ($book['photo']): ?>
                 <img src="../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="Book Photo"
                     class="w-48 h-48 mx-auto rounded-lg shadow-md">
