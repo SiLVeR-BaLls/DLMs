@@ -8,6 +8,9 @@ if (isset($_SESSION['admin'])) {
 } elseif (isset($_SESSION['student'])) {
     header("Location: ../dashboard/student/index.php");
     exit();
+} elseif (isset($_SESSION['librarian'])) {
+    header("Location: ../dashboard/librarian/index.php");
+    exit();
 } elseif (isset($_SESSION['visitor'])) {
     header("Location: ../dashboard/visitor/index.php");
     exit();

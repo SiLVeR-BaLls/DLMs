@@ -3,7 +3,7 @@ include 'config.php';
 // Start session
 
 // Check if the user is logged in (admin or student)
-$isLoggedIn = isset($_SESSION['admin']) || isset($_SESSION['student']) || isset($_SESSION['visitor']);
+$isLoggedIn = isset($_SESSION['admin']) || isset($_SESSION['student']) || isset($_SESSION['librarian']);
 
 // Get ID number from URL and validate
 $idNo = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;

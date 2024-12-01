@@ -15,16 +15,23 @@ if ($conn->connect_error) {
 
 // Start session to manage user authentication
 session_start();
-
-// Check if the user is logged in and is either admin or student
-if (!isset($_SESSION['admin']) && !isset($_SESSION['student'])) {
+// Check if the user is logged in and is either admin, student, or librarian
+if (!isset($_SESSION['admin']) && !isset($_SESSION['student']) && !isset($_SESSION['librarian'])) {
     header('Location: ../../Registration/log_in.php'); // Redirect to the login page if not logged in
     exit();
 }
 
-// Fetch data for the logged-in user (admin or student)
-$userType = isset($_SESSION['admin']) ? 'admin' : 'student'; // Determine if the user is admin or student
-$userID = isset($_SESSION['admin']) ? $_SESSION['admin']['IDno'] : (isset($_SESSION['student']) ? $_SESSION['student']['IDno'] : null); // Get IDno from session based on user type
+// Fetch data for the logged-in user (admin, student, or librarian)
+if (isset($_SESSION['admin'])) {
+    $userType = 'admin';
+    $userID = $_SESSION['admin']['IDno']; // Get IDno from session based on admin
+} elseif (isset($_SESSION['student'])) {
+    $userType = 'student';
+    $userID = $_SESSION['student']['IDno']; // Get IDno from session based on student
+} elseif (isset($_SESSION['librarian'])) {
+    $userType = 'librarian';
+    $userID = $_SESSION['librarian']['IDno']; // Get IDno from session based on librarian
+} else 
 
 // Check if user is logged in
 if (!$userID) {
@@ -150,7 +157,7 @@ if (isset($_GET['IDno'])) {
 
 <!-- Sidebar -->
 <div class="w-1/4 bg-white p-4 shadow-md h-full overflow-y-auto">
-    <a href="../dashboard/admin/index.php" class="text-red-500">Leave</a>
+    <a href="../" class="text-red-500">Leave</a>
     <h2 class="text-xl font-semibold">
         Logged in as: 
         <span class="text-blue-500"><?php echo htmlspecialchars($userDetails['Fname']) . ' ' . htmlspecialchars($userDetails['Sname']); ?></span>

@@ -32,11 +32,10 @@
                     <button class="w-full flex justify-between items-center py-2 px-4 hover:bg-blue-700">
                         Manage Users ▼
                     </button>
-                    <ul class="hidden group-hover:block bg-blue-500
-
- ml-4 mt-1 space-y-1">
+                    <ul class="hidden group-hover:block bg-blue-500 ml-4 mt-1 space-y-1">
                         <li><a href="BrowseUser.php" class="block py-2 px-4 hover:bg-blue-700">Browse Users</a></li>
                         <li><a href="pending.php" class="block py-2 px-4 hover:bg-blue-700">Pending User</a></li>
+                        <li><a href="Promote.php" class="block py-2 px-4 hover:bg-blue-700">Promote User</a></li>
                     </ul>
                 </li>
 

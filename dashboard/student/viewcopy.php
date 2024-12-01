@@ -155,17 +155,7 @@ $stmt->close();
                         </div>
                     </div>
                 </div>
-                <!-- Edit and Delete Buttons -->
-                <div class="mt-8 flex justify-between">
-                    <a href="include/edit_copy.php?ID=<?php echo urlencode($copy_data['ID']); ?>"
-                        class="bg-yellow-500 text-white py-3 px-6 rounded-md hover:bg-yellow-600">
-                        Edit Copy
-                    </a>
-                    <a href="delete_copy.php?ID=<?php echo urlencode($copy_data['ID']); ?>"
-                        class="bg-red-500 text-white py-3 px-6 rounded-md hover:bg-red-600">
-                        Delete Copy
-                    </a>
-                </div>
+            
                 </div>
 
                 <?php endif; ?>

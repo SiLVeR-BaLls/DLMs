@@ -36,43 +36,48 @@
         <p><strong>Course:</strong> <?php echo htmlspecialchars($userData['course']); ?></p>
     </div>
 <?php endif; ?> -->
- <!-- Modal for confirmation -->
- <div id="myModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg text-center">
-            <h2 class="text-xl font-semibold mb-2">Confirm Log Out?</h2>
-            <p class="mb-4">Are you sure to leave the page?</p>
-            <div class="flex justify-around">
-                <button id="confirmBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-500
 
-">Confirm</button>
-                <button id="cancelBtn" class="bg-blue-300 px-4 py-2 rounded hover:bg-blue-500
-">Cancel</button>
-            </div>
+<!-- Modal for confirmation -->
+<div id="myModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+    <div class="bg-white p-6 rounded shadow-lg text-center">
+        <h2 class="text-xl font-semibold mb-2">Confirm Log Out?</h2>
+        <p class="mb-4">Are you sure you want to leave the page?</p>
+        <div class="flex justify-around">
+            <button id="confirmBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Confirm
+            </button>
+            <button id="cancelBtn" class="bg-blue-300 px-4 py-2 rounded hover:bg-blue-500">
+                Cancel
+            </button>
         </div>
     </div>
+</div>
 
-    <!-- JavaScript for modal and toggles -->
+<!-- JavaScript for modal and toggles -->
 <script>
-        // Modal functionality
-        const modal = document.getElementById("myModal");
-        const logoutBtn = document.getElementById("logoutBtn");
-        const confirmBtn = document.getElementById("confirmBtn");
-        const cancelBtn = document.getElementById("cancelBtn");
+    // Modal functionality
+    const modal = document.getElementById("myModal");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
 
-        logoutBtn.addEventListener("click", function (event) {
-            event.preventDefault();
-            modal.classList.remove("hidden");
-        });
-        confirmBtn.addEventListener("click", function () {
+    logoutBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        modal.classList.remove("hidden");
+    });
+
+    confirmBtn.addEventListener("click", function () {
+        modal.classList.add("hidden");
+        window.location.replace("../logout.php");
+    });
+
+    cancelBtn.addEventListener("click", function () {
+        modal.classList.add("hidden");
+    });
+
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
             modal.classList.add("hidden");
-            window.location.href = "../logout.php";
-        });
-        cancelBtn.addEventListener("click", function () {
-            modal.classList.add("hidden");
-        });
-        window.addEventListener("click", function (event) {
-            if (event.target == modal) {
-                modal.classList.add("hidden");
-            }
-        });
-    </script>
+        }
+    });
+</script>
