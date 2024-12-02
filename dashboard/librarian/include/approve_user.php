@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     // Fetch email from the 'contact' table based on the user ID
     $sql = "SELECT email1 FROM contact WHERE IDno = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $userId);
+    $stmt->bind_param("s", $userId);
     $stmt->execute();
     $stmt->store_result();
     
@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
         // Fetch username and password from 'user_log' table
         $userQuery = "SELECT username, password FROM user_log WHERE IDno = ?";
         $userStmt = $conn->prepare($userQuery);
-        $userStmt->bind_param("i", $userId);
+        $userStmt->bind_param("s", $userId);
         $userStmt->execute();
         $userStmt->store_result();
         
@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
             // Update the user status to 'approved' in the user_log table
             $updateQuery = "UPDATE user_log SET status = 'approved' WHERE IDno = ?";
             $updateStmt = $conn->prepare($updateQuery);
-            $updateStmt->bind_param("i", $userId);
+            $updateStmt->bind_param("s", $userId);
             $updateStmt->execute();
 
             // Combine both messages

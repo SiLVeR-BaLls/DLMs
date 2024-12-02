@@ -1,20 +1,6 @@
 <?php
-// Database connection
-$host = 'localhost'; // Change this to your database host
-$user = 'root'; // Change this to your database username
-$pass = ''; // Change this to your database password
-$dbname = 'dlms'; // Change this to your database name
+include('../dashboard/config.php');
 
-// Create connection
-$conn = new mysqli($host, $user, $pass, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Start session to manage user authentication
-session_start();
 // Check if the user is logged in and is either admin, student, or librarian
 if (!isset($_SESSION['admin']) && !isset($_SESSION['student']) && !isset($_SESSION['librarian'])) {
     header('Location: ../../Registration/log_in.php'); // Redirect to the login page if not logged in
