@@ -200,17 +200,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         </div>
         <?php endif; ?>
             <div class="flex justify-center items-center gap-8">
-    <!-- Photo -->
-    <div class="space-y-2 w-1/4 p-2 border border-gray-300 rounded-md text-sm flex justify-center items-center">
+   <!-- Photo -->
+   <div class="w-1/4 p-4 flex flex-col items-center">
         <?php if ($user['photo']): ?>
-            <img src="../../../pic/User/<?php echo htmlspecialchars($user['photo']); ?>" alt="User Photo" class="img-thumbnail max-w-[150px] mt-4">
+            <img src="../../../pic/User/<?php echo htmlspecialchars($user['photo']); ?>" alt="User Photo" class="img-thumbnail max-w-[150px]">
         <?php endif; ?>
         <input type="file" id="photo" name="photo" accept="image/*" class="mt-4">
     </div>
 
     <!-- Account Information Group -->
     <div class="space-y-4">
-        <div class="space-y-2">
+        <div class="space-y-4">
             <label for="IDno" class="block text-sm font-medium text-gray-700">ID Number:</label>
             <input type="text" id="IDno" name="IDno" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="Enter ID (if Manual)" value="<?php echo htmlspecialchars($user['IDno'] ?? ''); ?>">
         </div>

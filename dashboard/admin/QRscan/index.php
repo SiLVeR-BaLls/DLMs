@@ -5,7 +5,7 @@ $idno = $_SESSION['admin']['IDno'];
 $attendanceQuery = "SELECT a.ID, a.IDno, u.Fname, u.Sname, a.TIMEIN, a.TIMEOUT, a.LOGDATE, a.STATUS
                     FROM attendance a
                     JOIN users_info u ON a.IDno = u.IDno
-                    WHERE a.LOGDATE = CURDATE()";
+                    ORDER BY a.LOGDATE DESC";
 $query = $conn->query($attendanceQuery);
 ?>
 
@@ -33,7 +33,7 @@ $query = $conn->query($attendanceQuery);
             background-color: #111;
             overflow-x: hidden;
             transition: 0.5s;
-            padding-top: 60px;
+            padding-top: 0px;
             box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.2);
         }
 
@@ -114,12 +114,29 @@ $query = $conn->query($attendanceQuery);
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <div id="attendanceTableWrapper">
             <h2 class="text-xl font-medium text-gray-600 mb-4">Attendance Records</h2>
-            <input type="text" id="searchInput" placeholder="Search..." class="w-full p-2 mb-4 border rounded-lg"
-                onkeyup="searchTable()">
+          <!-- Search Inputs -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search..." 
+        class="w-full md:w-1/2 p-2 border rounded-lg" 
+        onkeyup="searchTable()"
+    >
+    <input 
+        type="date" 
+        id="dateInput" 
+        class="w-full md:w-1/3 p-2 border rounded-lg" 
+        onchange="filterByDate()"
+    >
+    <button id="resetButton" class="bg-gray-500 text-white py-2 px-4 mt-4 rounded-lg">Reset</button>
+
+</div>
+
+            
             <table id="attendanceTable" class="min-w-full table-auto border-collapse">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="px-4 py-2 text-gray-700">ID</th>
                         <th class="px-4 py-2 text-gray-700">User ID</th>
                         <th class="px-4 py-2 text-gray-700">First Name</th>
                         <th class="px-4 py-2 text-gray-700">Last Name</th>
@@ -132,9 +149,7 @@ $query = $conn->query($attendanceQuery);
                 <tbody id="tableBody">
                     <?php while ($row = $query->fetch_assoc()) { ?>
                     <tr class="border-b">
-                        <td class="px-4 py-2">
-                            <?php echo $row['ID']; ?>
-                        </td>
+                      
                         <td class="px-4 py-2">
                             <?php echo $row['IDno']; ?>
                         </td>
@@ -151,7 +166,7 @@ $query = $conn->query($attendanceQuery);
                             <?php echo $row['TIMEOUT']; ?>
                         </td>
                         <td class="px-4 py-2">
-                            <?php echo $row['LOGDATE']; ?>
+                            <?php echo date('d/m/Y', strtotime($row['LOGDATE'])); ?>
                         </td>
                         <td class="px-4 py-2">
                             <?php echo $row['STATUS'] == 1 ? 'Out' : 'In'; ?>
@@ -306,6 +321,63 @@ $query = $conn->query($attendanceQuery);
                 rows[i].style.display = match ? "" : "none";
             }
         }
+        
+        function searchTable() {
+            const input = document.getElementById("searchInput").value.toUpperCase();
+            const table = document.getElementById("attendanceTable");
+            const rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) {
+                let cells = rows[i].getElementsByTagName("td");
+                let match = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toUpperCase().includes(input)) {
+                        match = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = match ? "" : "none";
+            }
+        }
+        function filterByDate() {
+    const inputDate = document.getElementById("dateInput").value; // Get the date from the input
+    const table = document.getElementById("attendanceTable");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let cells = rows[i].getElementsByTagName("td");
+        let dateCell = cells[6]; // Assuming the date is in the 7th column (LOGDATE)
+
+        if (dateCell) {
+            const rowDate = dateCell.innerText.trim(); // Get the date from the row
+
+            // Convert the row date (d/m/Y) to the format YYYY-MM-DD
+            const [day, month, year] = rowDate.split('/'); // Assuming format is dd/mm/yyyy
+            const formattedRowDate = `${year}-${month}-${day}`;
+
+            // Compare the formatted row date with the input date
+            if (inputDate === formattedRowDate) {
+                rows[i].style.display = ""; // Show the row if the date matches
+            } else {
+                rows[i].style.display = "none"; // Hide the row if the date doesn't match
+            }
+        }
+    }
+}
+document.getElementById("resetButton").addEventListener("click", function() {
+    // Clear search input and date input
+    document.getElementById("searchInput").value = "";
+    document.getElementById("dateInput").value = "";
+
+    // Reset table display
+    const table = document.getElementById("attendanceTable");
+    const rows = table.getElementsByTagName("tr");
+
+    // Show all rows
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].style.display = ""; // Show all rows
+    }
+});
 
         // Display initial page
         displayTablePage(currentPage);

@@ -19,7 +19,7 @@
         </div>
         <!-- Borrowed by College -->
         <div class="chart-container w-full lg:w-1/2  h-[80vh] overflow-hidden"> <!-- Set width and height, hide overflow -->
-            <h3 class="chart-title text-xl font-semibold mb-4 text-center">Borrowed Books by College</h3>
+            <h3 class="chart-title text-xl font-semibold mb-4 text-center">College</h3>
             <canvas id="borrowedCollegeChart" class="h-[80%] w-full"></canvas> <!-- Set canvas height to 80% of container -->
         </div>
     </div>

@@ -17,12 +17,12 @@
     <div class="flex flex-col lg:flex-row gap-8 justify-center">
         <!-- Returned by Course -->
         <div class="chart-container w-full lg:w-1/2  h-[80vh] overflow-hidden"> <!-- Set height to 70% of viewport height -->
-            <h3 class="chart-title text-xl font-semibold mb-4 text-center">Returned Books by Course</h3>
+            <h3 class="chart-title text-xl font-semibold mb-4 text-center">Program</h3>
             <canvas id="returnedCourseChart"  class="h-[80%] w-full"></canvas> <!-- Set canvas to 100% of container height -->
         </div>
         <!-- Returned by College -->
         <div class="chart-container w-full lg:w-1/2  h-[80vh] overflow-hidden"> <!-- Set height to 70% of viewport height -->
-            <h3 class="chart-title text-xl font-semibold mb-4 text-center">Returned Books by College</h3>
+            <h3 class="chart-title text-xl font-semibold mb-4 text-center">College</h3>
             <canvas id="returnedCollegeChart"  class="h-[80%] w-full"></canvas> <!-- Set canvas to 100% of container height -->
         </div>
     </div>
