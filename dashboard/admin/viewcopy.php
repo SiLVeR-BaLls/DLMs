@@ -173,7 +173,7 @@ $stmt->close();
                         class="bg-yellow-500 text-white py-3 px-6 rounded-md hover:bg-yellow-600">
                         Edit Copy
                     </a>
-                    <a href="delete_copy.php?ID=<?php echo urlencode($copy_data['ID']); ?>"
+                    <a href="include/delete_copy.php?ID=<?php echo urlencode($copy_data['ID']); ?>"
                         class="bg-red-500 text-white py-3 px-6 rounded-md hover:bg-red-600">
                         Delete Copy
                     </a>

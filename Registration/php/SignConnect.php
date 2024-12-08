@@ -31,10 +31,8 @@ if ($conn->connect_error) {
         $municipality = $_POST['municipality'];
         $barangay = $_POST['barangay'];
         $province = $_POST['province'];
-        $email1 = $_POST['mail1'];
-        $email2 = $_POST['mail2'];
+        $email1 = $_POST['email1'];
         $con1 = $_POST['con1'];
-        $con2 = $_POST['con2'];
         $username = $_POST['username'];
         $password = $_POST['password']; // No hashing
         $IDno = $_POST['IDno'];
@@ -42,7 +40,8 @@ if ($conn->connect_error) {
         // $status = $_POST['status'];
         $college = $_POST['college']??'';
         $course = $_POST['course']??'';
-        $yrLVL = $_POST['yrLVL'];
+        $yrLVL = $_POST['yrLVL']??'';
+        $personnel_type = $_POST['personnel_type']??'';
 
         // Check if IDno already exists
         $query = "SELECT * FROM users_info WHERE IDno = ?";
@@ -75,9 +74,9 @@ if ($conn->connect_error) {
             // Insert into user_details table
             $status ='active';
             $A_LVL = '3';
-            $sql = "INSERT INTO user_details (IDno, college, course, yrLVL, A_LVL, status) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO user_details (IDno, college, course, yrLVL, A_LVL, status, personnel_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $IDno, $college, $course,  $yrLVL, $A_LVL, $status);
+            $stmt->bind_param("sssssss", $IDno, $college, $course,  $yrLVL, $A_LVL, $status, $personnel_type);
             $stmt->execute();
 
                     // Insert into user_log table
@@ -88,9 +87,9 @@ if ($conn->connect_error) {
             $stmt->execute();
 
             // Insert into contact table
-            $sql = "INSERT INTO contact (IDno, email1, email2, con1, con2) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO contact (IDno, email1, con1) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $IDno, $email1, $email2, $con1, $con2);
+            $stmt->bind_param("sss", $IDno, $email1, $con1);
             $stmt->execute();
             $message = "Registration successful!";
             $message_type = "success";

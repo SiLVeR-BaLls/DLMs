@@ -9,13 +9,13 @@ $bookID = htmlspecialchars($bookID);
 
 // Query to search for books by a partial or exact match of the book ID
 $sql = "SELECT 
-            book_copies.ID, book_copies.copy_ID, book_copies.B_title, book_copies.status, 
+            book_copies.book_id, book_copies.copy_ID, book_copies.B_title, book_copies.status, 
             book_copies.callNumber, book_copies.circulationType, book_copies.dateAcquired, 
             book_copies.description1, book_copies.description2, book_copies.description3,
             book.B_title AS book_title, book.author, book.ISBN, book.publisher, book.Pdate
         FROM book_copies
         LEFT JOIN book ON book_copies.B_title = book.B_title
-        WHERE book_copies.ID LIKE ?";
+        WHERE book_copies.book_id LIKE ?";
 
 // Prepare the SQL statement to prevent SQL injection
 $stmt = $conn->prepare($sql);
@@ -30,7 +30,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Sanitize output for safety
-        $bookID = htmlspecialchars($row['ID']);
+        $bookID = htmlspecialchars($row['book_id']);
         $bookTitle = htmlspecialchars($row['book_title']);
         $author = htmlspecialchars($row['author']);
         $status = htmlspecialchars($row['status']);

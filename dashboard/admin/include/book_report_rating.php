@@ -69,49 +69,55 @@
     <!-- Chart.js Scripts -->
 <script>
     // Rating Data for Bar Chart
-    const ratingLabels = ['0', '1', '2', '3', '4', '5'];
-    const ratingData = <?php echo json_encode(array_values($ratingCounts)); ?>;
-    const bookTitles = <?php echo json_encode($booksByRating); ?>;
+    // Rating Data for Bar Chart
+const ratingLabels = ['0', '1', '2', '3', '4', '5'];
+const ratingData = <?php echo json_encode(array_values($ratingCounts)); ?>;
+const bookTitles = <?php echo json_encode($booksByRating); ?>;
 
-    // Initialize the Chart.js Bar Chart
-    const ctx = document.getElementById('ratingsChart').getContext('2d');
-    const ratingsChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ratingLabels,
-            datasets: [{
-                label: 'Number of Books',
-                data: ratingData,
-                backgroundColor: '#4CAF50',
-                borderColor: '#388E3C',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        // Display the book titles and count on hover
-                        afterLabel: function(tooltipItem) {
-                            const rating = tooltipItem.label;
-                            const titles = bookTitles[rating];
-                            return 'Books: ' + titles.join(', ');
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Book Count'
+// Initialize the Chart.js Bar Chart
+const ctx = document.getElementById('ratingsChart').getContext('2d');
+const ratingsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ratingLabels,
+        datasets: [{
+            label: 'Number of Books',
+            data: ratingData,
+            backgroundColor: '#4CAF50',
+            borderColor: '#388E3C',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    // Display the book titles and count on hover
+                    afterLabel: function(tooltipItem) {
+                        const rating = tooltipItem.label;
+                        const titles = bookTitles[rating];
+                        return titles ? 'Books: ' + titles.join(', ') : 'No books available';
                     }
                 }
             }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Book Count'
+                },
+                ticks: {
+                    stepSize: 5, // Increment y-axis labels by 5
+                    precision: 0 // Ensure no decimal values
+                }
+            }
         }
-    });
+    }
+});
+
 </script>
 </body>
 </html>

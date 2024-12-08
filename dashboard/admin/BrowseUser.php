@@ -13,26 +13,25 @@ include '../config.php';
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
-
-    <!-- Header at the Top -->
-    <?php include 'include/header.php'; ?>
-
     <!-- Main Content Area with Sidebar and BrowseBook Section -->
-    <main class="flex ">
+    <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow ">
+        <!-- Header at the Top -->
+        <?php include 'include/header.php'; ?>
 
-        <!-- BrowseBook Content and Footer Section -->
-        <div class="flex-grow">
+      <div class="container mx-auto px-4 py-6 ">
+
             <!-- BrowseBook Content -->
             <?php include 'include/TableOfUser.php'; ?>
 
-            <!-- Footer at the Bottom -->
-            <footer class="bg-blue-600 text-white p-4 mt-auto">
-                <?php include 'include/footer.php'; ?>
-            </footer>
-        </div>
+            </div>
+      <!-- Footer at the Bottom -->
+         <footer class="bg-blue-600 text-white mt-auto">
+            <?php include 'include/footer.php'; ?>
+        </footer>
     </main>
-
 </body>
 </html>

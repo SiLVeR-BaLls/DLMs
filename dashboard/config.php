@@ -96,7 +96,7 @@ if (!$userID) {
 // Combined query with JOINs
 $combinedQuery = "
     SELECT 
-        contact.email1, contact.email2, contact.con1, contact.con2,
+        contact.email1, contact.con1, 
         address.municipality, address.barangay, address.province, address.DOB,
         users_info.Fname, users_info.Sname, users_info.IDno, users_info.Mname, users_info.Ename, users_info.gender, users_info.photo,
         user_details.college, user_details.course, user_details.yrLVL, user_details.A_LVL, user_details.status

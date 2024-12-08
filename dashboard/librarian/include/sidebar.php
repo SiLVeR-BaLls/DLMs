@@ -23,7 +23,7 @@
                         <li><a href="BorrowDisplay.php" class="block py-2 px-4 hover:bg-blue-700">Borrowed</a></li>
                         <li><a href="Catalog.php" class="block py-2 px-4 hover:bg-blue-700">Catalog</a></li>
                         <li><a href="ReturnBook.php" class="block py-2 px-4 hover:bg-blue-700">Return</a></li>
-                        <li><a href="Report.php" class="block py-2 px-4 hover:bg-blue-700">Report</a></li>
+                        <li><a href=Report_return.php" class="block py-2 px-4 hover:bg-blue-700">Report</a></li>
                     </ul>
                 </li>
 

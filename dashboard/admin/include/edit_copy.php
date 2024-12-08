@@ -78,63 +78,73 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <?php if (!empty($copy_data)): ?>
             <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-    <table class="table-auto w-full border-collapse border border-gray-300">
-        <tbody>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Title</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="B_title" name="B_title" value="<?php echo htmlspecialchars($copy_data['B_title']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Copy ID</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="copy_ID" name="copy_ID" value="<?php echo htmlspecialchars($copy_data['copy_ID']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Call Number</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="callNumber" name="callNumber" value="<?php echo htmlspecialchars($copy_data['callNumber']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Status</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="status" name="status" value="<?php echo htmlspecialchars($copy_data['status']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Vendor</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="vendor" name="vendor" value="<?php echo htmlspecialchars($copy_data['vendor']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Funding Source</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="fundingSource" name="fundingSource" value="<?php echo htmlspecialchars($copy_data['fundingSource']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Sublocation</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="Sublocation" name="Sublocation" value="<?php echo htmlspecialchars($copy_data['Sublocation']); ?>" required>
-                </td>
-            </tr>
-            <tr>
-                <td class="border border-gray-300 px-4 py-2 font-semibold">Rating</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="rating" name="rating" value="<?php echo htmlspecialchars($copy_data['rating']); ?>" required>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="flex items-center justify-between mt-4">
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
-    </div>
-</form>
-
+                <table class="table-auto w-full border-collapse border border-gray-300">
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Title</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="B_title" name="B_title" value="<?php echo htmlspecialchars($copy_data['B_title']); ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Copy ID</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="copy_ID" name="copy_ID" value="<?php echo htmlspecialchars($copy_data['copy_ID']); ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Call Number</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="callNumber" name="callNumber" value="<?php echo htmlspecialchars($copy_data['callNumber']); ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Status</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="status" name="status" required>
+                                    <option value="Available" <?php echo $copy_data['status'] == 'Available' ? 'selected' : ''; ?>>Available</option>
+                                    <option value="Borrowed" <?php echo $copy_data['status'] == 'Borrowed' ? 'selected' : ''; ?>>Borrowed</option>
+                                    <option value="Weeding" <?php echo $copy_data['status'] == 'Weeding' ? 'selected' : ''; ?>>Weeding</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Vendor</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="vendor" name="vendor" value="<?php echo htmlspecialchars($copy_data['vendor']); ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Funding Source</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="fundingSource" name="fundingSource" value="<?php echo htmlspecialchars($copy_data['fundingSource']); ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Sublocation</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="Sublocation" name="Sublocation" value="<?php echo htmlspecialchars($copy_data['Sublocation']); ?>" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 font-semibold">Rating</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" id="rating" name="rating" required>
+                                    <option value="0" <?php echo $copy_data['rating'] == '0' ? 'selected' : ''; ?>>0</option>
+                                    <option value="1" <?php echo $copy_data['rating'] == '1' ? 'selected' : ''; ?>>1</option>
+                                    <option value="2" <?php echo $copy_data['rating'] == '2' ? 'selected' : ''; ?>>2</option>
+                                    <option value="3" <?php echo $copy_data['rating'] == '3' ? 'selected' : ''; ?>>3</option>
+                                    <option value="4" <?php echo $copy_data['rating'] == '4' ? 'selected' : ''; ?>>4</option>
+                                    <option value="5" <?php echo $copy_data['rating'] == '5' ? 'selected' : ''; ?>>5</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="flex items-center justify-between mt-4">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Changes</button>
+                </div>
+            </form>
         <?php endif; ?>
     </div>
 </body>

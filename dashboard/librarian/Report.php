@@ -34,7 +34,7 @@ include '../config.php';
     
     <!-- Button to Return Book Report -->
     <div id="returnedSection" class="w-auto">
-        <a href="report.php">
+        <a href=Report_return.php">
             <button class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition text-sm">
                 Returned Reports
             </button>

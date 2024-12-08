@@ -1,6 +1,5 @@
-
     <!-- Sticky Sidebar -->
-    <aside class="w-64 bg-blue-600 text-white sticky top-0 flex flex-col h-screen">
+    <aside class="bg-blue-600 text-white sticky top-0 z-1000 flex flex-col w-1/6 max-h-screen">
     <div class="p-4 font-bold text-lg border-b border-blue-600">
             Admin Panel
         </div>
@@ -35,7 +34,7 @@
                     <ul class="hidden group-hover:block bg-blue-500 ml-4 mt-1 space-y-1">
                         <li><a href="BrowseUser.php" class="block py-2 px-4 hover:bg-blue-700">Browse Users</a></li>
                         <li><a href="pending.php" class="block py-2 px-4 hover:bg-blue-700">Pending User</a></li>
-                        <li><a href="Promote.php" class="block py-2 px-4 hover:bg-blue-700">Promote User</a></li>
+                        <li><a href="Assign.php" class="block py-2 px-4 hover:bg-blue-700">Assign User</a></li>
                     </ul>
                 </li>
 

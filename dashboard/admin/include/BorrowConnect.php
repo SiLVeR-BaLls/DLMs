@@ -83,20 +83,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Proceed with the book borrowing process
         foreach ($bookIDs as $bookID) {
             // Check if the book is available
-            $bookCheck = $conn->prepare("SELECT * FROM book_copies WHERE ID = ? AND status = 'available'");
-            $bookCheck->bind_param("i", $bookID);
+            $bookCheck = $conn->prepare("SELECT * FROM book_copies WHERE book_id = ? AND status = 'available'");
+            $bookCheck->bind_param("s", $bookID);
             $bookCheck->execute();
             $bookCheck->store_result();
 
             if ($bookCheck->num_rows > 0) {
                 // Insert the borrowing record with borrow date and due date
-                $stmt = $conn->prepare("INSERT INTO borrow_book (IDno, ID, borrow_date, due_date) VALUES (?, ?, NOW(), ?)");
-                $stmt->bind_param("sis", $IDno, $bookID, $dueDate);
+                $stmt = $conn->prepare("INSERT INTO borrow_book (IDno, book_id, borrow_date, due_date) VALUES (?, ?, NOW(), ?)");
+                $stmt->bind_param("sss", $IDno, $bookID, $dueDate);
                 $stmt->execute();
 
                 // Update the book status to 'borrowed'
-                $updateBook = $conn->prepare("UPDATE book_copies SET status = 'borrowed' WHERE ID = ?");
-                $updateBook->bind_param("i", $bookID);
+                $updateBook = $conn->prepare("UPDATE book_copies SET status = 'borrowed' WHERE book_id = ?");
+                $updateBook->bind_param("s", $bookID);
                 $updateBook->execute();
 
                 $stmt->close();

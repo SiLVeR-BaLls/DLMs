@@ -33,9 +33,18 @@ include '../config.php';
     <!-- Navbar -->
     <div class="w-full h-16 flex sticky top-0 justify-evenly gap-4 p-2 bg-blue-600"> <!-- Full width navbar with centered buttons -->
         
+        <!-- Button to Statistical Book Report -->
+        <div id="returnedSection" class="w-auto">
+        <a href="Report.php">
+            <button class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition text-sm">
+                Statistical Reports
+            </button>
+        </a>
+    </div>
+    
         <!-- Button to Return Book Report -->
         <div id="returnedSection" class="w-auto">
-            <a href="report.php">
+            <a href="Report_return.php">
                 <button class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition text-sm">
                     Returned Reports
                 </button>
@@ -59,6 +68,15 @@ include '../config.php';
                 </button>
             </a>
         </div>
+
+        <!-- Button to Count Book Report -->
+     <div id="borrowedSection" class="w-auto">
+        <a href="Report_book_count.php">
+            <button class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition text-sm">
+                Count Reports
+            </button>
+        </a>
+    </div>
     </div>
 
     <!-- Include Book Report Rating -->

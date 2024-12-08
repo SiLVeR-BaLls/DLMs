@@ -98,8 +98,7 @@ $query = $conn->query($attendanceQuery);
 
             <!-- QR Code Form -->
             <div class="w-full md:w-1/6 p-4">
-                <button id="openSidebarButton" class="bg-blue-500 text-white py-2 px-4 m-4 rounded-lg">Toggle
-                    Table</button>
+                <button id="openSidebarButton" class="bg-blue-500 text-white py-2 px-4 m-4 rounded-lg">Entered</button>
                 <form id="qrForm" action="insert.php" method="post" class="bg-white p-6 rounded-lg shadow-lg">
                     <label for="studentID" class="text-lg text-gray-600">ENTER ID:</label>
                     <input type="text" name="studentID" id="text" placeholder="Enter ID"

@@ -1,5 +1,31 @@
 <?php
-include '../config.php';
+    include '../config.php'; // Database connection
+
+    // Fetch pending users from the database
+    function getPendingUsers() {
+        global $conn;
+        $query = "
+            SELECT u.IDno, u.Fname, u.Sname, l.U_type 
+            FROM users_info u 
+            JOIN user_log l ON u.IDno = l.IDno 
+            WHERE l.status = 'pending'
+        ";
+        $result = $conn->query($query);
+        
+        $users = [];
+        if ($result->num_rows > 0) {
+            while ($user = $result->fetch_assoc()) {
+                $users[] = $user;
+            }
+        }
+        return $users;
+    }
+
+    // Handle AJAX requests to get updated pending users (for dynamic updates)
+    if (isset($_GET['action']) && $_GET['action'] === 'fetch_pending_users') {
+        echo json_encode(getPendingUsers());
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -15,78 +41,41 @@ include '../config.php';
 </head>
 
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
-
-    <!-- Header at the Top -->
-    <?php include 'include/header.php'; ?>
-
     <!-- Main Content Area with Sidebar and BrowseBook Section -->
     <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow ">
+        <!-- Header at the Top -->
+        <?php include 'include/header.php'; ?>
 
-        <!-- BrowseBook Content and Footer Section -->
-        <div class="flex-grow">
-            <!-- Popup Notification -->
-            <?php if (!empty($message)): ?>
-                <div id="popupAlert" class="px-4 py-2 mb-4 text-white rounded-lg <?php echo $type === 'success' ? 'bg-green-500' : 'bg-red-500'; ?>">
-                    <?php echo htmlspecialchars($message); ?>
-                    <button class="ml-2 text-sm" onclick="closePopup()">x</button>
-                </div>
-            <?php endif; ?>
-            <div class="container mx-auto px-4 py-6 ">
+      <div class="container mx-auto px-4 py-6 ">
 
-            <h2 class="text-3xl font-semibold mb-6">Pending Users</h2>
-            <div class="mb-6 px-4 flex justify-between items-center overflow-x-auto">
+                <h2 class="text-3xl font-semibold mb-6">Pending Users</h2>
+                <div class="mb-6 px-4 flex justify-between items-center overflow-x-auto">
 
-                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                    <thead class="bg-gray-100 border-b">
-                        <tr>
-                            <th class="py-3 px-4 text-center text-gray-700 font-medium">ID No</th>
-                            <th class="py-3 px-4 text-left text-gray-700 font-medium">First Name</th>
-                            <th class="py-3 px-4 text-left text-gray-700 font-medium">Last Name</th>
-                            <th class="py-3 px-4 text-left text-gray-700 font-medium">Role</th>
-                            <th class="py-3 px-4 text-center text-gray-700 font-medium">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // Fetch pending users
-                        $pendingUsersQuery = "
-                            SELECT u.IDno, u.Fname, u.Sname, l.U_type 
-                            FROM users_info u 
-                            JOIN user_log l ON u.IDno = l.IDno 
-                            WHERE l.status = 'pending'
-                        ";
-                        $pendingUsersResult = $conn->query($pendingUsersQuery);
-
-                        if ($pendingUsersResult->num_rows > 0):
-                            while ($user = $pendingUsersResult->fetch_assoc()): ?>
-                                <tr class="border-b hover:bg-gray-50">
-                                    <td class="py-3 px-4 text-center"><?php echo htmlspecialchars($user['IDno']); ?></td>
-                                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['Fname']); ?></td>
-                                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['Sname']); ?></td>
-                                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['U_type']); ?></td>
-                                    <td class="py-3 px-4 text-center space-x-2">
-                                        <button class="px-3 py-1 text-sm text-white bg-green-500 hover:bg-green-600 rounded approve-button" data-id="<?php echo $user['IDno']; ?>">Approve</button>
-                                        <button class="px-3 py-1 text-sm text-white bg-red-500 hover:bg-red-600 rounded reject-button" data-id="<?php echo $user['IDno']; ?>">Reject</button>
-                                    </td>
-                                </tr>
-                            <?php endwhile;
-                        else: ?>
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                        <thead class="bg-gray-100 border-b">
                             <tr>
-                                <td colspan="5" class="py-4 text-center text-gray-600">No pending users.</td>
+                                <th class="py-3 px-4 text-center text-gray-700 font-medium">ID No</th>
+                                <th class="py-3 px-4 text-left text-gray-700 font-medium">First Name</th>
+                                <th class="py-3 px-4 text-left text-gray-700 font-medium">Last Name</th>
+                                <th class="py-3 px-4 text-left text-gray-700 font-medium">Role</th>
+                                <th class="py-3 px-4 text-center text-gray-700 font-medium">Actions</th>
                             </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody id="pendingUsersTable">
+                            <!-- Table rows will be injected here via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Footer at the Bottom -->
-            <footer class="bg-blue-600 text-white p-4 mt-auto">
-                <?php include 'include/footer.php'; ?>
-            </footer>
-        </div>
+             <!-- Footer at the Bottom -->
+             <footer class="bg-blue-600 text-white mt-auto">
+            <?php include 'include/footer.php'; ?>
+        </footer>
     </main>
 
     <!-- Approval Popup -->
@@ -116,21 +105,59 @@ include '../config.php';
     <script>
         let selectedUserId = null;
 
-        // Open Approval Popup
-        document.querySelectorAll('.approve-button').forEach(button => {
-            button.addEventListener('click', function (event) {
-                selectedUserId = this.getAttribute('data-id');
-                document.getElementById('approvePopup').classList.remove('hidden');
-            });
-        });
+        // Function to fetch and update the pending users table
+        function updatePendingUsers() {
+            fetch('?action=fetch_pending_users')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('pendingUsersTable');
+                    tableBody.innerHTML = '';  // Clear the current table
 
-        // Open Rejection Popup
-        document.querySelectorAll('.reject-button').forEach(button => {
-            button.addEventListener('click', function (event) {
-                selectedUserId = this.getAttribute('data-id');
-                document.getElementById('rejectPopup').classList.remove('hidden');
+                    if (data.length > 0) {
+                        data.forEach(user => {
+                            const row = document.createElement('tr');
+                            row.classList.add('border-b', 'hover:bg-gray-50');
+                            row.innerHTML = `
+                                <td class="py-3 px-4 text-center">${user.IDno}</td>
+                                <td class="py-3 px-4">${user.Fname}</td>
+                                <td class="py-3 px-4">${user.Sname}</td>
+                                <td class="py-3 px-4">${user.U_type}</td>
+                                <td class="py-3 px-4 text-center space-x-2">
+                                    <button class="px-3 py-1 text-sm text-white bg-green-500 hover:bg-green-600 rounded approve-button" data-id="${user.IDno}">Approve</button>
+                                    <button class="px-3 py-1 text-sm text-white bg-red-500 hover:bg-red-600 rounded reject-button" data-id="${user.IDno}">Reject</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+
+                        // Reattach event listeners to the newly added buttons
+                        attachButtonListeners();
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td colspan="5" class="py-4 text-center text-gray-600">No pending users.</td>`;
+                        tableBody.appendChild(row);
+                    }
+                });
+        }
+
+        // Function to attach click event listeners to the approve and reject buttons
+        function attachButtonListeners() {
+            // Open Approval Popup
+            document.querySelectorAll('.approve-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    selectedUserId = this.getAttribute('data-id');
+                    document.getElementById('approvePopup').classList.remove('hidden');
+                });
             });
-        });
+
+            // Open Rejection Popup
+            document.querySelectorAll('.reject-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    selectedUserId = this.getAttribute('data-id');
+                    document.getElementById('rejectPopup').classList.remove('hidden');
+                });
+            });
+        }
 
         // Close Popup (Cancel)
         document.getElementById('approveCancel').addEventListener('click', function () {
@@ -149,6 +176,22 @@ include '../config.php';
         document.getElementById('rejectConfirm').addEventListener('click', function () {
             window.location.href = `include/reject_user.php?id=${selectedUserId}`;
         });
+
+
+        // Close Popup if clicked outside
+    window.addEventListener('click', function (event) {
+        const approvePopup = document.getElementById('approvePopup');
+        const rejectPopup = document.getElementById('rejectPopup');
+        if (event.target === approvePopup || event.target === rejectPopup) {
+            approvePopup.classList.add('hidden');
+            rejectPopup.classList.add('hidden');
+        }
+    });
+        // Initially load pending users
+        updatePendingUsers();
+
+        // Auto-update the pending users every 5 seconds
+        setInterval(updatePendingUsers, 5000);
     </script>
 </body>
 

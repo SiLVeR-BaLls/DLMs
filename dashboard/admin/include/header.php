@@ -1,9 +1,9 @@
 
-<div class="flex items-center justify-between bg-gray-200 p-4 shadow-md">
+<div class="flex sticky top-0 bg-white shadow-md z-10 items-center justify-between bg-gray-200 w-full h-[3rem] shadow-md">
     <!-- Left side: Logo and Title -->
     <div class="flex items-center">
         <a href="#">
-            <img src="../../Registration/pic/logo wu.png" alt="Logo" class="h-12 w-12 mr-4">
+            <img src="../../Registration/pic/logo wu.png" alt="Logo" class="w-12 m-4">
         </a>
         <strong class="text-lg font-semibold text-gray-800">
             Digital Library Management System
@@ -11,7 +11,7 @@
     </div>
     
     <!-- Right side: User's First Name -->
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center space-x-4 m-4">
         <?php if ($userData): ?>
             <span class="text-sm text-gray-700 font-medium">Hello, 
                 <strong class="text-gray-900"><?php echo htmlspecialchars($userData['Fname']); ?></strong>

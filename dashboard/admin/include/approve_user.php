@@ -2,8 +2,6 @@
 
 <?php
 include '../../config.php';
-include '../include/admin_connect.php';
-
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;

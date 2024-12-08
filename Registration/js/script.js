@@ -212,7 +212,6 @@ window.onload = displayErrorMessage;
 
 
 
-
 const nextBtn = document.getElementById('nextBtn');
 const prevBtn = document.getElementById('prevBtn');
 const submitBtn = document.getElementById('submitBtn');
@@ -220,12 +219,36 @@ const formSteps = document.querySelectorAll('.form-step');
 let currentStep = 0;
 
 nextBtn.addEventListener('click', () => {
-    if (currentStep < formSteps.length - 1) {
-        formSteps[currentStep].classList.remove('form-step-active');
+    const currentFormStep = formSteps[currentStep];
+    const requiredFields = currentFormStep.querySelectorAll('[required]');
+    let isValid = true;
+
+    // Clear any previous error message
+    const errorMessageContainer = document.getElementById('error-message');
+    errorMessageContainer.style.display = 'none'; // Hide error message initially
+    errorMessageContainer.textContent = '';
+
+    // Loop through each required field and check if it's empty
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            isValid = false;
+            field.classList.add('invalid'); // Highlight the empty field
+        } else {
+            field.classList.remove('invalid'); // Remove highlight if the field is filled
+        }
+    });
+
+    if (!isValid) {
+        // Show error message if fields are empty
+        errorMessageContainer.textContent = 'Please fill in all required fields before proceeding.';
+        errorMessageContainer.style.display = 'block'; // Display error message
+    } else {
+        // If valid, proceed to the next step
+        currentFormStep.classList.remove('form-step-active');
         currentStep++;
         formSteps[currentStep].classList.add('form-step-active');
+        updateButtons();
     }
-    updateButtons();
 });
 
 prevBtn.addEventListener('click', () => {
@@ -234,13 +257,6 @@ prevBtn.addEventListener('click', () => {
         currentStep--;
         formSteps[currentStep].classList.add('form-step-active');
     }
-    updateButtons();
-});
-
-document.getElementById('resetBtn').addEventListener('click', () => {
-    currentStep = 0;
-    formSteps.forEach(step => step.classList.remove('form-step-active'));
-    formSteps[0].classList.add('form-step-active');
     updateButtons();
 });
 
