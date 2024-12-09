@@ -1,216 +1,216 @@
 <?php
-include '../../config.php';
+    include '../config.php';
 
-// Initialize message variables
-$message = "";
-$message_type = "";
+    // Initialize message variables
+    $message = "";
+    $message_type = "";
 
-// Get the book title from the query string
-$title = $_GET['title'] ?? '';
+    // Get the book title from the query string
+    $title = $_GET['title'] ?? '';
 
-if ( $title) {
-    
-    // Fetch book
-    $sql = "SELECT * FROM book WHERE B_title = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s",  $title);
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
+    if ( $title) {
         
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-        } else {
-            $message = "No book found with that ID.";
-            $message_type = "error";
-        }
-    }
-    $stmt->close();
-
-    // Fetch alternatetitle
-    $sql = "SELECT * FROM alternatetitle WHERE B_title = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s",  $title);
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            $alternatetitle = $result->fetch_assoc();
-        }
-    }
-    $stmt->close();
-
-    // Fetch book
-    $sql = "SELECT * FROM book WHERE B_title = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s",  $title);
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            $book = $result->fetch_assoc();
-        }
-    }
-    $stmt->close();
-
-    // Fetch resource
-    $sql = "SELECT * FROM resource WHERE B_title = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s",  $title);
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            $resource = $result->fetch_assoc();
-        }
-    }
-    $stmt->close();
-
-        // Fetch series
-        $sql = "SELECT * FROM series WHERE B_title = ?";
+        // Fetch book
+        $sql = "SELECT * FROM book WHERE B_title = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s",  $title);
         if ($stmt->execute()) {
             $result = $stmt->get_result();
+            
             if ($result->num_rows > 0) {
-                $series = $result->fetch_assoc();
+                $user = $result->fetch_assoc();
+            } else {
+                $message = "No book found with that ID.";
+                $message_type = "error";
             }
         }
         $stmt->close();
 
-    // Fetch subject
-        $sql = "SELECT * FROM subject WHERE B_title = ?";
+        // Fetch alternatetitle
+        $sql = "SELECT * FROM alternatetitle WHERE B_title = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s",  $title);
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             if ($result->num_rows > 0) {
-                $subject = $result->fetch_assoc();
+                $alternatetitle = $result->fetch_assoc();
             }
         }
-    $stmt->close();
+        $stmt->close();
 
-} else {
-    $message = "No book title provided.";
-    $message_type = "error";
-}
-
-// Handle form submission for updating book details
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-    // Process file upload
-    $photoPath = $book['photo']; // Default to existing photo
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
-
-
-
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
-        $fileType = mime_content_type($_FILES['photo']['tmp_name']);
-        $fileSize = $_FILES['photo']['size'];
-
-        if (!in_array($fileType, $allowedTypes) || $fileSize > 2 * 1024 * 1024) { // 2 MB limit
-            $message = "Invalid image format or file too large.";
-            $message_type = "error";
-        } else {
-            $uploadDir = '../../../pic/Book/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-
-            // Delete existing photo if present
-            if (!empty($book['photo'])) {
-                unlink($uploadDir . $book['photo']);
-            }
-
-            // Handle new file upload
-            $fileName = uniqid() . '_' . basename($_FILES['photo']['name']);
-            if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $fileName)) {
-                $photoPath = $fileName;
-            } else {
-                $message = "Failed to upload photo.";
-                $message_type = "error";
+        // Fetch book
+        $sql = "SELECT * FROM book WHERE B_title = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s",  $title);
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                $book = $result->fetch_assoc();
             }
         }
-    }
+        $stmt->close();
 
-  // Update book information if no errors occurred
-  if (empty($message)) {
-    // Update book table
-    $sql = "UPDATE book SET subtitle=?, author=?, edition=?, LCCN=?, ISBN=?, ISSN=?, MT=?, ST=?, place=?, publisher=?, Pdate=?, copyright=?, extent=?, Odetail=?, size=?, photo=? WHERE B_title=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssssssssssss", $_POST['subtitle'], $_POST['author'], $_POST['edition'], $_POST['LCCN'], $_POST['ISBN'], $_POST['ISSN'], $_POST['MT'], $_POST['ST'], $_POST['place'], $_POST['publisher'], $_POST['Pdate'], $_POST['copyright'], $_POST['extent'], $_POST['Odetail'], $_POST['size'], $photoPath, $title);
-    if (!$stmt->execute()) {
-        $message = "Error updating book: " . $stmt->error;
-        $message_type = "error";
-    }
-    $stmt->close();
-
-    // Update alternatetitle table
-    $sql = "UPDATE alternatetitle SET UTitle=?, VForm=?, SUTitle=? WHERE B_title=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $_POST['UTitle'], $_POST['VForm'], $_POST['SUTitle'], $title);
-    if (!$stmt->execute()) {
-        $message = "Error updating alternatetitle: " . $stmt->error;
-        $message_type = "error";
-    }
-    $stmt->close();
-
-    // Update resources table
-    $sql = "UPDATE resource SET url=?, Description=? WHERE B_title=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $_POST['url'], $_POST['Description'], $title);
-    if (!$stmt->execute()) {
-        $message = "Error updating resources: " . $stmt->error;
-        $message_type = "error";
-    }
-    $stmt->close();
-
-    // Update series table
-    $sql = "UPDATE series SET volume=?, IL=?, lexille=?, F_and_P=? WHERE B_title=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $_POST['volume'], $_POST['IL'], $_POST['lexille'], $_POST['F_and_P'], $title);
-    if (!$stmt->execute()) {
-        $message = "Error updating series: " . $stmt->error;
-        $message_type = "error";
-    }
-    $stmt->close();
-
-    // Update subject table
-    $sql = "UPDATE subject SET Sub_Head=?, Sub_Head_input=?, Sub_Body_1=?, Sub_input_1=?, Sub_Body_2=?, Sub_input_2=?, Sub_Body_3=?, Sub_input_3=? WHERE B_title=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssss", $_POST['Sub_Head'], $_POST['Sub_Head_input'], $_POST['Sub_Body_1'], $_POST['Sub_input_1'], $_POST['Sub_Body_2'], $_POST['Sub_input_2'], $_POST['Sub_Body_3'], $_POST['Sub_input_3'], $title);
-    if (!$stmt->execute()) {
-        $message = "Error updating subject: " . $stmt->error;
-        $message_type = "error";
-    }
-    $stmt->close();
-    
-    // Redirect after a successful update
-    header("Location: ../ViewBook.php?message=success&title=" . urlencode($title));
-    exit();
-}
-}
-
-
-// Handle book deletion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-    // Get the photo filename before deleting the book record
-    $photoToDelete = $book['photo'] ?? '';
-
-    $deleteSql = "DELETE FROM Book WHERE B_title = ?";
-    $deleteStmt = $conn->prepare($deleteSql);
-    $deleteStmt->bind_param("s", $title);
-
-    if ($deleteStmt->execute()) {
-        // Check if the photo exists and delete it from the directory
-        if ($photoToDelete && file_exists("../../../pic/Book/" . $photoToDelete)) {
-            unlink("../../../pic/Book/" . $photoToDelete);
+        // Fetch resource
+        $sql = "SELECT * FROM resource WHERE B_title = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s",  $title);
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                $resource = $result->fetch_assoc();
+            }
         }
+        $stmt->close();
 
-        // Redirect to index page after deletion
-        header("Location: ../index.php?message=deleted&title=" . urlencode($title));
-        exit();
+            // Fetch series
+            $sql = "SELECT * FROM series WHERE B_title = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s",  $title);
+            if ($stmt->execute()) {
+                $result = $stmt->get_result();
+                if ($result->num_rows > 0) {
+                    $series = $result->fetch_assoc();
+                }
+            }
+            $stmt->close();
+
+        // Fetch subject
+            $sql = "SELECT * FROM subject WHERE B_title = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s",  $title);
+            if ($stmt->execute()) {
+                $result = $stmt->get_result();
+                if ($result->num_rows > 0) {
+                    $subject = $result->fetch_assoc();
+                }
+            }
+        $stmt->close();
+
     } else {
-        $message = "Error deleting book: " . $deleteStmt->error;
+        $message = "No book title provided.";
         $message_type = "error";
     }
-    $deleteStmt->close();
-}
+
+    // Handle form submission for updating book details
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+        // Process file upload
+        $photoPath = $book['photo']; // Default to existing photo
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
+
+
+
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
+            $fileType = mime_content_type($_FILES['photo']['tmp_name']);
+            $fileSize = $_FILES['photo']['size'];
+
+            if (!in_array($fileType, $allowedTypes) || $fileSize > 2 * 1024 * 1024) { // 2 MB limit
+                $message = "Invalid image format or file too large.";
+                $message_type = "error";
+            } else {
+                $uploadDir = '../../pic/Book/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                // Delete existing photo if present
+                if (!empty($book['photo'])) {
+                    unlink($uploadDir . $book['photo']);
+                }
+
+                // Handle new file upload
+                $fileName = uniqid() . '_' . basename($_FILES['photo']['name']);
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $fileName)) {
+                    $photoPath = $fileName;
+                } else {
+                    $message = "Failed to upload photo.";
+                    $message_type = "error";
+                }
+            }
+        }
+
+    // Update book information if no errors occurred
+    if (empty($message)) {
+        // Update book table
+        $sql = "UPDATE book SET subtitle=?, author=?, edition=?, LCCN=?, ISBN=?, ISSN=?, MT=?, ST=?, place=?, publisher=?, Pdate=?, copyright=?, extent=?, Odetail=?, size=?, photo=? WHERE B_title=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssssssssssssss", $_POST['subtitle'], $_POST['author'], $_POST['edition'], $_POST['LCCN'], $_POST['ISBN'], $_POST['ISSN'], $_POST['MT'], $_POST['ST'], $_POST['place'], $_POST['publisher'], $_POST['Pdate'], $_POST['copyright'], $_POST['extent'], $_POST['Odetail'], $_POST['size'], $photoPath, $title);
+        if (!$stmt->execute()) {
+            $message = "Error updating book: " . $stmt->error;
+            $message_type = "error";
+        }
+        $stmt->close();
+
+        // Update alternatetitle table
+        $sql = "UPDATE alternatetitle SET UTitle=?, VForm=?, SUTitle=? WHERE B_title=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $_POST['UTitle'], $_POST['VForm'], $_POST['SUTitle'], $title);
+        if (!$stmt->execute()) {
+            $message = "Error updating alternatetitle: " . $stmt->error;
+            $message_type = "error";
+        }
+        $stmt->close();
+
+        // Update resources table
+        $sql = "UPDATE resource SET url=?, Description=? WHERE B_title=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $_POST['url'], $_POST['Description'], $title);
+        if (!$stmt->execute()) {
+            $message = "Error updating resources: " . $stmt->error;
+            $message_type = "error";
+        }
+        $stmt->close();
+
+        // Update series table
+        $sql = "UPDATE series SET volume=?, IL=?, lexille=?, F_and_P=? WHERE B_title=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssss", $_POST['volume'], $_POST['IL'], $_POST['lexille'], $_POST['F_and_P'], $title);
+        if (!$stmt->execute()) {
+            $message = "Error updating series: " . $stmt->error;
+            $message_type = "error";
+        }
+        $stmt->close();
+
+        // Update subject table
+        $sql = "UPDATE subject SET Sub_Head=?, Sub_Head_input=?, Sub_Body_1=?, Sub_input_1=?, Sub_Body_2=?, Sub_input_2=?, Sub_Body_3=?, Sub_input_3=? WHERE B_title=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssssss", $_POST['Sub_Head'], $_POST['Sub_Head_input'], $_POST['Sub_Body_1'], $_POST['Sub_input_1'], $_POST['Sub_Body_2'], $_POST['Sub_input_2'], $_POST['Sub_Body_3'], $_POST['Sub_input_3'], $title);
+        if (!$stmt->execute()) {
+            $message = "Error updating subject: " . $stmt->error;
+            $message_type = "error";
+        }
+        $stmt->close();
+        
+        // Redirect after a successful update
+        header("Location: ViewBook.php?message=success&title=" . urlencode($title));
+        exit();
+    }
+    }
+
+
+    // Handle book deletion
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+        // Get the photo filename before deleting the book record
+        $photoToDelete = $book['photo'] ?? '';
+
+        $deleteSql = "DELETE FROM Book WHERE B_title = ?";
+        $deleteStmt = $conn->prepare($deleteSql);
+        $deleteStmt->bind_param("s", $title);
+
+        if ($deleteStmt->execute()) {
+            // Check if the photo exists and delete it from the directory
+            if ($photoToDelete && file_exists("../../pic/Book/" . $photoToDelete)) {
+                unlink("../../pic/Book/" . $photoToDelete);
+            }
+
+            // Redirect to index page after deletion
+            header("Location: index.php?message=deleted&title=" . urlencode($title));
+            exit();
+        } else {
+            $message = "Error deleting book: " . $deleteStmt->error;
+            $message_type = "error";
+        }
+        $deleteStmt->close();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -219,6 +219,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Book</title>
+        <!-- Tailwind CSS CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .body_contain {
@@ -235,17 +238,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
     </style>
 </head>
-<body>
-    <div class="body_contain">
+<body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
+    <!-- Main Content Area with Sidebar and BrowseBook Section -->
+    <main class="flex flex-grow">
+        <!-- Sidebar Section -->
+        <?php include 'include/sidebar.php'; ?>
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow ">
+        <!-- Header at the Top -->
+        <?php include 'include/header.php'; ?>
+
+      <div class="container mx-auto px-4 py-6 ">
+
+<!-- Breadcrumb Section -->
+<div class="text-sm text-gray-600 mb-4">
+    <a href="index.php" class="hover:text-blue-800 hover:underline">Home</a> &rarr;
+    <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="hover:text-blue-800 hover:underline">
+        <?php echo htmlspecialchars($book['B_title']); ?>
+    </a> &rarr;
+    <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>" class="hover:text-blue-800 hover:underline">Edit Copy</a>
+</div>
+
         <?php if ($message): ?>
             <div class="alert alert-<?php echo htmlspecialchars($message_type); ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
+                    <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="hover:text-blue-800 hover:underline">&larr; Back</a>
+
+<div class="text-center"> 
 
         <?php if (isset($book)): ?>
-            <h4 class="book-title">Editing: <?php echo htmlspecialchars($book['B_title']); ?></h4>
-            <button onclick="history.back();" class="btn btn-secondary mb-3">Back to Browse</button>
+            <h2 class="text-3xl font-semibold mt-4">
+                    <?php echo htmlspecialchars($book['B_title']); ?>
+            </h2>
+            <div class="book-title">Editing:</div>
+            </div>
             <form method="POST" enctype="multipart/form-data" class="book-card">
               
 
@@ -253,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <div class="form-group">
                 <label for="photo" >Upload Photo:</label>
                 <?php if ($book['photo']): ?>
-                    <img src="../../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="book Photo" class="img-thumbnail" style="max-width: 200px; margin-top: 10px;">
+                    <img src="../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="book Photo" class="img-thumbnail" style="max-width: 200px; margin-top: 10px;">
                 <?php endif; ?>
                 <input type="file" id="photo" class="form-control" name="photo" accept="image/*">
             </div>
@@ -427,6 +455,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         <?php endif; ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+          <!-- Footer at the Bottom -->
+          <footer class="bg-blue-600 text-white mt-auto">
+            <?php include 'include/footer.php'; ?>
+        </footer>
+    </main>
 </body>
 
 <script>

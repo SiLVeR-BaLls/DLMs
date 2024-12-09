@@ -55,46 +55,49 @@
             </ul>
         </nav>
     </aside>
-
-    <!-- Modal for confirmation -->
-    <div id="myModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg text-center">
-            <h2 class="text-xl font-semibold mb-2">Confirm Log Out?</h2>
-            <p class="mb-4">Are you sure to leave the page?</p>
-            <div class="flex justify-around">
-                <button id="confirmBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-500
-
-">Confirm</button>
-                <button id="cancelBtn" class="bg-blue-300 px-4 py-2 rounded hover:bg-blue-500
-">Cancel</button>
-            </div>
+<!-- Modal for confirmation -->
+<div id="myModal" class="hidden fixed z-20 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded shadow-lg text-center">
+        <h2 class="text-xl font-semibold mb-2">Confirm Log Out?</h2>
+        <p class="mb-4">Are you sure you want to leave the page?</p>
+        <div class="flex justify-around">
+            <button id="confirmBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Confirm</button>
+            <button id="cancelBtn" class="bg-blue-300 px-4 py-2 rounded hover:bg-blue-500">Cancel</button>
         </div>
     </div>
+</div>
 
-    <!-- JavaScript for modal and toggles -->
-    <script>
-        // Modal functionality
-        const modal = document.getElementById("myModal");
-        const logoutBtn = document.getElementById("logoutBtn");
-        const confirmBtn = document.getElementById("confirmBtn");
-        const cancelBtn = document.getElementById("cancelBtn");
+<!-- JavaScript for modal and toggles -->
+<script>
+    // Modal functionality
+    const modal = document.getElementById("myModal");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
 
-        logoutBtn.addEventListener("click", function(event) {
-            event.preventDefault();
-            modal.classList.remove("hidden");
-        });
-        confirmBtn.addEventListener("click", function() {
+    // Show the modal when clicking the logout button
+    logoutBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        modal.classList.remove("hidden");
+    });
+
+    // Confirm logout
+    confirmBtn.addEventListener("click", function() {
+        modal.classList.add("hidden");
+        window.location.href = "../logout.php"; // Redirect to logout page
+    });
+
+    // Cancel logout and close modal
+    cancelBtn.addEventListener("click", function() {
+        modal.classList.add("hidden");
+    });
+
+    // Close the modal if clicking outside the modal content
+    window.addEventListener("click", function(event) {
+        if (event.target == modal) {
             modal.classList.add("hidden");
-            window.location.href = "../logout.php";
-        });
-        cancelBtn.addEventListener("click", function() {
-            modal.classList.add("hidden");
-        });
-        window.addEventListener("click", function(event) {
-            if (event.target == modal) {
-                modal.classList.add("hidden");
-            }
-        });
-    </script>
+        }
+    });
+</script>
 
 

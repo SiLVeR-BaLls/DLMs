@@ -1,31 +1,31 @@
 <?php
-include '../config.php';
+  include '../config.php';
 
-// Initialize message variables
-$message = "";
-$message_type = "";
+  // Initialize message variables
+  $message = "";
+  $message_type = "";
 
-// Get the book title from the URL (filtering by title)
-$book_title = isset($_GET['title']) ? $_GET['title'] : '';
+  // Get the book title from the URL (filtering by title)
+  $book_title = isset($_GET['title']) ? $_GET['title'] : '';
 
-// Use prepared statements to fetch filtered book copies
-$sql = "SELECT * FROM book_copies";
-if (!empty($book_title)) {
-    $sql .= " WHERE B_title = ?";
-}
-$stmt = $conn->prepare($sql);
+  // Use prepared statements to fetch filtered book copies
+  $sql = "SELECT * FROM book_copies";
+  if (!empty($book_title)) {
+      $sql .= " WHERE B_title = ?";
+  }
+  $stmt = $conn->prepare($sql);
 
-if (!empty($book_title)) {
-    $stmt->bind_param("s", $book_title);
-}
+  if (!empty($book_title)) {
+      $stmt->bind_param("s", $book_title);
+  }
 
-$stmt->execute();
-$result = $stmt->get_result();
+  $stmt->execute();
+  $result = $stmt->get_result();
 
-if (!$result) {
-    $message = "Error retrieving books: " . $conn->error;
-    $message_type = "error";
-}
+  if (!$result) {
+      $message = "Error retrieving books: " . $conn->error;
+      $message_type = "error";
+  }
 ?>
 
 <!DOCTYPE html>
@@ -48,9 +48,7 @@ if (!$result) {
         <!-- Header at the Top -->
         <?php include 'include/header.php'; ?>
 
-    <!-- BrowseBook Content and Footer Section -->
-    <div class="flex-grow">
-      <div class="container mx-auto p-4 pt-6">
+      <div class="container mx-auto px-4 py-6 ">
         <h2 class="text-2xl font-semibold mb-4">Book List</h2>
         <a href="ViewBook.php?title=<?php echo urlencode($book_title); ?>"
           class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mb-3">List</a>
@@ -129,7 +127,6 @@ if (!$result) {
         </table>
       </div>
       <!-- Footer at the Bottom -->
-         <!-- Footer at the Bottom -->
          <footer class="bg-blue-600 text-white mt-auto">
             <?php include 'include/footer.php'; ?>
         </footer>

@@ -1,110 +1,110 @@
 <!-- ViewBook.php -->
 <?php
-include '../config.php';
+    include '../config.php';
 
-// Initialize message variables
-$message = "";
-$message_type = "";
+    // Initialize message variables
+    $message = "";
+    $message_type = "";
 
-// Define the target directory for photos
-$targetDir = '../../pic/Book/';
+    // Define the target directory for photos
+    $targetDir = '../../pic/Book/';
 
-// Get the book title from the query string
-$title = $_GET['title'] ?? '';
+    // Get the book title from the query string
+    $title = $_GET['title'] ?? '';
 
-if ($title) {
-    // Fetch the book details
-    $sql = "SELECT * FROM Book WHERE B_title = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $title);
-    
-    if ($stmt->execute()) {
-        $result = $stmt->get_result();
+    if ($title) {
+        // Fetch the book details
+        $sql = "SELECT * FROM Book WHERE B_title = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $title);
         
-        if ($result->num_rows === 0) {
-            $message = "No book found with that title.";
-            $message_type = "error";
-        } else {
-            $book = $result->fetch_assoc();
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
             
-            // Handle photo upload
-            if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-                // Validate image format
-                $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-                $file_type = mime_content_type($_FILES['photo']['tmp_name']);
+            if ($result->num_rows === 0) {
+                $message = "No book found with that title.";
+                $message_type = "error";
+            } else {
+                $book = $result->fetch_assoc();
+                
+                // Handle photo upload
+                if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+                    // Validate image format
+                    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+                    $file_type = mime_content_type($_FILES['photo']['tmp_name']);
 
-                if (!in_array($file_type, $allowed_types)) {
-                    echo "<script>alert('Invalid image format. The image format should be JPG, PNG, or GIF.');</script>";
-                    echo '<script>window.history.back();</script>';
-                    exit;
-                }
+                    if (!in_array($file_type, $allowed_types)) {
+                        echo "<script>alert('Invalid image format. The image format should be JPG, PNG, or GIF.');</script>";
+                        echo '<script>window.history.back();</script>';
+                        exit;
+                    }
 
-                // Fetch the current photo from the database
-                $sql = "SELECT photo FROM Book WHERE B_title = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $title);
-                $stmt->execute();
-                $stmt->bind_result($currentPhoto);
-                $stmt->fetch();
-                $stmt->close();
+                    // Fetch the current photo from the database
+                    $sql = "SELECT photo FROM Book WHERE B_title = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("s", $title);
+                    $stmt->execute();
+                    $stmt->bind_result($currentPhoto);
+                    $stmt->fetch();
+                    $stmt->close();
 
-                // Delete the current photo from the server if it exists
-                if ($currentPhoto) {
-                    $current_photo_path = $targetDir . $currentPhoto;
-                    if (file_exists($current_photo_path)) {
-                        unlink($current_photo_path); // Delete the current photo
+                    // Delete the current photo from the server if it exists
+                    if ($currentPhoto) {
+                        $current_photo_path = $targetDir . $currentPhoto;
+                        if (file_exists($current_photo_path)) {
+                            unlink($current_photo_path); // Delete the current photo
+                        }
+                    }
+
+                    // Check if the uploads directory exists; if not, create it
+                    if (!is_dir($targetDir)) {
+                        mkdir($targetDir, 0755, true); // Create directory with appropriate permissions
+                    }
+
+                    // Set the photo name and ensure it is unique
+                    $photo_name = pathinfo($_FILES['photo']['name'], PATHINFO_FILENAME);
+                    $photo_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                    $photo = $photo_name . "_" . time() . "." . $photo_extension; // Append timestamp to avoid collision
+                    $targetFilePath = $targetDir . $photo;
+
+                    // Move the uploaded file to the specified directory
+                    if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
+                        // Update the database with the new photo path
+                        $updateSql = "UPDATE Book SET photo = ? WHERE B_title = ?";
+                        $updateStmt = $conn->prepare($updateSql);
+                        $updateStmt->bind_param("ss", $photo, $title);
+                        $updateStmt->execute();
+                        $updateStmt->close();
+                    } else {
+                        $message = "Error uploading photo.";
+                        $message_type = "error";
                     }
                 }
 
-                // Check if the uploads directory exists; if not, create it
-                if (!is_dir($targetDir)) {
-                    mkdir($targetDir, 0755, true); // Create directory with appropriate permissions
+                // Fetch related data using a helper function
+                function fetch_related_data($conn, $query, $title) {
+                    $stmt = $conn->prepare($query);
+                    $stmt->bind_param("s", $title);
+                    $stmt->execute();
+                    return $stmt->get_result();
                 }
 
-                // Set the photo name and ensure it is unique
-                $photo_name = pathinfo($_FILES['photo']['name'], PATHINFO_FILENAME);
-                $photo_extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-                $photo = $photo_name . "_" . time() . "." . $photo_extension; // Append timestamp to avoid collision
-                $targetFilePath = $targetDir . $photo;
-
-                // Move the uploaded file to the specified directory
-                if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
-                    // Update the database with the new photo path
-                    $updateSql = "UPDATE Book SET photo = ? WHERE B_title = ?";
-                    $updateStmt = $conn->prepare($updateSql);
-                    $updateStmt->bind_param("ss", $photo, $title);
-                    $updateStmt->execute();
-                    $updateStmt->close();
-                } else {
-                    $message = "Error uploading photo.";
-                    $message_type = "error";
-                }
+                // Fetch related data
+                $coAuthorsResult = fetch_related_data($conn, "SELECT * FROM CoAuthor WHERE B_title = ?", $title);
+                $seriesResult = fetch_related_data($conn, "SELECT * FROM Series WHERE B_title = ?", $title);
+                $subjectsResult = fetch_related_data($conn, "SELECT * FROM Subject WHERE B_title = ?", $title);
+                $resourcesResult = fetch_related_data($conn, "SELECT * FROM Resource WHERE B_title = ?", $title);
+                $alternateTitlesResult = fetch_related_data($conn, "SELECT * FROM AlternateTitle WHERE B_title = ?", $title);
             }
-
-            // Fetch related data using a helper function
-            function fetch_related_data($conn, $query, $title) {
-                $stmt = $conn->prepare($query);
-                $stmt->bind_param("s", $title);
-                $stmt->execute();
-                return $stmt->get_result();
-            }
-
-            // Fetch related data
-            $coAuthorsResult = fetch_related_data($conn, "SELECT * FROM CoAuthor WHERE B_title = ?", $title);
-            $seriesResult = fetch_related_data($conn, "SELECT * FROM Series WHERE B_title = ?", $title);
-            $subjectsResult = fetch_related_data($conn, "SELECT * FROM Subject WHERE B_title = ?", $title);
-            $resourcesResult = fetch_related_data($conn, "SELECT * FROM Resource WHERE B_title = ?", $title);
-            $alternateTitlesResult = fetch_related_data($conn, "SELECT * FROM AlternateTitle WHERE B_title = ?", $title);
+        } else {
+            $message = "Error executing query: " . $stmt->error;
+            $message_type = "error";
         }
+        $stmt->close();
     } else {
-        $message = "Error executing query: " . $stmt->error;
+        $message = "No book title provided.";
         $message_type = "error";
     }
-    $stmt->close();
-} else {
-    $message = "No book title provided.";
-    $message_type = "error";
-}
 ?>
 
 
@@ -120,18 +120,28 @@ if ($title) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-900 flex flex-col min-h-screen">
 
-    <!-- Header at the Top -->
-    <?php include 'include/header.php'; ?>
-
-    <!-- Main Content Area with Sidebar and Book Details -->
-    <main class="flex-grow flex">
+<body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
+    <!-- Main Content Area with Sidebar and BrowseBook Section -->
+    <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow ">
+        <!-- Header at the Top -->
+        <?php include 'include/header.php'; ?>
 
-        <!-- Main Content Section -->
-        <div class="flex-grow p-6">
+      <div class="container mx-auto px-4 py-6 ">
+
+<!-- Breadcrumb Section -->
+<div class="text-sm text-gray-600 mb-4">
+    <a href="index.php" class="hover:text-blue-800 hover:underline">Home</a> &rarr;
+    <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="hover:text-blue-800 hover:underline">
+        <?php echo htmlspecialchars($book['B_title']); ?>
+    </a>
+</div>
+
+
             <!-- Message -->
             <?php if ($message): ?>
             <div class="mb-4 p-4 text-center rounded-lg <?php echo $message_type === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'; ?>">
@@ -140,7 +150,7 @@ if ($title) {
             <?php endif; ?>
 
             <?php if (isset($book)): ?>
-                <a href="index.php" class="inline-block text-blue-500 hover:underline mb-4">&larr; Back</a>
+                <a href="index.php" class=""hover:text-blue-800 hover:underline">&larr; Back</a>
             <div class="text-center mb-6">
                 
                 <?php if ($book['photo']): ?>
@@ -153,9 +163,9 @@ if ($title) {
                 </h2>
 
                 <div class="flex justify-center gap-4 mt-4">
-                    <a href="include/edit_book.php?title=<?php echo urlencode($book['B_title']); ?>"
+                    <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>"
                         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
-                    <a href="include/AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>"
+                    <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>"
                         class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Copy</a>
                     <a href="BookList.php?title=<?php echo urlencode($book['B_title']); ?>"
                         class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">List</a>
@@ -279,12 +289,12 @@ if ($title) {
                 </div>
             </div>
             <?php endif; ?>
-
-            <!-- Footer -->
-            <footer class="bg-blue-600 text-white p-4 mt-8">
-                <?php include 'include/footer.php'; ?>
-            </footer>
         </div>
+
+          <!-- Footer at the Bottom -->
+          <footer class="bg-blue-600 text-white mt-auto">
+            <?php include 'include/footer.php'; ?>
+        </footer>
     </main>
 </body>
 

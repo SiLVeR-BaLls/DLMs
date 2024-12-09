@@ -1,67 +1,67 @@
 <?php
-// Include config and start session to access the logged-in user's ID
-include '../config.php';
+    // Include config and start session to access the logged-in user's ID
+    include '../config.php';
 
-// Default number of records per page
-$defaultRecordsPerPage = 5;
+    // Default number of records per page
+    $defaultRecordsPerPage = 5;
 
-// Get the number of records per page from the user input or use the default
-$recordsPerPage = isset($_GET['books_per_page']) ? (int)$_GET['books_per_page'] : $defaultRecordsPerPage;
+    // Get the number of records per page from the user input or use the default
+    $recordsPerPage = isset($_GET['books_per_page']) ? (int)$_GET['books_per_page'] : $defaultRecordsPerPage;
 
-// Ensure the recordsPerPage is within a reasonable range
-$recordsPerPage = max(1, min($recordsPerPage, 50)); // Between 1 and 50
+    // Ensure the recordsPerPage is within a reasonable range
+    $recordsPerPage = max(1, min($recordsPerPage, 50)); // Between 1 and 50
 
-// Get the current page number for borrowed books
-$borrowPage = isset($_GET['borrow_page']) ? (int)$_GET['borrow_page'] : 1;
-$borrowPage = max(1, $borrowPage); // Ensure the page number is at least 1
+    // Get the current page number for borrowed books
+    $borrowPage = isset($_GET['borrow_page']) ? (int)$_GET['borrow_page'] : 1;
+    $borrowPage = max(1, $borrowPage); // Ensure the page number is at least 1
 
-// Calculate the offset for borrowed books
-$borrowOffset = ($borrowPage - 1) * $recordsPerPage;
+    // Calculate the offset for borrowed books
+    $borrowOffset = ($borrowPage - 1) * $recordsPerPage;
 
-// SQL query to count total borrowed books
-$countBorrowQuery = "SELECT COUNT(*) AS total FROM borrow_book WHERE return_date IS NULL AND IDno = ?";
-if ($stmt = $conn->prepare($countBorrowQuery)) {
-    $stmt->bind_param("s", $userID);
-    $stmt->execute();
-    $stmt->bind_result($totalBorrowRecords);
-    $stmt->fetch();
-    $stmt->close();
-}
-$totalBorrowPages = ceil($totalBorrowRecords / $recordsPerPage);
+    // SQL query to count total borrowed books
+    $countBorrowQuery = "SELECT COUNT(*) AS total FROM borrow_book WHERE return_date IS NULL AND IDno = ?";
+    if ($stmt = $conn->prepare($countBorrowQuery)) {
+        $stmt->bind_param("s", $userID);
+        $stmt->execute();
+        $stmt->bind_result($totalBorrowRecords);
+        $stmt->fetch();
+        $stmt->close();
+    }
+    $totalBorrowPages = ceil($totalBorrowRecords / $recordsPerPage);
 
-// Ensure the current page does not exceed the total pages for borrowed books
-$borrowPage = min($borrowPage, $totalBorrowPages);
+    // Ensure the current page does not exceed the total pages for borrowed books
+    $borrowPage = min($borrowPage, $totalBorrowPages);
 
-// Query to fetch borrowed books for the logged-in user
-$query = "
-    SELECT 
-        bb.borrow_id,
-        bb.borrow_date,
-        bc.B_title,
-        b.author,
-        DATEDIFF(CURDATE(), bb.borrow_date) AS days_borrowed
-    FROM borrow_book AS bb
-    JOIN book_copies AS bc ON bb.ID = bc.ID
-    JOIN book AS b ON bc.B_title = b.B_title
-    WHERE bb.return_date IS NULL AND bb.IDno = ?
-    LIMIT ?, ?
-";
+    // Query to fetch borrowed books for the logged-in user
+    $query = "
+        SELECT 
+            bb.borrow_id,
+            bb.borrow_date,
+            bc.B_title,
+            b.author,
+            DATEDIFF(CURDATE(), bb.borrow_date) AS days_borrowed
+        FROM borrow_book AS bb
+        JOIN book_copies AS bc ON bb.ID = bc.ID
+        JOIN book AS b ON bc.B_title = b.B_title
+        WHERE bb.return_date IS NULL AND bb.IDno = ?
+        LIMIT ?, ?
+    ";
 
-// Prepare and execute the query
-if ($stmt = $conn->prepare($query)) {
-    $stmt->bind_param("sii", $userID, $borrowOffset, $recordsPerPage);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Prepare and execute the query
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param("sii", $userID, $borrowOffset, $recordsPerPage);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
 
-    // Close the prepared statement
-    $stmt->close();
-} else {
-    echo "<div class='mt-4 text-center text-red-500'>Error retrieving data.</div>";
-}
+        // Close the prepared statement
+        $stmt->close();
+    } else {
+        echo "<div class='mt-4 text-center text-red-500'>Error retrieving data.</div>";
+    }
 
-// Close the database connection
-$conn->close();
+    // Close the database connection
+    $conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,17 +74,17 @@ $conn->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
-
-    <!-- Header Section -->
-    <?php include 'include/header.php'; ?>
-
-    <!-- Main Content Section with Sidebar -->
+    <!-- Main Content Area with Sidebar and BrowseBook Section -->
     <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow ">
+        <!-- Header at the Top -->
+        <?php include 'include/header.php'; ?>
+        <div class="container mx-auto px-4 py-6 ">
+        <h2 class="text-2xl font-semibold text-gray-800">Your Borrowed Books</h2>
 
-        <!-- Borrowed Books Content -->
-        <div class="flex-grow p-8">
 <?php
 
     // Check if any rows were returned
@@ -119,7 +119,7 @@ $conn->close();
     }
 ?>
 <!-- Pagination -->
-<div class="mt-4 text-center">
+<div class="mt-4  text-center">
     <form method="GET" class="inline-block mb-2">
         <select name="books_per_page" id="books_per_page" onchange="this.form.submit()" class="border rounded px-2 py-1">
             <option value="5" <?= ($recordsPerPage == 5 ? "selected" : "") ?>>5</option>
@@ -143,12 +143,12 @@ $conn->close();
     }
     ?>
 </div>
-</main>
+</div>
 
-<!-- Footer Section -->
-<footer class="bg-blue-600 text-white p-4 mt-auto">
-    <?php include 'include/footer.php'; ?>
-</footer>
-
+             <!-- Footer at the Bottom -->
+             <footer class="bg-blue-600 text-white mt-auto">
+            <?php include 'include/footer.php'; ?>
+        </footer>
+    </main>
 </body>
 </html>

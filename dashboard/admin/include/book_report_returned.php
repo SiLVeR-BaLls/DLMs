@@ -7,6 +7,17 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<style>
+    .chart-container {
+        width: 100%;
+        margin: 0 auto; /* Center the container */
+        height: 40%; /* Reduced height */
+    }
+    .ratingsChart {
+        width: 100%;
+        height: 40%; /* Reduced canvas height */
+    }
+</style>
 <body class="bg-gray-100">
 
     <!-- Main Content -->

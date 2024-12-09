@@ -1,5 +1,5 @@
 
-<div class="flex sticky top-0 bg-white shadow-md z-10 items-center justify-between bg-gray-200 w-full h-[3rem] shadow-md">
+<div class="flex sticky top-0 shadow-md z-10 items-center justify-between bg-gray-200 w-full h-[3rem] shadow-md">
     <!-- Left side: Logo and Title -->
     <div class="flex items-center">
         <a href="#">

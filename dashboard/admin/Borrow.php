@@ -15,7 +15,7 @@ include '../config.php'; // Include the configuration file for database connecti
 
 </head>
 
-<body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
+<body class="flex flex-col min-h-screen truncate bg-gray-100 text-gray-900">
     <!-- Main Content Area with Sidebar and BrowseBook Section -->
     <main class="flex flex-grow">
         <!-- Sidebar Section -->

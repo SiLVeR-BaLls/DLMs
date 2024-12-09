@@ -1,58 +1,58 @@
 <?php
-// Include config and start session to access the logged-in user's ID
-include '../config.php';
+    // Include config and start session to access the logged-in user's ID
+    include '../config.php';
 
-// Default number of records per page
-$defaultRecordsPerPage = 5;
+    // Default number of records per page
+    $defaultRecordsPerPage = 5;
 
-// Get the number of records per page from the user input or use the default
-$recordsPerPage = isset($_GET['books_per_page']) ? (int)$_GET['books_per_page'] : $defaultRecordsPerPage;
+    // Get the number of records per page from the user input or use the default
+    $recordsPerPage = isset($_GET['books_per_page']) ? (int)$_GET['books_per_page'] : $defaultRecordsPerPage;
 
-// Ensure the recordsPerPage is within a reasonable range
-$recordsPerPage = max(1, min($recordsPerPage, 50)); // Between 1 and 50
+    // Ensure the recordsPerPage is within a reasonable range
+    $recordsPerPage = max(1, min($recordsPerPage, 50)); // Between 1 and 50
 
-// Get the current page number for returned books
-$returnPage = isset($_GET['return_page']) ? (int)$_GET['return_page'] : 1;
-$returnPage = max(1, $returnPage); // Ensure the page number is at least 1
+    // Get the current page number for returned books
+    $returnPage = isset($_GET['return_page']) ? (int)$_GET['return_page'] : 1;
+    $returnPage = max(1, $returnPage); // Ensure the page number is at least 1
 
-// Calculate the offset for returned books
-$returnOffset = ($returnPage - 1) * $recordsPerPage;
+    // Calculate the offset for returned books
+    $returnOffset = ($returnPage - 1) * $recordsPerPage;
 
-// Query to count total returned books
-$countReturnQuery = "SELECT COUNT(*) AS total FROM borrow_book WHERE return_date IS NOT NULL AND IDno = ?";
-if ($stmt = $conn->prepare($countReturnQuery)) {
-    $stmt->bind_param("s", $userID);
-    $stmt->execute();
-    $stmt->bind_result($totalReturnRecords);
-    $stmt->fetch();
-    $stmt->close();
-}
-$totalReturnPages = ceil($totalReturnRecords / $recordsPerPage);
+    // Query to count total returned books
+    $countReturnQuery = "SELECT COUNT(*) AS total FROM borrow_book WHERE return_date IS NOT NULL AND IDno = ?";
+    if ($stmt = $conn->prepare($countReturnQuery)) {
+        $stmt->bind_param("s", $userID);
+        $stmt->execute();
+        $stmt->bind_result($totalReturnRecords);
+        $stmt->fetch();
+        $stmt->close();
+    }
+    $totalReturnPages = ceil($totalReturnRecords / $recordsPerPage);
 
-// Ensure the current page does not exceed the total pages for returned books
-$returnPage = min($returnPage, $totalReturnPages);
+    // Ensure the current page does not exceed the total pages for returned books
+    $returnPage = min($returnPage, $totalReturnPages);
 
-// Returned Books Query
-$returnQuery = "
-    SELECT 
-        bb.borrow_id, 
-        bb.borrow_date, 
-        bc.B_title, 
-        b.author, 
-        DATEDIFF(bb.return_date, bb.borrow_date) AS days_borrowed, 
-        bb.return_date 
-    FROM borrow_book AS bb 
-    JOIN book_copies AS bc ON bb.ID = bc.ID 
-    JOIN book AS b ON bc.B_title = b.B_title 
-    WHERE bb.return_date IS NOT NULL AND bb.IDno = ? 
-    LIMIT ?, ? 
-";
-if ($stmt = $conn->prepare($returnQuery)) {
-    $stmt->bind_param("sii", $userID, $returnOffset, $recordsPerPage);
-    $stmt->execute();
-    $returnResult = $stmt->get_result();
-    $stmt->close();
-}
+    // Returned Books Query
+    $returnQuery = "
+        SELECT 
+            bb.borrow_id, 
+            bb.borrow_date, 
+            bc.B_title, 
+            b.author, 
+            DATEDIFF(bb.return_date, bb.borrow_date) AS days_borrowed, 
+            bb.return_date 
+        FROM borrow_book AS bb 
+        JOIN book_copies AS bc ON bb.ID = bc.ID 
+        JOIN book AS b ON bc.B_title = b.B_title 
+        WHERE bb.return_date IS NOT NULL AND bb.IDno = ? 
+        LIMIT ?, ? 
+    ";
+    if ($stmt = $conn->prepare($returnQuery)) {
+        $stmt->bind_param("sii", $userID, $returnOffset, $recordsPerPage);
+        $stmt->execute();
+        $returnResult = $stmt->get_result();
+        $stmt->close();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -66,22 +66,19 @@ if ($stmt = $conn->prepare($returnQuery)) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
-
-    <!-- Header Section -->
-    <?php include 'include/header.php'; ?>
-
-    <!-- Main Content Section with Sidebar -->
+    <!-- Main Content Area with Sidebar and BrowseBook Section -->
     <main class="flex flex-grow">
         <!-- Sidebar Section -->
         <?php include 'include/sidebar.php'; ?>
+        <!-- BrowseBook Content Section -->
+        <div class="flex-grow ">
+        <!-- Header at the Top -->
+        <?php include 'include/header.php'; ?>
+        <div class="container mx-auto px-4 py-6 ">
 
-        <!-- Borrowed Books Content -->
-        <div class="flex-grow p-8">
-
-            <!-- Returned Books Content -->
             <h2 class="text-2xl font-semibold text-gray-800">Your Returned Books</h2>
+<?php
 
-            <?php
             if ($returnResult && $returnResult->num_rows > 0) {
                 echo "<div class='overflow-x-auto bg-white shadow-md rounded-lg'>";
                 echo "<table class='min-w-full table-auto'>
@@ -137,14 +134,13 @@ if ($stmt = $conn->prepare($returnQuery)) {
                     echo "<a href='?return_page=$totalReturnPages&books_per_page=$recordsPerPage' class='px-3 py-2 bg-gray-200 border rounded mx-1'>»</a>";
                 }
                 ?>
-            </div>
-        </div>
+ </div>
+</div>
+
+             <!-- Footer at the Bottom -->
+             <footer class="bg-blue-600 text-white mt-auto">
+            <?php include 'include/footer.php'; ?>
+        </footer>
     </main>
-
-    <!-- Footer Section -->
-    <footer class="bg-blue-600 text-white p-4 mt-auto">
-        <?php include 'include/footer.php'; ?>
-    </footer>
-
 </body>
 </html>
