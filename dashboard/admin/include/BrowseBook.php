@@ -10,27 +10,40 @@ if ($conn->connect_error) {
     $message_type = "danger"; // Danger type for error messages
 } else {
     // Modify SQL query to fetch book information along with copies data (no pagination)
-    $sql = "SELECT 
-                Book.B_title, 
-                Book.author, 
-                (SELECT GROUP_CONCAT(Co_Name SEPARATOR ', ')
-                 FROM CoAuthor WHERE B_title = Book.B_title) AS coauthors, 
-                Book.LCCN, 
-                Book.ISBN, 
-                Book.ISSN, Book.copyright, 
-                Book.MT, 
-                Book.extent,
-                COUNT(CASE WHEN Book_copies.status = 'Available' THEN 1 END) AS available_count, 
-                COUNT(CASE WHEN Book_copies.status = 'Borrowed' THEN 1 END) AS borrowed_count,
-                COUNT(Book_copies.ID) AS total_count
-            FROM 
-                Book 
-            LEFT JOIN 
-                Book_copies ON Book.B_title = Book_copies.B_title
-            GROUP BY 
-                Book.B_title, Book.author, Book.LCCN, Book.ISBN, Book.ISSN, Book.copyright, Book.MT, Book.extent";
-
-    $result = $conn->query($sql); // Execute the query and get the result
+    $sql ="SELECT 
+    book.book_id, 
+    book.B_title, 
+    book.subtitle, 
+    book.author, 
+    book.LCCN, 
+    book.ISBN, 
+    book.ISSN, 
+    book.copyright, 
+    book.MT, 
+    book.extent,
+    coauthor.Co_Name,
+    COUNT(CASE WHEN book_copies.status = 'Available' THEN 1 END) AS available_count,
+    COUNT(CASE WHEN book_copies.status = 'Borrowed' THEN 1 END) AS borrowed_count,
+    COUNT(book_copies.ID) AS total_count
+FROM 
+    book 
+LEFT JOIN 
+    coauthor ON book.book_id = coauthor.book_id
+LEFT JOIN 
+    book_copies ON book.B_title = book_copies.B_title
+GROUP BY 
+    book.book_id, 
+    book.B_title, 
+    book.subtitle, 
+    book.author, 
+    book.LCCN, 
+    coauthor.Co_Name,
+    book.ISBN, 
+    book.ISSN, 
+    book.copyright, 
+    book.MT, 
+    book.extent";
+$result = $conn->query($sql); // Execute the query and get the result
 }
 ?>
 
@@ -83,7 +96,7 @@ if ($conn->connect_error) {
             <option value="all">All</option>
             <option value="title">Title</option>
             <option value="author">Author</option>
-            <option value="coauthors">Co-authors</option>
+            <option value="coauthor">Co-authors</option>
             <option value="lccn">LCCN</option>
             <option value="isbn">ISBN</option>
             <option value="issn">ISSN</option>
@@ -95,57 +108,73 @@ if ($conn->connect_error) {
 
     <div class="overflow-x-auto bg-white rounded-lg shadow-md">
         <table class="min-w-full table-auto" id="attendanceTable">
-            <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="px-4 py-2">Title</th>
-                    <th class="px-4 py-2">Author</th>
-                    <th class="px-4 py-2">Co-authors</th>
-                    <th class="px-4 py-2">Material Type</th>
-                    <th class="px-4 py-2">Extent</th>
-                    <th class="px-4 py-2">Copies</th>
-                </tr>
-            </thead>
-            <tbody id="bookTableBody">
-                <?php if ($result && $result->num_rows > 0): ?>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                        <tr class="border-y border-solid cursor-pointer hover:bg-gray-200" 
-                                data-title="<?php echo htmlspecialchars($row['B_title']); ?> "
-                                data-author="<?php echo htmlspecialchars($row['author']); ?> "
-                                data-coauthors="<?php echo htmlspecialchars($row['coauthors']); ?> "
-                                data-lccn="<?php echo htmlspecialchars($row['LCCN']); ?> "
-                                data-isbn="<?php echo htmlspecialchars($row['ISBN']); ?> "
-                                data-issn="<?php echo htmlspecialchars($row['ISSN']); ?> "
-                                data-material-type="<?php echo htmlspecialchars($row['MT']); ?> "
-                                data-extent="<?php echo htmlspecialchars($row['extent']); ?> "
-                                data-available-count="<?php echo $row['available_count']; ?> "
-                                data-total-count="<?php echo $row['total_count']; ?> "
-                                data-copyright="<?php echo htmlspecialchars($row['copyright']); ?>"
-                                onclick="window.location.href='ViewBook.php?title=<?php echo urlencode($row['B_title']); ?>';"
-                                onmouseenter="showPopup(event, this)" onmouseleave="hidePopup()">
-                             <td class="px-4 py-2 title"><?php echo htmlspecialchars($row['B_title']); ?></td>
-                            <td class="px-4 py-2 author"><?php echo htmlspecialchars($row['author']); ?></td>
-                            <td class="px-4 py-2 coauthors"><?php echo htmlspecialchars($row['coauthors']); ?></td>
-                            <td class="px-4 py-2 MT"><?php echo htmlspecialchars($row['MT']); ?></td>
-                            <td class="px-4 py-2 extent"><?php echo htmlspecialchars($row['extent']); ?></td>
-                            <td class="px-4 py-2 flex justify-center gap-2">
-                                <?php if ($row['available_count'] > 0): ?>
-                                    <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
-                                        ✔
-                                    </div>
-                                <?php else: ?>
-                                    <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center">
-                                        ✖
-                                    </div>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="9" class="text-center py-4">No books found.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
+           <thead class="bg-gray-800 text-white">
+    <tr>
+        <th class="px-4 py-2">Title</th>
+        <th class="px-4 py-2">Author(s)</th>
+        <th class="px-4 py-2">Coauthor(s)</th>
+        <th class="px-4 py-2">Material Type</th>
+        <th class="px-4 py-2">Extent</th>
+        <th class="px-4 py-2">Copies</th>
+    </tr>
+</thead>
+<tbody id="bookTableBody">
+    <?php if ($result && $result->num_rows > 0): ?>
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <tr class="border-y border-solid cursor-pointer hover:bg-gray-200" 
+                    data-title="<?php echo htmlspecialchars($row['B_title']); ?>"
+                    data-author="<?php echo htmlspecialchars($row['author']); ?>"
+                    data-coauthor="<?php echo htmlspecialchars($row['Co_Name']); ?>"
+                    data-lccn="<?php echo htmlspecialchars($row['LCCN']); ?>"
+                    data-isbn="<?php echo htmlspecialchars($row['ISBN']); ?>"
+                    data-issn="<?php echo htmlspecialchars($row['ISSN']); ?>"
+                    data-material-type="<?php echo htmlspecialchars($row['MT']); ?>"
+                    data-extent="<?php echo htmlspecialchars($row['extent']); ?>"
+                    data-available-count="<?php echo $row['available_count']; ?>"
+                    data-total-count="<?php echo $row['total_count']; ?>"
+                    data-copyright="<?php echo htmlspecialchars($row['copyright']); ?>"
+                    onclick="window.location.href='Viewbook.php?title=<?php echo urlencode($row['B_title']); ?>';"
+                    onmouseenter="showPopup(event, this)" onmouseleave="hidePopup()">
+                <td class="px-4 py-2 title"><?php echo htmlspecialchars($row['B_title']); ?></td>
+                <td class="px-4 py-2 author">
+                    <?php 
+                        // Display the primary author
+                        echo htmlspecialchars($row['author']);
+                    ?>
+                </td>
+                <td class="px-4 py-2 coauthor">
+                    <?php 
+                        // Split Co_Name (coauthor) by comma and display them
+                        if (!empty($row['Co_Name'])) {
+                            $coauthor = explode(',', $row['Co_Name']);
+                            echo implode(', ', array_map('trim', $coauthor));
+                        } else {
+                            echo "No coauthor";
+                        }
+                    ?>
+                </td>
+                <td class="px-4 py-2 MT"><?php echo htmlspecialchars($row['MT']); ?></td>
+                <td class="px-4 py-2 extent"><?php echo htmlspecialchars($row['extent']); ?></td>
+                <td class="px-4 py-2 flex justify-center gap-2">
+                    <?php if ($row['available_count'] > 0): ?>
+                        <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
+                            ✔
+                        </div>
+                    <?php else: ?>
+                        <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center">
+                            ✖
+                        </div>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="9" class="text-center py-4">No books found.</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
+
         </table>
     </div>
 
@@ -179,7 +208,7 @@ $(document).ready(function() {
             // Get the text values of the current row
             const rowTitle = $(this).find('.title').text().toLowerCase();
             const rowAuthor = $(this).find('.author').text().toLowerCase();
-            const rowCoAuthors = $(this).find('.coauthors').text().toLowerCase();
+            const rowbooks = $(this).find('.coauthor').text().toLowerCase();
             const rowLCCN = $(this).find('.lccn').text().toLowerCase();
             const rowISBN = $(this).find('.isbn').text().toLowerCase();
             const rowISSN = $(this).find('.issn').text().toLowerCase();
@@ -194,7 +223,7 @@ $(document).ready(function() {
                 case 'all':
                     matchSearchType = rowTitle.indexOf(searchText) > -1 || 
                                       rowAuthor.indexOf(searchText) > -1 || 
-                                      rowCoAuthors.indexOf(searchText) > -1 || 
+                                      rowbooks.indexOf(searchText) > -1 || 
                                       rowLCCN.indexOf(searchText) > -1 || 
                                       rowISBN.indexOf(searchText) > -1 || 
                                       rowISSN.indexOf(searchText) > -1 || 
@@ -207,8 +236,8 @@ $(document).ready(function() {
                 case 'author':
                     matchSearchType = rowAuthor.indexOf(searchText) > -1;
                     break;
-                case 'coauthors':
-                    matchSearchType = rowCoAuthors.indexOf(searchText) > -1;
+                case 'coauthor':
+                    matchSearchType = rowbooks.indexOf(searchText) > -1;
                     break;
                 case 'lccn':
                     matchSearchType = rowLCCN.indexOf(searchText) > -1;
@@ -249,7 +278,7 @@ function showPopup(event, row) {
         // Retrieve data from row attributes
         var title = row.getAttribute('data-title');
         var author = row.getAttribute('data-author');
-        var coauthors = row.getAttribute('data-coauthors');
+        var coauthor = row.getAttribute('data-coauthor');
         var lccn = row.getAttribute('data-lccn');
         var isbn = row.getAttribute('data-isbn');
         var issn = row.getAttribute('data-issn');
@@ -263,7 +292,7 @@ function showPopup(event, row) {
         popup.innerHTML = `
             <strong>Title:</strong> ${title}<br>
             <strong>Author:</strong> ${author}<br>
-            <strong>Co-authors:</strong> ${coauthors || 'N/A'}<br>
+            <strong>Co-authors:</strong> ${coauthor || 'N/A'}<br>
             <strong>LCCN:</strong> ${lccn || 'N/A'}<br>
             <strong>ISBN:</strong> ${isbn || 'N/A'}<br>
             <strong>ISSN:</strong> ${issn || 'N/A'}<br>

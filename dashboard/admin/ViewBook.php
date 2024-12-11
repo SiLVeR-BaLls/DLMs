@@ -88,13 +88,6 @@
                     $stmt->execute();
                     return $stmt->get_result();
                 }
-
-                // Fetch related data
-                $coAuthorsResult = fetch_related_data($conn, "SELECT * FROM CoAuthor WHERE B_title = ?", $title);
-                $seriesResult = fetch_related_data($conn, "SELECT * FROM Series WHERE B_title = ?", $title);
-                $subjectsResult = fetch_related_data($conn, "SELECT * FROM Subject WHERE B_title = ?", $title);
-                $resourcesResult = fetch_related_data($conn, "SELECT * FROM Resource WHERE B_title = ?", $title);
-                $alternateTitlesResult = fetch_related_data($conn, "SELECT * FROM AlternateTitle WHERE B_title = ?", $title);
             }
         } else {
             $message = "Error executing query: " . $stmt->error;
@@ -105,6 +98,7 @@
         $message = "No book title provided.";
         $message_type = "error";
     }
+
 ?>
 
 
@@ -150,7 +144,7 @@
             <?php endif; ?>
 
             <?php if (isset($book)): ?>
-                <a href="index.php" class=""hover:text-blue-800 hover:underline">&larr; Back</a>
+                <a href="index.php" class="hover:text-blue-800 hover:underline">&larr; Back</a>
             <div class="text-center mb-6">
                 
                 <?php if ($book['photo']): ?>
@@ -208,86 +202,57 @@
 
             <!-- Additional Information -->
             <div class="mt-8">
-                <h3 class="text-2xl font-semibold mb-4">Additional Information</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Co-authors -->
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h4 class="text-lg font-semibold mb-2">Co-authors</h4>
-                        <?php if ($coAuthorsResult->num_rows > 0): ?>
-                        <ul class="list-disc list-inside">
-                            <?php while ($row = $coAuthorsResult->fetch_assoc()): ?>
-                            <li>
-                                <?php echo htmlspecialchars($row['Co_Name']) . " - " . htmlspecialchars($row['Co_Date']) . " (" . htmlspecialchars($row['Co_Role']) . ")"; ?>
-                            </li>
-                            <?php endwhile; ?>
-                        </ul>
-                        <?php else: ?>
-                        <p>No co-authors available.</p>
-                        <?php endif; ?>
-                    </div>
+    <h3 class="text-2xl font-semibold mb-4">Additional Information</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Co-authors -->
+                    
 
-                    <!-- Series -->
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h4 class="text-lg font-semibold mb-2">Series</h4>
-                        <?php if ($seriesResult->num_rows > 0): ?>
-                        <ul class="list-disc list-inside">
-                            <?php while ($row = $seriesResult->fetch_assoc()): ?>
-                            <li>Volume <?php echo htmlspecialchars($row['volume']); ?> - <?php echo htmlspecialchars($row['IL']); ?> (<?php echo htmlspecialchars($row['F_and_P']); ?>)</li>
-                            <?php endwhile; ?>
-                        </ul>
-                        <?php else: ?>
-                        <p>No series information available.</p>
-                        <?php endif; ?>
-                    </div>
+         
 
-                    <!-- Subjects -->
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h4 class="text-lg font-semibold mb-2">Subjects</h4>
-                        <?php if ($subjectsResult->num_rows > 0): ?>
-                        <ul class="list-disc list-inside">
-                            <?php while ($row = $subjectsResult->fetch_assoc()): ?>
-                            <li><?php echo htmlspecialchars($row['Sub_Head']) . ": " . htmlspecialchars($row['Sub_Head_input']); ?></li>
-                            <li><?php echo htmlspecialchars($row['Sub_Body_1']) . ": " . htmlspecialchars($row['Sub_input_1']); ?></li>
-                            <li><?php echo htmlspecialchars($row['Sub_Body_2']) . ": " . htmlspecialchars($row['Sub_input_2']); ?></li>
-                            <li><?php echo htmlspecialchars($row['Sub_Body_3']) . ": " . htmlspecialchars($row['Sub_input_3']); ?></li>
-                            <?php endwhile; ?>
-                        </ul>
-                        <?php else: ?>
-                        <p>No subjects information available.</p>
-                        <?php endif; ?>
-                    </div>
+        <!-- Series -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-lg font-semibold mb-2">Series</h4>
+            <ul class="list-none list-inside">
+                <li>Volume <?php echo htmlspecialchars($book['volume']); ?> - <?php echo htmlspecialchars($book['IL']); ?> (<?php echo htmlspecialchars($book['F_and_P']); ?>)</li>
+            </ul>
+        </div>
 
-                    <!-- Resources -->
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h4 class="text-lg font-semibold mb-2">Resources</h4>
-                        <?php if ($resourcesResult->num_rows > 0): ?>
-                        <ul class="list-disc list-inside">
-                            <?php while ($row = $resourcesResult->fetch_assoc()): ?>
-                            <li><a href="<?php echo htmlspecialchars($row['url']); ?>" class="text-blue-500 underline" target="_blank"><?php echo htmlspecialchars($row['Description']); ?></a></li>
-                            <?php endwhile; ?>
-                        </ul>
-                        <?php else: ?>
-                        <p>No resources available.</p>
-                        <?php endif; ?>
-                    </div>
+        <!-- Subjects -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-lg font-semibold mb-2">Subjects</h4>
+            <ul class="list-none list-inside">
+                <li><?php echo htmlspecialchars($book['Sub_Head']) . ": " . htmlspecialchars($book['Sub_Head_input']); ?></li>
+            </ul>
+        </div>
 
-                    <!-- Alternate Titles -->
-                    <div class="bg-white p-6 rounded-lg shadow">
-                        <h4 class="text-lg font-semibold mb-2">Alternate Titles</h4>
-                        <?php if ($alternateTitlesResult->num_rows > 0): ?>
-                        <ul class="list-disc list-inside">
-                            <?php while ($row = $alternateTitlesResult->fetch_assoc()): ?>
-                            <li><?php echo htmlspecialchars($row['UTitle']); ?></li>
-                            <li><?php echo htmlspecialchars($row['VForm']); ?></li>
-                            <li><?php echo htmlspecialchars($row['SUTitle']); ?></li>
-                            <?php endwhile; ?>
-                        </ul>
-                        <?php else: ?>
-                        <p>No alternate titles available.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
+        <!-- Resources -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-lg font-semibold mb-2">Resources</h4>
+            <ul class="list-none list-inside">
+                <?php if (!empty($book['url']) && !empty($book['Description'])): ?>
+                    <li><a href="<?php echo htmlspecialchars($book['url']); ?>" class="text-blue-500 underline" target="_blank"><?php echo htmlspecialchars($book['Description']); ?></a></li>
+                <?php elseif (!empty($book['url'])): ?>
+                    <li><a href="<?php echo htmlspecialchars($book['url']); ?>" class="text-blue-500 underline" target="_blank">No description available</a></li>
+                <?php elseif (!empty($book['Description'])): ?>
+                    <li><?php echo htmlspecialchars($book['Description']); ?></li>
+                <?php else: ?>
+                    <li>No link or description available.</li>
+                <?php endif; ?>
+            </ul>
+        </div>
+
+        <!-- Alternate Titles -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-lg font-semibold mb-2">Alternate Titles</h4>
+            <ul class="list-none list-inside">
+                <li><?php echo htmlspecialchars($book['UTitle']); ?></li>
+                <li><?php echo htmlspecialchars($book['VForm']); ?></li>
+                <li><?php echo htmlspecialchars($book['SUTitle']); ?></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
             <?php endif; ?>
         </div>
 

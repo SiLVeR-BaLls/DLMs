@@ -15,7 +15,7 @@ if ($conn->connect_error) {
         // Get POST data for Book
         $B_title = $_POST['B_title'] ?? '';
         $subtitle = $_POST['subtitle'] ?? '';
-        $author = $_POST['author'] ?? '';
+        $author = filter_var($_POST['author'] ?? '', FILTER_SANITIZE_STRING);
         $edition = $_POST['edition'] ?? '';
         $LCCN = $_POST['LCCN'] ?? '';
         $ISBN = $_POST['ISBN'] ?? '';
@@ -29,6 +29,12 @@ if ($conn->connect_error) {
         $extent = $_POST['extent'] ?? '';
         $Odetail = $_POST['Odetail'] ?? '';
         $size = $_POST['size'] ?? '';
+        $volume = $_POST['volume'] ?? '';
+        $url = $_POST['url'] ?? '';
+        $Description = $_POST['Description'] ?? '';
+        $UTitle = $_POST['UTitle'] ?? '';
+        $VForm = $_POST['VForm'] ?? '';
+        $SUTitle = $_POST['SUTitle'] ?? '';
 
         // Check for duplicate B_title
         $checkSql = "SELECT COUNT(*) FROM Book WHERE B_title = ?";
@@ -44,8 +50,9 @@ if ($conn->connect_error) {
             $message_type = "error";
         } else {
             // Insert into Book table
-            $sql = "INSERT INTO Book (B_title, subtitle, author, edition, LCCN, ISBN, ISSN, MT, ST, place, publisher, Pdate, copyright, extent, Odetail, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            if (!executeStatement($conn, $sql, "ssssssssssssssss", $B_title, $subtitle, $author, $edition, $LCCN, $ISBN, $ISSN, $MT, $ST, $place, $publisher, $Pdate, $copyright, $extent, $Odetail, $size)) {
+            $sql = "INSERT INTO Book (B_title, UTitle, VForm, SUTitle, url, Description, volume, subtitle, author, edition, LCCN, ISBN, ISSN, MT, ST, place, publisher, Pdate, copyright, extent, Odetail, size) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            if (!executeStatement($conn, $sql, "ssssisssssssssssssssss", $B_title, $UTitle, $VForm, $SUTitle, $url, $Description, $volume, $subtitle, $author, $edition, $LCCN, $ISBN, $ISSN, $MT, $ST, $place, $publisher, $Pdate, $copyright, $extent, $Odetail, $size)) {
                 $message = "Error inserting book: " . $conn->error;
                 $message_type = "error";
             } else {
@@ -55,69 +62,41 @@ if ($conn->connect_error) {
                 // Get the last inserted id
                 $last_id = $conn->insert_id;
 
-                // Prepare additional inserts
-                $series = $_POST['series'] ?? '';
-                $volume = $_POST['volume'] ?? '';
-                $IL = $_POST['IL'] ?? '';
-                $lexille = $_POST['lexille'] ?? '';
-                $F_and_P = $_POST['F_and_P'] ?? '';
-                $comments = $_POST['comments'] ?? '';
-                $url = $_POST['url'] ?? '';
-                $Description = $_POST['Description'] ?? '';
-                $UTitle = $_POST['UTitle'] ?? '';
-                $VForm = $_POST['VForm'] ?? '';
-                $SUTitle = $_POST['SUTitle'] ?? '';
-
-                // Insert Series
-                $sql = "INSERT INTO Series (B_title, title, volume, IL, lexille, F_and_P, comments) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                executeStatement($conn, $sql, "ssissss", $B_title, $series, $volume, $IL, $lexille, $F_and_P, $comments);
-
-                // Insert Resource
-                $sql = "INSERT INTO Resource (B_title, url, Description) VALUES (?, ?, ?)";
-                executeStatement($conn, $sql, "sss", $B_title, $url, $Description);
-
-                // Insert Alternate Title
-                $sql = "INSERT INTO AlternateTitle (B_title, UTitle, VForm, SUTitle) VALUES (?, ?, ?, ?)";
-                executeStatement($conn, $sql, "ssss", $B_title, $UTitle, $VForm, $SUTitle);
-
                 // Insert CoAuthors
-                $coAuthors = $_POST['Co_Name'] ?? [];
-                $coAuthorDates = $_POST['Co_Date'] ?? [];
-                $coAuthorRoles = $_POST['Co_Role'] ?? [];
+                $coAuthors = $_POST['Co_Name'] ?? []; // Array of co-author names
+                $coAuthorDates = $_POST['Co_Date'] ?? []; // Array of co-author dates
+                $coAuthorRoles = $_POST['Co_Role'] ?? []; // Array of co-author roles
 
                 foreach ($coAuthors as $index => $coAuthor) {
-                    $coAuthorDate = $coAuthorDates[$index] ?? '';
-                    $coAuthorRole = $coAuthorRoles[$index] ?? '';
+                    $coAuthorDate = $coAuthorDates[$index] ?? ''; // Ensure proper handling if there's no date
+                    $coAuthorRole = $coAuthorRoles[$index] ?? ''; // Ensure proper handling if there's no role
 
-                    // Prepare statement for co-authors
-                    $stmt = $conn->prepare("INSERT INTO coauthor (B_title, Co_Name, Co_Date, Co_Role) VALUES (?, ?, ?, ?)");
-                    $stmt->bind_param("ssss", $B_title, $coAuthor, $coAuthorDate, $coAuthorRole);
-                    $stmt->execute();
+                    // Prepare the insert statement for each co-author
+                    $stmt = $conn->prepare("INSERT INTO coauthor (book_id, Co_Name, Co_Date, Co_Role) VALUES (?, ?, ?, ?)");
+                    $stmt->bind_param("isss", $last_id, $coAuthor, $coAuthorDate, $coAuthorRole);
+
+                    // Execute the statement and check for errors
+                    if (!$stmt->execute()) {
+                        error_log("Error inserting co-author: " . $stmt->error); // Log errors for debugging
+                    }
                 }
 
-                // Insert Subject using foreach
+                // Insert subjects and comments
                 $subHeads = $_POST['Sub_Head'] ?? [];
                 $subHeadsInputs = $_POST['Sub_Head_input'] ?? [];
-                $subBody1s = $_POST['Sub_Body_1'] ?? [];
-                $subInput1s = $_POST['Sub_input_1'] ?? [];
-                $subBody2s = $_POST['Sub_Body_2'] ?? [];
-                $subInput2s = $_POST['Sub_input_2'] ?? [];
-                $subBody3s = $_POST['Sub_Body_3'] ?? [];
-                $subInput3s = $_POST['Sub_input_3'] ?? [];
+                $comments = $_POST['comment'] ?? []; // Get comment data
 
-                // Iterate over all the subject fields
                 foreach ($subHeads as $index => $subHead) {
                     $subHeadInput = $subHeadsInputs[$index] ?? '';
-                    $subBody1 = $subBody1s[$index] ?? '';
-                    $subInput1 = $subInput1s[$index] ?? '';
-                    $subBody2 = $subBody2s[$index] ?? '';
-                    $subInput2 = $subInput2s[$index] ?? '';
-                    $subBody3 = $subBody3s[$index] ?? '';
-                    $subInput3 = $subInput3s[$index] ?? '';
+                    $commentsArray  = $comments[$index] ?? '';  // Use default empty string if not set
 
-                    // Insert each subject
-                    $sql = "INSERT INTO Subject (B_title, Sub_Head, Sub_Head_input, Sub_Body_1, Sub_input_1, Sub_Body_2, Sub_input_2, Sub_Body_3, Sub_input_3) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    executeStatement($conn, $sql, "sssssssss", $B_title, $subHead, $subHeadInput, $subBody1, $subInput1, $subBody2, $subInput2, $subBody3, $subInput3);
+                    // Insert each subject with comment handling
+                    $sql = "INSERT INTO subject (book_id, Sub_Head, Sub_Head_input, comment) VALUES (?, ?, ?, ?)";
+
+                    // Assuming executeStatement is a custom function to run prepared SQL queries
+                    if (!executeStatement($conn, $sql, "isss", $last_id, $subHead, $subHeadInput, $commentsArray )) {
+                        error_log("Error inserting subject: " . $conn->error); // Log error
+                    }
                 }
             }
         }
@@ -131,10 +110,16 @@ if ($conn->connect_error) {
 function executeStatement($conn, $sql, $types, ...$params) {
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
+        // Log error for debugging
+        error_log("SQL prepare failed: " . $conn->error);
         return false; // Return false if the statement preparation fails
     }
     $stmt->bind_param($types, ...$params);
     $result = $stmt->execute();
+    if (!$result) {
+        // Log error for debugging
+        error_log("Execution failed: " . $stmt->error);
+    }
     $stmt->close();
     return $result;
 }
@@ -143,46 +128,45 @@ function executeStatement($conn, $sql, $types, ...$params) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Processing</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function showAlert(message, type) {
-            if (type === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: message,
-                    didClose: () => {
-                        window.location.href = '../index.php'; // Redirect to the index page
-                    }
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: message,
-                    didClose: () => {
-                        window.history.back(); // Redirect back on error
-                    }
-                });
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Processing</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function showAlert(message, type) {
+      if (type === 'success') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: message,
+          didClose: () => {
+            window.location.href = '../index.php'; // Redirect to the index page
+          }
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          didClose: () => {
+            window.history.back(); // Redirect back on error
+          }
+        });
+      }
+    }
+
+    // Check if there's a message and type
+    <?php if ($message): ?>
+      document.addEventListener('DOMContentLoaded', function () {
+        var fullMessage = "<?php echo addslashes($message); ?>";
+        var messageType = "<?php echo $message_type; ?>";
+
+        showAlert(fullMessage, messageType);
+      });
+    <?php endif; ?>
+  </script>
 </head>
 <body>
-    <script>
-        // Check if there's a message and type
-        <?php if ($message): ?>
-            document.addEventListener('DOMContentLoaded', function() {
-                var fullMessage = "<?php echo addslashes($message); ?>";
-                var messageType = "<?php echo $message_type; ?>";
-
-                showAlert(fullMessage, messageType);
-            });
-        <?php endif; ?>
-    </script>
 </body>
 </html>

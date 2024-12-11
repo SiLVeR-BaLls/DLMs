@@ -12,7 +12,6 @@
           <button onclick="showSection('title-section')" class="text-white hover:text-blue-300">Brief
             Title</button>
           <button onclick="showSection('series/note')" class="text-white hover:text-blue-300">Series/Note</button>
-          <button onclick="showSection('subject')" class="text-white hover:text-blue-300">Subject</button>
           <button onclick="showSection('resources')" class="text-white hover:text-blue-300">Resources</button>
           <button onclick="showSection('added-entrie')" class="text-white hover:text-blue-300">Added
             Entries</button>
@@ -143,72 +142,146 @@
           </div>
         </div>
 
-        <!-- Series Info Section -->
-        <div class="mb-8" id="series/note">
-          <h1 class="text-3xl font-bold text-blue-600 mb-6">Series Info</h1>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label for="volume" class="block text-sm font-medium text-gray-700">Volume</label>
-              <input type="text" id="volume" name="volume" placeholder="Enter volume number"
-                class="w-full px-4 py-2 border rounded-md">
-            </div>
-           
-          </div>
-          <button type="button" onclick="openCommentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-              Add Comment
-          </button>
+ <!-- Series Info Section -->
+  <div class="mb-8 " id="series/note">
+<!-- Series Info Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+  <!-- Left Side: Series Section -->
+  <div class="bg-white p-6 border rounded-md shadow-sm">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6">Series Info</h1>
+    <!-- Volume Input -->
+    <div class="mb-4">
+      <label for="volume" class="block text-sm font-medium text-gray-700">Volume</label>
+      <input type="text" id="volume" name="volume" placeholder="Enter volume number" class="w-full px-4 py-2 border rounded-md">
+    </div>
+
+    <!-- Comment Section -->
+<!-- Comment Section -->
+<div class="mt-6">
+  <h1 class="text-2xl font-semibold mb-4">Add a Comment</h1>
+  
+  <!-- Comment Input Field -->
+  <input id="commentInput" class="w-full px-4 py-2 border rounded-md" name="comment[]" placeholder="Write your comment..." />
+
+  <!-- Button to Add Comment -->
+  <a id="addCommentBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md mt-4 inline-block text-center cursor-pointer">
+    Add Comment
+  </a>
+
+  <!-- Comments List -->
+  <div id="commentsList" class="mt-6">
+    <!-- Comments will appear here -->
+  </div>
+</div>
+
+<script>
+  let commentsArray = [];
+
+  function updateCommentList() {
+    const commentsListDiv = document.getElementById("commentsList");
+    commentsListDiv.innerHTML = ""; // Clear existing comments
+    commentsArray.forEach((comment, index) => {
+      const commentDiv = document.createElement("div");
+      commentDiv.classList.add("comment-item", "mb-2", "p-2", "border", "rounded-md");
+      commentDiv.textContent = comment;
+      
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.classList.add("text-red-500", "ml-4", "cursor-pointer");
+      deleteBtn.onclick = () => {
+        commentsArray.splice(index, 1);
+        updateCommentList(); // Re-render the list
+      };
+
+      commentDiv.appendChild(deleteBtn);
+      commentsListDiv.appendChild(commentDiv);
+    });
+  }
+
+  function addComment() {
+    const commentInput = document.getElementById("commentInput");
+    const newComment = commentInput.value.trim();
+    
+    if (newComment !== "") {
+      commentsArray.push(newComment); // Add comment to the array
+      updateCommentList(); // Update the list
+      commentInput.value = ""; // Clear input field
+    } else {
+      alert("Please write a comment before adding.");
+    }
+  }
+
+  // Event listener for "Add Comment" button
+  document.getElementById("addCommentBtn").addEventListener("click", addComment);
+</script>
+
+  </div>
+
+  
+  <!-- Right Side: Subject Section -->
+  <div class="bg-white p-6 border rounded-md shadow-sm">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6">Subject</h1>
+
+    <div class="subject-item mb-4">
+
+      <!-- Subject Fields in Columns -->
+      <div class="flex flex-col space-y-4">
+        <!-- Subject Heading Select -->
+        <div>
+          <label for="Sub_Head" class="block text-sm text-gray-700">Subject Heading</label>
+          <select name="Sub_Head[]" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="Tropical Heading" selected>Tropical Heading</option>
+            <option value="Personal Heading">Personal Heading</option>
+            <option value="Geographic Heading">Geographic Heading</option>
+            <option value="Local Heading">Local Heading</option>
+          </select>
         </div>
 
-        <!-- Subject Section -->
-        <div class="mb-8" id="subject">
-
-
-          <h1 class="text-2xl font-semibold text-blue-600 mb-4">Subject</h1>
-          <div class="subject-item grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <!-- Subject Heading Select -->
-            <div>
-              <label for="Sub_Head" class="block text-sm text-gray-700">Subject Heading</label>
-              <select name="Sub_Head[]"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                <option value="Tropical Heading" selected>Tropical Heading</option>
-                <option value="Personal Heading">Personal Heading</option>
-                <option value="Geographic Heading">Geographic Heading</option>
-                <option value="Local Heading">Local Heading</option>
-              </select>
-            </div>
-
-            <!-- Subject Details Input -->
-            <div>
-              <label for="Sub_Head_input" class="block text-sm text-gray-700">Subject Heading Details</label>
-              <input type="text" name="Sub_Head_input[]"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md mt-2 focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter subject heading details">
-            </div>
-          </div>
-
-          <!-- Button to Add Subject -->
-          <button type="button" id="addSubject" class="bg-blue-500 text-white py-2 px-4 rounded-md mt-4">Add
-            Subject</button>
-
-          <!-- Container for dynamically added subjects -->
-          <div id="subjectsContainer" class="mt-4"></div>
+        <!-- Subject Heading Details Input -->
+        <div>
+          <label for="Sub_Head_input" class="block text-sm text-gray-700">Subject Heading Details</label>
+          <input type="text" name="Sub_Head_input[]" class="w-full px-3 py-2 border border-gray-300 rounded-md mt-2 focus:ring-2 focus:ring-blue-500" placeholder="Enter subject heading details">
         </div>
+      </div>
 
+      <!-- Button to Add Subject -->
+      <div class="mt-6">
+        <button type="button" id="addSubject" class="bg-blue-500 text-white py-2 px-4 rounded-md ">
+          Add Subject
+        </button>
+      </div>
+    </div>
+
+    <!-- Dynamically Added Subjects -->
+    <div id="subjectsContainer" class="mt-4">
+      <!-- Dynamically added subjects will appear here -->
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<!-- Script to add comment functionality -->
+
+
+<!-- add subject -->
         <script>
-                  // Handle the adding of a subject entry
-                  document.getElementById('addSubject').addEventListener('click', function () {
-                    // Get the values from the form fields
-                    const subHead = document.querySelector('select[name="Sub_Head[]"]').value;
-                    const subHeadInput = document.querySelector('input[name="Sub_Head_input[]"]').value;
+          // Handle the adding of a subject entry
+          document.getElementById('addSubject').addEventListener('click', function () {
+            // Get the values from the form fields
+            const subHead = document.querySelector('select[name="Sub_Head[]"]').value;
+            const subHeadInput = document.querySelector('input[name="Sub_Head_input[]"]').value;
 
-                    // Validate input before adding
-                    if (subHead && subHeadInput) {
-                      // Create a new display element for the subject
-                      const subjectsContainer = document.getElementById('subjectsContainer');
-                      const newSubjectDisplay = document.createElement('div');
-                      newSubjectDisplay.classList.add('subject-entry');
-                      newSubjectDisplay.classList.add('mb-4');
-                      newSubjectDisplay.innerHTML = `
+            // Validate input before adding
+            if (subHead && subHeadInput) {
+              // Create a new display element for the subject
+              const subjectsContainer = document.getElementById('subjectsContainer');
+              const newSubjectDisplay = document.createElement('div');
+              newSubjectDisplay.classList.add('subject-entry');
+              newSubjectDisplay.classList.add('mb-4');
+              newSubjectDisplay.innerHTML = `
               <div class="flex justify-between items-center">
                 <div>
                   <span><strong>Heading:</strong> ${subHead} - ${subHeadInput}</span>
@@ -220,51 +293,51 @@
                 </div>
               </div>
             `;
-                      subjectsContainer.appendChild(newSubjectDisplay);
+              subjectsContainer.appendChild(newSubjectDisplay);
 
-                      // Create hidden input fields for the new subject to submit via the form
-                      const form = document.querySelector('form');
+              // Create hidden input fields for the new subject to submit via the form
+              const form = document.querySelector('form');
 
-                      // Create hidden inputs for the subject data
-                      const hiddenInputs = [
-                        { name: 'Sub_Head[]', value: subHead },
-                        { name: 'Sub_Head_input[]', value: subHeadInput }
-                      ];
+              // Create hidden inputs for the subject data
+              const hiddenInputs = [
+                { name: 'Sub_Head[]', value: subHead },
+                { name: 'Sub_Head_input[]', value: subHeadInput }
+              ];
 
-                      hiddenInputs.forEach(inputData => {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = inputData.name;
-                        input.value = inputData.value;
-                        form.appendChild(input);
-                      });
+              hiddenInputs.forEach(inputData => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = inputData.name;
+                input.value = inputData.value;
+                form.appendChild(input);
+              });
 
-                      // Clear the form inputs for the next entry
-                      document.querySelector('select[name="Sub_Head[]"]').value = '';
-                      document.querySelector('input[name="Sub_Head_input[]"]').value = '';
-                    } else {
-                      alert("Please fill out all fields.");
-                    }
-                  });
+              // Clear the form inputs for the next entry
+              document.querySelector('select[name="Sub_Head[]"]').value = '';
+              document.querySelector('input[name="Sub_Head_input[]"]').value = '';
+            } else {
+              alert("Please fill out all fields.");
+            }
+          });
 
-                  // Handle the removal of a subject entry
-                  document.getElementById('subjectsContainer').addEventListener('click', function (e) {
-                    // Check if the clicked element is a remove button
-                    if (e.target && e.target.classList.contains('removeSubjectBtn')) {
-                      // Remove the subject entry from the DOM
-                      const subjectEntry = e.target.closest('.subject-entry');
-                      subjectEntry.remove();
+          // Handle the removal of a subject entry
+          document.getElementById('subjectsContainer').addEventListener('click', function (e) {
+            // Check if the clicked element is a remove button
+            if (e.target && e.target.classList.contains('removeSubjectBtn')) {
+              // Remove the subject entry from the DOM
+              const subjectEntry = e.target.closest('.subject-entry');
+              subjectEntry.remove();
 
-                      // Optionally, remove corresponding hidden input fields here (if needed)
-                      // const subHead = subjectEntry.querySelector('span').textContent;
-                      // const hiddenInputs = document.querySelectorAll(`input[name='Sub_Head[]']`);
-                      // hiddenInputs.forEach(input => {
-                      //   if (input.value === subHead) {
-                      //     input.remove();
-                      //   }
-                      // });
-                    }
-                  });
+              // Optionally, remove corresponding hidden input fields here (if needed)
+              // const subHead = subjectEntry.querySelector('span').textContent;
+              // const hiddenInputs = document.querySelectorAll(`input[name='Sub_Head[]']`);
+              // hiddenInputs.forEach(input => {
+              //   if (input.value === subHead) {
+              //     input.remove();
+              //   }
+              // });
+            }
+          });
 
         </script>
 
@@ -365,7 +438,8 @@
   </script>
 
   <!-- co_author -->
-  <script>document.getElementById('addCoAuthor').addEventListener('click', function () {
+  <script> 
+    document.getElementById('addCoAuthor').addEventListener('click', function () {
       // Get the form fields
       const coName = document.querySelector('input[name="Co_Name[]"]').value;
       const coDate = document.querySelector('input[name="Co_Date[]"]').value;
@@ -438,4 +512,4 @@
       }
     });
   </script>
-  </body>
+</body>
