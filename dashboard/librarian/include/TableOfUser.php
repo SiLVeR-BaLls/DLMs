@@ -12,16 +12,16 @@
             user_details.course, 
             user_details.college, 
             user_details.yrLVL AS year,
-            user_log.U_type
+            user_log.U_Type
         FROM users_info
         JOIN user_details ON users_info.IDno = user_details.IDno
         JOIN user_log ON users_info.IDno = user_log.IDno
         WHERE user_log.status = 'approved'";
 
-    // Apply U_type filter if selected
-    if (isset($_GET['U_type']) && !empty($_GET['U_type'])) {
-        $U_type = mysqli_real_escape_string($conn, $_GET['U_type']);
-        $usersQuery .= " AND user_log.U_type = '$U_type'";
+    // Apply U_Type filter if selected
+    if (isset($_GET['U_Type']) && !empty($_GET['U_Type'])) {
+        $U_Type = mysqli_real_escape_string($conn, $_GET['U_Type']);
+        $usersQuery .= " AND user_log.U_Type = '$U_Type'";
     }
 
     // Add pagination
@@ -52,7 +52,7 @@
 <div class="container mx-auto px-4 py-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">User Management</h2>
 
-    <!-- U_type Filter Buttons -->
+    <!-- U_Type Filter Buttons -->
     <div class="flex justify-center items-center mb-4">
       <div class="flex space-x-2 w-full sm:w-1/2 lg:w-1/3 justify-center">
         <button id="studentFilter"
@@ -192,7 +192,7 @@
 
     function filterByType(type) {
       const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set('U_type', type);
+      currentUrl.searchParams.set('U_Type', type);
       window.location.href = currentUrl.toString();
     }
 

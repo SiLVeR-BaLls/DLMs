@@ -34,11 +34,11 @@
             </div>
             <div class="text-group">
               <label for="Sname">Surname</label>
-              <input id="Sname" name="Sname" class="box" type="text" placeholder="Surname"required>
+              <input id="Sname" name="Sname" class="box" type="text" placeholder="Surname" required>
             </div>
             <div class="text-group">
               <label for="Mname">Middle Name</label>
-              <input id="Mname" name="Mname" class="box" type="text" placeholder="Middle Name"required>
+              <input id="Mname" name="Mname" class="box" type="text" placeholder="Middle Name" required>
             </div>
           </div>
 
@@ -46,9 +46,9 @@
             <div class="group-box">
               <p class="tile">Basic Information</p>
               <div class="text-group">
-                <label for="gender">Gender</label>
-                <select class="box" name="gender" id="gender">
-                  <option value="" disabled selected>Select Gender</option>
+                <label for="Sex">Sex</label>
+                <select class="box" name="Sex" id="Sex">
+                  <option value="" disabled selected>Select Sex</option>
                   <option value="m">Male</option>
                   <option value="f">Female</option>
                   <option value="o">Other</option>
@@ -87,14 +87,14 @@
             <div class="group-box">
               <p class="tile">Contact</p>
               <div class="text-group">
-                <label for="con1">Contact No. 1</label>
-                <input id="con1" name="con1" class="box" type="text" placeholder="09*********" pattern="^\d{11}$"
+                <label for="contact">Contact No. 1</label>
+                <input id="contact" name="contact" class="box" type="text" placeholder="09*********" pattern="^\d{11}$"
                   title="Please enter a valid 11-digit number">
               </div>
 
               <div class="text-group">
-                <label for="email1">Email 1</label>
-                <input id="email1" name="email1" class="box" type="email" placeholder="sample@gmail.com">
+                <label for="email">Email 1</label>
+                <input id="email" name="email" class="box" type="email" placeholder="sample@gmail.com">
               </div>
 
             </div>
@@ -102,112 +102,115 @@
         </div>
 
 
-  <!-- siteinfo -->
-<div class="form-step">
-  <p class="top"><b class="tile">Site Information</b></p>
+        <!-- siteinfo -->
+        <div class="form-step">
+          <p class="top"><b class="tile">Site Information</b></p>
 
-  <div class="group-1">
-    <div class="group-box">
-      <p class="tile">Account Information</p>
-      <div class="text-group">
-        <label for="IDno">ID Number:</label>
-        <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)" required>
-      </div>
+          <div class="group-1">
+            <div class="group-box">
+              <p class="tile">Account Information</p>
+              <div class="text-group">
+                <label for="IDno">ID Number:</label>
+                <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)" required>
+              </div>
 
-      <div class="text-group">
-        <label for="U_type">User Type</label>
-        <select class="box" name="U_type" id="U_type" onchange="toggleUserType()">
-          <option value="student" selected>Student</option>
-          <option value="faculty">Faculty</option>
-        </select>
-      </div>
-    </div>
+              <div class="text-group">
+                <label for="U_Type">User Type</label>
+                <select class="box" name="U_Type" id="U_Type" onchange="toggleUserType()">
+                  <option value="student" selected>Student</option>
+                  <option value="faculty">Faculty</option>
+                </select>
+              </div>
+            </div>
 
-    <!-- Group container for Program, Course, Year & Section, and Personnel Type -->
-    <div class="group-box" id="user-info" style="display: flex; flex-direction: column;">
-      <p class="tile">User Information</p>
+            <!-- Group container for Program, Course, Year & Section, and Personnel Type -->
+            <div class="group-box" id="user-info" style="display: flex; flex-direction: column;">
+              <p class="tile">User Information</p>
 
-      <!-- Program (College) -->
-      <div class="text-group" style="display: flex;">
-        <label for="college" style="flex: 1;">Program</label>
-        <select class="box" id="college" name="college" required >
-          <option value="" selected disabled>Select College</option>
-          <option value="cas">College of Arts and Sciences</option>
-          <option value="cea">College of Engineering and Architecture</option>
-          <option value="coe">College of Education</option>
-          <option value="cit">College of Industrial Technology</option>
-        </select>
-      </div>
+               <!-- Personnel Type (only visible for faculty) -->
+               <div class="text-group" id="personnel-group" style="display: flex; display: none;">
+                <label for="personnel_type" style="flex: 1;">Personnel Type</label>
+                <select class="box" id="personnel_type" name="personnel_type">
+                  <option value="" selected disabled>Select Personnel Type</option>
+                  <option value="Teaching Personnel">Teaching Personnel</option>
+                  <option value="Non-Teaching Personnel">Non-Teaching Personnel</option>
+                </select>
+              </div>
 
-      <!-- Course (only visible for students) -->
-      <div class="text-group" id="course-group" style="display: flex;">
-        <label for="course" style="flex: 1;">Course</label>
-        <select class="box" id="course" name="course" >
-          <option value="" selected disabled>Select Course</option>
-          <option value="course1">Course 1</option>
-          <option value="course2">Course 2</option>
-          <option value="course3">Course 3</option>
-        </select>
-      </div>
+              
+              <!-- Program (College) -->
+              <div class="text-group" style="display: flex;">
+                <label for="college" style="flex: 1;">Program</label>
+                <select class="box" id="college" name="college" required>
+                  <option value="" selected disabled>Select College</option>
+                  <option value="cas">College of Arts and Sciences</option>
+                  <option value="cea">College of Engineering and Architecture</option>
+                  <option value="coe">College of Education</option>
+                  <option value="cit">College of Industrial Technology</option>
+                </select>
+              </div>
 
-      <!-- Year and Section (only visible for students) -->
-      <div class="text-group" id="yrLVL-group" style="display: flex;">
-        <label for="yrLVL" style="flex: 1;">Year and Section</label>
-        <select class="box" id="yrLVL" name="yrLVL" >
-          <option value="" selected disabled>Select Year and Section</option>
-          <?php for ($year = 1; $year <= 5; $year++): ?>
-            <?php foreach (['A', 'B', 'C', 'D'] as $section): ?>
-              <option value="<?php echo $year . ' ' . $section; ?>" <?php echo (isset($user['yrLVL']) &&
-                $user['yrLVL'] == "$year $section") ? 'selected' : ''; ?>>
-                <?php echo $year . ' ' . $section; ?>
-              </option>
-            <?php endforeach; ?>
-          <?php endfor; ?>
-        </select>
-      </div>
+              <!-- Course (only visible for students) -->
+              <div class="text-group" id="course-group" style="display: flex;">
+                <label for="course" style="flex: 1;">Course</label>
+                <select class="box" id="course" name="course">
+                  <option value="" selected disabled>Select Course</option>
+                  <option value="course1">Course 1</option>
+                  <option value="course2">Course 2</option>
+                  <option value="course3">Course 3</option>
+                </select>
+              </div>
 
-      <!-- Personnel Type (only visible for faculty) -->
-      <div class="text-group" id="personnel-group" style="display: flex; display: none;">
-        <label for="personnel_type" style="flex: 1;">Personnel Type</label>
-        <select class="box" id="personnel_type" name="personnel_type" >
-          <option value="" selected disabled>Select Personnel Type</option>
-          <option value="Teaching Personnel">Teaching Personnel</option>
-          <option value="Non-Teaching Personnel">Non-Teaching Personnel</option>
-        </select>
-      </div>
-    </div>
-  </div>
-</div>
+              <!-- Year and Section (only visible for students) -->
+              <div class="text-group" id="yrLVL-group" style="display: flex;">
+                <label for="yrLVL" style="flex: 1;">Year and Section</label>
+                <select class="box" id="yrLVL" name="yrLVL">
+                  <option value="" selected disabled>Select Year and Section</option>
+                  <?php for ($year = 1; $year <= 5; $year++): ?>
+                  <?php foreach (['A', 'B', 'C', 'D'] as $section): ?>
+                  <option value="<?php echo $year . ' ' . $section; ?>" <?php echo (isset($user['yrLVL']) &&
+                    $user['yrLVL']=="$year $section" ) ? 'selected' : '' ; ?>>
+                    <?php echo $year . ' ' . $section; ?>
+                  </option>
+                  <?php endforeach; ?>
+                  <?php endfor; ?>
+                </select>
+              </div>
 
-<!-- JavaScript function to toggle between student and faculty info -->
-<script>
-  function toggleUserType() {
-    const userType = document.getElementById("U_type").value;
-    const courseGroup = document.getElementById("course-group");
-    const yrLVLGroup = document.getElementById("yrLVL-group");
-    const personnelGroup = document.getElementById("personnel-group");
+             
+            </div>
+          </div>
+        </div>
 
-    if (userType === "faculty") {
-      // For faculty: Hide Course and Year & Section, and show Personnel Type
-      courseGroup.style.display = "none";
-      yrLVLGroup.style.display = "none";
-      personnelGroup.style.display = "flex";  // Show Personnel Type
-    } else {
-      // For student: Show Course and Year & Section, and hide Personnel Type
-      courseGroup.style.display = "flex";
-      yrLVLGroup.style.display = "flex";
-      personnelGroup.style.display = "none";  // Hide Personnel Type
-    }
-  }
+        <!-- JavaScript function to toggle between student and faculty info -->
+        <script>
+          function toggleUserType() {
+            const userType = document.getElementById("U_Type").value;
+            const courseGroup = document.getElementById("course-group");
+            const yrLVLGroup = document.getElementById("yrLVL-group");
+            const personnelGroup = document.getElementById("personnel-group");
 
-  // Call the toggle function on page load to ensure the correct form is displayed
-  window.onload = function () {
-    toggleUserType();
-  };
-</script>
+            if (userType === "faculty") {
+              // For faculty: Hide Course and Year & Section, and show Personnel Type
+              courseGroup.style.display = "none";
+              yrLVLGroup.style.display = "none";
+              personnelGroup.style.display = "flex";  // Show Personnel Type
+            } else {
+              // For student: Show Course and Year & Section, and hide Personnel Type
+              courseGroup.style.display = "flex";
+              yrLVLGroup.style.display = "flex";
+              personnelGroup.style.display = "none";  // Hide Personnel Type
+            }
+          }
+
+          // Call the toggle function on page load to ensure the correct form is displayed
+          window.onload = function () {
+            toggleUserType();
+          };
+        </script>
 
 
-<!-- pass mail -->
+        <!-- pass mail -->
         <div class="form-step">
           <p class="top"><b>User Information</b></p>
 
@@ -249,7 +252,7 @@
 
       </div>
 
-        <div id="error-message" class="error"></div>
+      <div id="error-message" class="error"></div>
 
       <div class="button-container">
         <button type="button" class="button" id="prevBtn" disabled>Previous</button>
@@ -269,15 +272,15 @@
       "Fname": "Firstname",
       "Sname": "Surname",
       "Mname": "Middle Name",
-      "gender": "Gender",
+      "Sex": "Sex",
       "DOB": "Birthdate",
       "municipality": "Municipality/City",
       "barangay": "Barangay",
       "province": "Province",
-      "con1": "Contact No. 1",
-      "email1": "Email 1",
+      "contact": "Contact No. 1",
+      "email": "Email 1",
       "IDno": "ID Number",
-      "U_type": "User Type",
+      "U_Type": "User Type",
       "username": "Username",
       "password": "Password",
       "password-repeat": "Repeat Password"
@@ -345,7 +348,6 @@
     color: #28a745;
     /* Green for success message */
   }
-
 </style>
 
 <!-- Add the following JavaScript for validation and feedback -->
@@ -394,7 +396,7 @@
 <!-- Add the following JavaScript to handle validation -->
 <script>
   // Validate contact number (11 digits)
-  document.getElementById('con1').addEventListener('input', function () {
+  document.getElementById('contact').addEventListener('input', function () {
     const contact = this.value;
     const isValid = /^\d{11}$/.test(contact);  // Check if it's 11 digits
     this.classList.toggle('valid', isValid);  // Apply 'valid' class
@@ -402,7 +404,7 @@
   });
 
   // Validate email format
-  document.getElementById('email1').addEventListener('input', function () {
+  document.getElementById('email').addEventListener('input', function () {
     const email = this.value;
     const isValid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     this.classList.toggle('valid', isValid);  // Apply 'valid' class

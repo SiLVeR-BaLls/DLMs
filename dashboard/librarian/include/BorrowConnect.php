@@ -3,10 +3,10 @@
 include '../../config.php';
 
 // Function to calculate the due date based on user type
-function calculateDueDate($U_type) {
+function calculateDueDate($U_Type) {
     $currentDate = new DateTime();
 
-    if ($U_type === 'student') {
+    if ($U_Type === 'student') {
         // Add 3 weekdays (excluding Saturday and Sunday)
         $daysToAdd = 0;
         while ($daysToAdd < 3) {
@@ -16,7 +16,7 @@ function calculateDueDate($U_type) {
                 $daysToAdd++;
             }
         }
-    } elseif (in_array($U_type, ['librarian', 'professor', 'super_librarian'])) {
+    } elseif (in_array($U_Type, ['librarian', 'professor', 'super_librarian'])) {
         // Add 3 months for librarian and professors
         $currentDate->modify('+3 months');
     }
@@ -29,18 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $bookIDs = $_POST["bookID"];
     $errors = [];
 
-    // Fetch the user's U_type
-    $userTypeQuery = $conn->prepare("SELECT U_type FROM user_log WHERE IDno = ?");
+    // Fetch the user's U_Type
+    $userTypeQuery = $conn->prepare("SELECT U_Type FROM user_log WHERE IDno = ?");
     $userTypeQuery->bind_param("s", $IDno);
     $userTypeQuery->execute();
     $result = $userTypeQuery->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $U_type = $row['U_type'];
+        $U_Type = $row['U_Type'];
 
         // Calculate the due date
-        $dueDate = calculateDueDate($U_type);
+        $dueDate = calculateDueDate($U_Type);
 
         // Proceed with the book borrowing process
         foreach ($bookIDs as $bookID) {

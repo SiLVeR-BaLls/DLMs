@@ -60,8 +60,8 @@
         <div class="group-box">
             <p class="tile">Contact</p>
             <div class="text-group">
-                <label for="con1">Contact No. 1</label>
-                <input id="con1" name="con1" class="box" type="text" placeholder="09*********" required pattern="^\d{11}$" title="Please enter a valid 11-digit number">
+                <label for="contact">Contact No. 1</label>
+                <input id="contact" name="contact" class="box" type="text" placeholder="09*********" required pattern="^\d{11}$" title="Please enter a valid 11-digit number">
             </div>
             <div class="text-group">
                 <label for="con2">Contact No. 2</label>

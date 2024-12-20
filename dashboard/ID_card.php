@@ -69,7 +69,7 @@ mysqli_close($conn);
                  onerror="this.onerror=null; this.src='../pic/User/default.png';"> <!-- Default image if fails -->
             <h2 class="text-2xl font-semibold text-center text-gray-800"><?php echo htmlspecialchars($studentInfo['Fname']) . ' ' . htmlspecialchars($studentInfo['Sname']); ?></h2>
             <h3 class="text-sm text-gray-600">ID No: <?php echo htmlspecialchars($studentInfo['IDno']); ?></h3>
-            <p class="text-sm text-gray-600">Role: <?php echo htmlspecialchars($studentInfo['U_type']); ?></p>
+            <p class="text-sm text-gray-600">Role: <?php echo htmlspecialchars($studentInfo['U_Type']); ?></p>
             <p class="text-sm text-gray-600">Course: <?php echo htmlspecialchars($studentInfo['course']); ?></p>
             <p class="text-sm text-gray-600">Year and Section: <?php echo htmlspecialchars($studentInfo['yrLVL']); ?></p>
         </div>

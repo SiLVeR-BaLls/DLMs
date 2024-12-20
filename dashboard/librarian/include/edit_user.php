@@ -83,9 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     $college = $_POST['college'];
     $course = $_POST['course'];
     $yrLVL = $_POST['yrLVL'];
-    $email1 = $_POST['mail1'];
+    $email = $_POST['mail1'];
     $email2 = $_POST['mail2'] ?? '';
-    $con1 = $_POST['con1'];
+    $contact = $_POST['contact'];
     $con2 = $_POST['con2'] ?? '';
 
     // Validate and handle photo upload
@@ -148,9 +148,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         $stmt->close();
 
         // Update contact
-        $sql = "UPDATE contact SET email1=?, email2=?, con1=?, con2=? WHERE IDno=?";
+        $sql = "UPDATE contact SET email=?, email2=?, contact=?, con2=? WHERE IDno=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssss", $email1, $email2, $con1, $con2, $IDno);
+        $stmt->bind_param("sssss", $email, $email2, $contact, $con2, $IDno);
         if (!$stmt->execute()) {
             $message = "Error updating contact: " . $stmt->error;
             $message_type = "error";
@@ -275,15 +275,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label for="mail1" class="block text-sm font-medium text-gray-700">Email 1:</label>
-                        <input type="email" id="mail1" name="mail1" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="Email" value="<?php echo htmlspecialchars($contact['email1'] ?? ''); ?>">
+                        <input type="email" id="mail1" name="mail1" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="Email" value="<?php echo htmlspecialchars($contact['email'] ?? ''); ?>">
                     </div>
                     <div class="space-y-2">
                         <label for="mail2" class="block text-sm font-medium text-gray-700">Email 2:</label>
                         <input type="email" id="mail2" name="mail2" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="Email" value="<?php echo htmlspecialchars($contact['email2'] ?? ''); ?>">
                     </div>
                     <div class="space-y-2">
-                        <label for="con1" class="block text-sm font-medium text-gray-700">Contact Number 1:</label>
-                        <input type="text" id="con1" name="con1" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="Contact Number" value="<?php echo htmlspecialchars($contact['con1'] ?? ''); ?>">
+                        <label for="contact" class="block text-sm font-medium text-gray-700">Contact Number 1:</label>
+                        <input type="text" id="contact" name="contact" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="Contact Number" value="<?php echo htmlspecialchars($contact['contact'] ?? ''); ?>">
                     </div>
                     <div class="space-y-2">
                         <label for="con2" class="block text-sm font-medium text-gray-700">Contact Number 2:</label>

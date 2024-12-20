@@ -42,11 +42,11 @@ if (!isset($_SESSION['librarian'])) {
     exit();
 }
 
-// Assuming the U_type should be 'librarian' for this page
+// Assuming the U_Type should be 'librarian' for this page
 $requiredUserType = 'librarian';
 
-// Check if the user's U_type matches the required type
-if ($_SESSION['librarian']['U_type'] !== $requiredUserType) {
+// Check if the user's U_Type matches the required type
+if ($_SESSION['librarian']['U_Type'] !== $requiredUserType) {
     header('Location: /'); // Redirect to the root page if not librarian
     exit();
 }

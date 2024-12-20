@@ -2,9 +2,8 @@
 include '../config.php';
 
 // Fetch user data from the database
-$sql = "SELECT u.IDno, u.Fname, u.Sname, ul.U_type 
-        FROM users_info u 
-        JOIN user_log ul ON u.IDno = ul.IDno";
+$sql = "SELECT u.IDno, u.Fname, u.Sname, u.U_Type 
+        FROM users_info u ";
 
 $result = $conn->query($sql);
 
@@ -19,14 +18,14 @@ if ($result->num_rows > 0) {
 }
 
 // Check if a POST request to update role is made
-if (isset($_POST['IDno']) && isset($_POST['U_type'])) {
+if (isset($_POST['IDno']) && isset($_POST['U_Type'])) {
     $IDno = $_POST['IDno'];
-    $U_type = $_POST['U_type'];
+    $U_Type = $_POST['U_Type'];
 
     // Prepare and execute the update statement
-    $sql = "UPDATE user_log SET U_type = ? WHERE IDno = ?";
+    $sql = "UPDATE users_info SET U_Type = ? WHERE IDno = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $U_type, $IDno);
+    $stmt->bind_param("ss", $U_Type, $IDno);
 
     if ($stmt->execute()) {
         // Return success response if update is successful
@@ -95,12 +94,12 @@ if (isset($_POST['IDno']) && isset($_POST['U_type'])) {
                             <td class="py-4 px-6"><?= $user['Fname'] ?></td>
                             <td class="py-4 px-6"><?= $user['Sname'] ?></td>
                             <td class="py-4 px-6">
-                                <select class="role-select border rounded-lg p-2" name="U_type[<?= $user['IDno'] ?>]" data-id="<?= $user['IDno'] ?>" data-current-role="<?= $user['U_type'] ?>">
-                                    <option value="admin" <?= $user['U_type'] == 'admin' ? 'selected' : '' ?>>Admin</option>
-                                    <option value="student" <?= $user['U_type'] == 'student' ? 'selected' : '' ?>>Student</option>
-                                    <option value="professor" <?= $user['U_type'] == 'professor' ? 'selected' : '' ?>>Professor</option>
-                                    <option value="staff" <?= $user['U_type'] == 'staff' ? 'selected' : '' ?>>Staff</option>
-                                    <option value="librarian" <?= $user['U_type'] == 'librarian' ? 'selected' : '' ?>>Librarian</option>
+                                <select class="role-select border rounded-lg p-2" name="U_Type[<?= $user['IDno'] ?>]" data-id="<?= $user['IDno'] ?>" data-current-role="<?= $user['U_Type'] ?>">
+                                    <option value="admin" <?= $user['U_Type'] == 'admin' ? 'selected' : '' ?>>Admin</option>
+                                    <option value="student" <?= $user['U_Type'] == 'student' ? 'selected' : '' ?>>Student</option>
+                                    <option value="professor" <?= $user['U_Type'] == 'professor' ? 'selected' : '' ?>>Professor</option>
+                                    <option value="staff" <?= $user['U_Type'] == 'staff' ? 'selected' : '' ?>>Staff</option>
+                                    <option value="librarian" <?= $user['U_Type'] == 'librarian' ? 'selected' : '' ?>>Librarian</option>
                                 </select>
                             </td>
                             <td class="py-4 px-6 text-center">
@@ -155,12 +154,12 @@ if (isset($_POST['IDno']) && isset($_POST['U_type'])) {
             const selectedRole = document.querySelector(`.role-select[data-id="${userId}"]`).value;
 
             // Debug: Log the data being sent
-            console.log("Sending data:", { IDno: userId, U_type: selectedRole });
+            console.log("Sending data:", { IDno: userId, U_Type: selectedRole });
 
             // Prepare the form data for sending
             const formData = new FormData();
             formData.append('IDno', userId);
-            formData.append('U_type', selectedRole);
+            formData.append('U_Type', selectedRole);
 
             // Send the data to the PHP backend
             fetch(window.location.href, {

@@ -10,9 +10,9 @@
 
     if ($title) {
         // Fetch the book details
-        $sql = "SELECT * FROM Book WHERE B_title = ?";
+        $sql = "SELECT * FROM Book WHERE book_id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $title);
+        $stmt->bind_param("i", $title);
 
         if ($stmt->execute()) {
             $result = $stmt->get_result();
@@ -32,11 +32,8 @@
                 }
 
                 // Fetch related data
-                $coAuthorsResult = fetch_related_data($conn, "SELECT * FROM CoAuthor WHERE B_title = ?", $title);
-                $seriesResult = fetch_related_data($conn, "SELECT * FROM Series WHERE B_title = ?", $title);
-                $subjectsResult = fetch_related_data($conn, "SELECT * FROM Subject WHERE B_title = ?", $title);
-                $resourcesResult = fetch_related_data($conn, "SELECT * FROM Resource WHERE B_title = ?", $title);
-                $alternateTitlesResult = fetch_related_data($conn, "SELECT * FROM AlternateTitle WHERE B_title = ?", $title);
+                $coAuthorsResult = fetch_related_data($conn, "SELECT * FROM CoAuthor WHERE book_id = ?", $title);
+                $subjectsResult = fetch_related_data($conn, "SELECT * FROM Subject WHERE book_id = ?", $title);
             }
         } else {
             $message = "Error executing query: " . $stmt->error;
@@ -107,15 +104,13 @@
       <div class="container mx-auto px-4 py-6 ">
         <!-- Breadcrumb Section -->
         <div class="text-sm text-gray-600 mb-4">
-          <a href="index.php" class="hover:text-blue-800 hover:underline">Home</a> &rarr;
-          <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>"
-            class="hover:text-blue-800 hover:underline">
+    <a href="index.php" class="hover:text-blue-800 hover:underline">Home</a> &rarr;
+    <a href="ViewBook.php?title=<?php echo urlencode($book['book_id']); ?>" class="hover:text-blue-800 hover:underline">
             <?php echo htmlspecialchars($book['B_title']); ?>
-          </a> &rarr;
-          <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>"
-            class="hover:text-blue-800 hover:underline">Add Copy</a>
-        </div>
-        <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>"
+        </a> &rarr;
+    <a href="AddBookCopy.php?title=<?php echo urlencode($book['book_id']); ?>" class="hover:text-blue-800 hover:underline">Edit Copy</a>
+</div>
+        <a href="ViewBook.php?title=<?php echo urlencode($book['book_id']); ?>"
           class="hover:text-blue-800 hover:underline">&larr; Back</a>
         <?php if ($message): ?>
         <div class="alert alert-<?php echo $message_type; ?>">
@@ -129,8 +124,6 @@
             <h2 class="text-2xl font-bold"><?php echo htmlspecialchars($book['B_title']); ?></h2>
             <input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
         </div>
-
-          <!-- <a href="../ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="btn btn-primary block mx-auto mb-6">List</a> -->
 
           <input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
 

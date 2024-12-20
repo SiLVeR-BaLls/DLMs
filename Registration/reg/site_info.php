@@ -15,8 +15,8 @@
 
 
             <div class="text-group">
-                <label for="U_type">User Type</label>
-                <select class="box" name="U_type" id="U_type" required>
+                <label for="U_Type">User Type</label>
+                <select class="box" name="U_Type" id="U_Type" required>
                     <option value="" selected disabled>Select User Type</option>
                     <option value="student">Student</option>
                     <option value="professor">Professor</option>

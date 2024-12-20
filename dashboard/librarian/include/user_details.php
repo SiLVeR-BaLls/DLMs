@@ -90,9 +90,9 @@ if (isset($_POST['delete'])) {
                 <?php while ($row = mysqli_fetch_assoc($contactResult)): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['IDno']); ?></td>
-                        <td><?php echo htmlspecialchars($row['email1']); ?></td>
+                        <td><?php echo htmlspecialchars($row['email']); ?></td>
                         <td><?php echo htmlspecialchars($row['email2']); ?></td>
-                        <td><?php echo htmlspecialchars($row['con1']); ?></td>
+                        <td><?php echo htmlspecialchars($row['contact']); ?></td>
                         <td><?php echo htmlspecialchars($row['con2']); ?></td>
                     </tr>
                 <?php endwhile; ?>

@@ -52,7 +52,7 @@ include '../config.php';
                         <?php
                         // Fetch pending users
                         $pendingUsersQuery = "
-                            SELECT u.IDno, u.Fname, u.Sname, l.U_type 
+                            SELECT u.IDno, u.Fname, u.Sname, l.U_Type 
                             FROM users_info u 
                             JOIN user_log l ON u.IDno = l.IDno 
                             WHERE l.status = 'pending'
@@ -65,7 +65,7 @@ include '../config.php';
                                     <td class="py-3 px-4 text-center"><?php echo htmlspecialchars($user['IDno']); ?></td>
                                     <td class="py-3 px-4"><?php echo htmlspecialchars($user['Fname']); ?></td>
                                     <td class="py-3 px-4"><?php echo htmlspecialchars($user['Sname']); ?></td>
-                                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['U_type']); ?></td>
+                                    <td class="py-3 px-4"><?php echo htmlspecialchars($user['U_Type']); ?></td>
                                     <td class="py-3 px-4 text-center space-x-2">
                                         <button class="px-3 py-1 text-sm text-white bg-green-500 hover:bg-green-600 rounded approve-button" data-id="<?php echo $user['IDno']; ?>">Approve</button>
                                         <button class="px-3 py-1 text-sm text-white bg-red-500 hover:bg-red-600 rounded reject-button" data-id="<?php echo $user['IDno']; ?>">Reject</button>

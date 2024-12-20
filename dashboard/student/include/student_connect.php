@@ -42,11 +42,11 @@ if (!isset($_SESSION['student'])) {
     exit();
 }
 
-// Assuming the U_type should be 'student' for this page
+// Assuming the U_Type should be 'student' for this page
 $requiredUserType = 'student';
 
-// Check if the user's U_type matches the required type
-if ($_SESSION['student']['U_type'] !== $requiredUserType) {
+// Check if the user's U_Type matches the required type
+if ($_SESSION['student']['U_Type'] !== $requiredUserType) {
     header('Location: /'); // Redirect to the root page if not student
     exit();
 }

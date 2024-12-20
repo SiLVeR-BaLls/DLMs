@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
     $userId = $_GET['id'];
 
     // Fetch email from the 'contact' table based on the user ID
-    $sql = "SELECT email1 FROM contact WHERE IDno = ?";
+    $sql = "SELECT email FROM contact WHERE IDno = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
     $stmt->execute();

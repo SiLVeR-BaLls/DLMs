@@ -31,17 +31,20 @@ if ($conn->connect_error) {
         $municipality = $_POST['municipality'];
         $barangay = $_POST['barangay'];
         $province = $_POST['province'];
-        $email1 = $_POST['email1'];
-        $con1 = $_POST['con1'];
+        $email = $_POST['email'];
+        $contact = $_POST['contact'];
         $username = $_POST['username'];
         $password = $_POST['password']; // No hashing
         $IDno = $_POST['IDno'];
-       $U_type = $_POST['U_type'];
+       $U_Type = $_POST['U_Type'];
         // $status = $_POST['status'];
         $college = $_POST['college']??'';
         $course = $_POST['course']??'';
         $yrLVL = $_POST['yrLVL']??'';
         $personnel_type = $_POST['personnel_type']??'';
+      $status_details ='active';
+            $A_LVL = '3';
+            $status_log = 'pending';
 
         // Check if IDno already exists
         $query = "SELECT * FROM users_info WHERE IDno = ?";
@@ -57,40 +60,15 @@ if ($conn->connect_error) {
             // Insert into users table
             $Ename = 'N/A';
             $photo = 'default.jpg';
-            $sql = "INSERT INTO users_info (IDno, Fname, Sname, Mname, Ename, gender, photo ) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO users_info (IDno, Fname, Sname, Mname, Ename, gender, photo, municipality, barangay, province, DOB, college, course, yrLVL, A_LVL, status_details, personnel_type, username, password, U_Type, status_log, email, contact ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssssss", $IDno, $Fname, $Sname, $Mname, $Ename, $gender, $photo );
+            $stmt->bind_param("sssssssssssssssssssssss", $IDno, $Fname, $Sname, $Mname, $Ename, $gender, $photo, $municipality, $barangay, $province, $DOB, $college, $course,  $yrLVL, $A_LVL, $status_details, $personnel_type, $username, $password, $U_Type, $status_log, $email, $contact );
             $stmt->execute();
 
-            // Get the last inserted ID
-            $user_id = $conn->insert_id;
-
-            // Insert into addresses table
-            $sql = "INSERT INTO address (IDno, municipality, barangay, province, DOB) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $IDno, $municipality, $barangay, $province, $DOB);
-            $stmt->execute();
+ 
             
-            // Insert into user_details table
-            $status ='active';
-            $A_LVL = '3';
-            $sql = "INSERT INTO user_details (IDno, college, course, yrLVL, A_LVL, status, personnel_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssssss", $IDno, $college, $course,  $yrLVL, $A_LVL, $status, $personnel_type);
-            $stmt->execute();
-
-                    // Insert into user_log table
-            $status = 'pending';
-            $sql = "INSERT INTO user_log (IDno, username, password, U_type, status) VALUES (?, ?, ?, ?  ,?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $IDno, $username, $password, $U_type, $status);
-            $stmt->execute();
-
-            // Insert into contact table
-            $sql = "INSERT INTO contact (IDno, email1, con1) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $IDno, $email1, $con1);
-            $stmt->execute();
+      
+           
             $message = "Registration successful!";
             $message_type = "success";
         }

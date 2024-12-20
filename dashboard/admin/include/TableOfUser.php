@@ -7,16 +7,16 @@
           user_details.course, 
           user_details.college, 
           user_details.yrLVL AS year,
-          user_log.U_type
+          user_log.U_Type
       FROM users_info
       JOIN user_details ON users_info.IDno = user_details.IDno
       JOIN user_log ON users_info.IDno = user_log.IDno
       WHERE user_log.status = 'approved'";
 
-  // Apply U_type filter if selected
-  if (isset($_GET['U_type']) && !empty($_GET['U_type'])) {
-      $U_type = mysqli_real_escape_string($conn, $_GET['U_type']);
-      $usersQuery .= " AND user_log.U_type = '$U_type'";
+  // Apply U_Type filter if selected
+  if (isset($_GET['U_Type']) && !empty($_GET['U_Type'])) {
+      $U_Type = mysqli_real_escape_string($conn, $_GET['U_Type']);
+      $usersQuery .= " AND user_log.U_Type = '$U_Type'";
   }
 
   // Fetch users without pagination (no LIMIT clause)
@@ -141,7 +141,7 @@
       </div>
     </div>
 
-  <!-- Filter Bar with U_type filter using radio buttons -->
+  <!-- Filter Bar with U_Type filter using radio buttons -->
 <div class="flex justify-center items-center mb-4 space-x-6">
 <div class="radio-input">
   <label>
@@ -186,7 +186,7 @@
         </thead>
         <tbody id="tableBody" class="bg-white divide-y divide-gray-200">
           <?php while ($row = mysqli_fetch_assoc($usersResult)): ?>
-          <tr class="user-row" data-user-type="<?php echo htmlspecialchars($row['U_type']); ?>">
+          <tr class="user-row" data-user-type="<?php echo htmlspecialchars($row['U_Type']); ?>">
             <td class="px-4 py-2 whitespace-nowrap">
               <?php echo htmlspecialchars($row['IDno']); ?>
             </td>

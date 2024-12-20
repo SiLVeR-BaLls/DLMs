@@ -32,7 +32,7 @@
     <div class="user-details">
         <h2>User Details</h2>
         <p><strong>Full Name:</strong> <?php echo htmlspecialchars($userData['Fname']) . " " . htmlspecialchars($userData['Sname']); ?></p>
-        <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['email1']); ?></p>
+        <p><strong>Email:</strong> <?php echo htmlspecialchars($userData['email']); ?></p>
         <p><strong>Course:</strong> <?php echo htmlspecialchars($userData['course']); ?></p>
     </div>
 <?php endif; ?> -->

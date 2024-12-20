@@ -35,6 +35,7 @@ if ($conn->connect_error) {
         $UTitle = $_POST['UTitle'] ?? '';
         $VForm = $_POST['VForm'] ?? '';
         $SUTitle = $_POST['SUTitle'] ?? '';
+        $note = $_POST['note'] ?? '';
 
         // Check for duplicate B_title
         $checkSql = "SELECT COUNT(*) FROM Book WHERE B_title = ?";
@@ -50,9 +51,9 @@ if ($conn->connect_error) {
             $message_type = "error";
         } else {
             // Insert into Book table
-            $sql = "INSERT INTO Book (B_title, UTitle, VForm, SUTitle, url, Description, volume, subtitle, author, edition, LCCN, ISBN, ISSN, MT, ST, place, publisher, Pdate, copyright, extent, Odetail, size) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            if (!executeStatement($conn, $sql, "ssssisssssssssssssssss", $B_title, $UTitle, $VForm, $SUTitle, $url, $Description, $volume, $subtitle, $author, $edition, $LCCN, $ISBN, $ISSN, $MT, $ST, $place, $publisher, $Pdate, $copyright, $extent, $Odetail, $size)) {
+            $sql = "INSERT INTO Book (B_title, UTitle, VForm, SUTitle, url, Description, volume, subtitle, author, edition, LCCN, ISBN, ISSN, MT, ST, place, publisher, Pdate, copyright, extent, Odetail, size, note) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            if (!executeStatement($conn, $sql, "ssssissssssssssssssssss", $B_title, $UTitle, $VForm, $SUTitle, $url, $Description, $volume, $subtitle, $author, $edition, $LCCN, $ISBN, $ISSN, $MT, $ST, $place, $publisher, $Pdate, $copyright, $extent, $Odetail, $size, $note)) {
                 $message = "Error inserting book: " . $conn->error;
                 $message_type = "error";
             } else {
@@ -81,23 +82,20 @@ if ($conn->connect_error) {
                     }
                 }
 
-                // Insert subjects and comments
+                // Insert subjects
                 $subHeads = $_POST['Sub_Head'] ?? [];
                 $subHeadsInputs = $_POST['Sub_Head_input'] ?? [];
-                $comments = $_POST['comment'] ?? []; // Get comment data
-
+                
                 foreach ($subHeads as $index => $subHead) {
                     $subHeadInput = $subHeadsInputs[$index] ?? '';
-                    $commentsArray  = $comments[$index] ?? '';  // Use default empty string if not set
-
-                    // Insert each subject with comment handling
-                    $sql = "INSERT INTO subject (book_id, Sub_Head, Sub_Head_input, comment) VALUES (?, ?, ?, ?)";
-
-                    // Assuming executeStatement is a custom function to run prepared SQL queries
-                    if (!executeStatement($conn, $sql, "isss", $last_id, $subHead, $subHeadInput, $commentsArray )) {
-                        error_log("Error inserting subject: " . $conn->error); // Log error
+                
+                    // Insert each subject into the database
+                    $sql = "INSERT INTO subject (book_id, Sub_Head, Sub_Head_input) VALUES (?, ?, ?)";
+                    if (!executeStatement($conn, $sql, "iss", $last_id, $subHead, $subHeadInput)) {
+                        error_log("Error inserting subject: " . $conn->error); // Log error if insertion fails
                     }
                 }
+                
             }
         }
 

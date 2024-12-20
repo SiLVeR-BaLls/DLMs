@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
     $password = mysqli_real_escape_string($conn, $_POST['password']);
 
     if (!empty($username) && !empty($password)) {
-        $query = "SELECT * FROM `user_log` WHERE username = '$username'";
+        $query = "SELECT * FROM `users_info` WHERE username = '$username'";
         $result = mysqli_query($conn, $query);
 
         if ($row = mysqli_fetch_assoc($result)) {
@@ -84,8 +84,8 @@ if (isset($_POST['submit'])) {
                 } elseif ($row['status'] == 'rejected') {
                     $_SESSION['status_message'] = "Your account has been rejected. Please sign in again.";
                 } else {
-                    $_SESSION[$row['U_type']] = $row;
-                    $redirect_page = "../dashboard/" . strtolower($row['U_type']) . "/index.php";
+                    $_SESSION[$row['U_Type']] = $row;
+                    $redirect_page = "../dashboard/" . strtolower($row['U_Type']) . "/index.php";
                     header("Location: $redirect_page");
                     exit();
                 }

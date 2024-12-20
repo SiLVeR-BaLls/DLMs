@@ -154,9 +154,9 @@ $conn->close();
             <div class="profile-section">
                 <h2>Contact Information</h2>
                 <div class="profile-box">
-                    <p><strong>Email 1:</strong> <?php echo htmlspecialchars($user['email1']); ?></p>
+                    <p><strong>Email 1:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
                     <p><strong>Email 2:</strong> <?php echo htmlspecialchars($user['email2']); ?></p>
-                    <p><strong>Contact No. 1:</strong> <?php echo htmlspecialchars($user['con1']); ?></p>
+                    <p><strong>Contact No. 1:</strong> <?php echo htmlspecialchars($user['contact']); ?></p>
                     <p><strong>Contact No. 2:</strong> <?php echo htmlspecialchars($user['con2']); ?></p>
                 </div>
             </div>
@@ -165,7 +165,7 @@ $conn->close();
                 <h2>Account Information</h2>
                 <div class="profile-box">
                     <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
-                    <p><strong>User Type:</strong> <?php echo htmlspecialchars($user['U_type']); ?></p>
+                    <p><strong>User Type:</strong> <?php echo htmlspecialchars($user['U_Type']); ?></p>
                     <p><strong>Access Level:</strong> <?php echo htmlspecialchars($user['A_LVL']); ?></p>
                     <p><strong>Status:</strong> <?php echo htmlspecialchars($user['status']); ?></p>
                 </div>

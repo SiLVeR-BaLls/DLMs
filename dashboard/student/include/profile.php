@@ -69,7 +69,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-4">
                     <div>
                         <p class="font-semibold text-gray-600">Email 1</p>
-                        <p class="text-gray-700"><?php echo htmlspecialchars($userData['email1'] ?? ''); ?></p>
+                        <p class="text-gray-700"><?php echo htmlspecialchars($userData['email'] ?? ''); ?></p>
                     </div>
                     <div>
                         <p class="font-semibold text-gray-600">Email 2</p>
@@ -77,7 +77,7 @@
                     </div>
                     <div>
                         <p class="font-semibold text-gray-600">Contact 1</p>
-                        <p class="text-gray-700"><?php echo htmlspecialchars($userData['con1'] ?? ''); ?></p>
+                        <p class="text-gray-700"><?php echo htmlspecialchars($userData['contact'] ?? ''); ?></p>
                     </div>
                     <div>
                         <p class="font-semibold text-gray-600">Contact 2</p>

@@ -14,9 +14,9 @@
 
     if ($title) {
         // Fetch the book details
-        $sql = "SELECT * FROM Book WHERE B_title = ?";
+        $sql = "SELECT * FROM Book WHERE book_id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $title);
+        $stmt->bind_param("i", $title);
         
         if ($stmt->execute()) {
             $result = $stmt->get_result();
@@ -40,7 +40,7 @@
                     }
 
                     // Fetch the current photo from the database
-                    $sql = "SELECT photo FROM Book WHERE B_title = ?";
+                    $sql = "SELECT photo FROM book WHERE book_id = ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param("s", $title);
                     $stmt->execute();
@@ -70,7 +70,7 @@
                     // Move the uploaded file to the specified directory
                     if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
                         // Update the database with the new photo path
-                        $updateSql = "UPDATE Book SET photo = ? WHERE B_title = ?";
+                        $updateSql = "UPDATE Book SET photo = ? WHERE book_id = ?";
                         $updateStmt = $conn->prepare($updateSql);
                         $updateStmt->bind_param("ss", $photo, $title);
                         $updateStmt->execute();
@@ -88,7 +88,11 @@
                     $stmt->execute();
                     return $stmt->get_result();
                 }
-            }
+
+                // Fetch related data
+                $coAuthorsResult = fetch_related_data($conn, "SELECT * FROM CoAuthor WHERE book_id = ?", $title);
+                $subjectsResult = fetch_related_data($conn, "SELECT * FROM Subject WHERE book_id = ?", $title);
+                }
         } else {
             $message = "Error executing query: " . $stmt->error;
             $message_type = "error";
@@ -98,7 +102,7 @@
         $message = "No book title provided.";
         $message_type = "error";
     }
-
+    
 ?>
 
 
@@ -106,161 +110,244 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DLMs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DLMs</title>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-
 <body class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
-    <!-- Main Content Area with Sidebar and BrowseBook Section -->
-    <main class="flex flex-grow">
-        <!-- Sidebar Section -->
-        <?php include 'include/sidebar.php'; ?>
-        <!-- BrowseBook Content Section -->
-        <div class="flex-grow ">
-        <!-- Header at the Top -->
-        <?php include 'include/header.php'; ?>
-
-      <div class="container mx-auto px-4 py-6 ">
-
-<!-- Breadcrumb Section -->
-<div class="text-sm text-gray-600 mb-4">
-    <a href="index.php" class="hover:text-blue-800 hover:underline">Home</a> &rarr;
-    <a href="ViewBook.php?title=<?php echo urlencode($book['B_title']); ?>" class="hover:text-blue-800 hover:underline">
-        <?php echo htmlspecialchars($book['B_title']); ?>
-    </a>
-</div>
 
 
-            <!-- Message -->
-            <?php if ($message): ?>
-            <div class="mb-4 p-4 text-center rounded-lg <?php echo $message_type === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'; ?>">
-                <?php echo $message; ?>
-            </div>
-            <?php endif; ?>
+  <!-- Main Content Area with Sidebar and BrowseBook Section -->
+  <main class="flex  flex-grow">
+    <!-- Sidebar Section -->
+    <?php include 'include/sidebar.php'; ?>
+    <!-- BrowseBook Content Section -->
+    <div class="flex-grow ">
+      <!-- Header at the Top -->
+      <?php include 'include/header.php'; ?>
 
-            <?php if (isset($book)): ?>
-                <a href="index.php" class="hover:text-blue-800 hover:underline">&larr; Back</a>
-            <div class="text-center mb-6">
-                
-                <?php if ($book['photo']): ?>
-                <img src="../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="Book Photo"
-                    class="w-48 h-48 mx-auto rounded-lg shadow-md">
-                <?php endif; ?>
+      <!-- Message -->
+      <?php if ($message): ?>
+      <div
+        class="mb-4  p-4 text-center rounded-lg <?php echo $message_type === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'; ?>">
+        <?php echo $message; ?>
+      </div>
+      <?php endif; ?>
 
-                <h2 class="text-3xl font-semibold mt-4">
-                    <?php echo htmlspecialchars($book['B_title']); ?>
-                </h2>
+      <a href="index.php" class="inline-block text-blue-500 hover:underline mb-4">&larr; Back</a>
+      <?php if (isset($book)): ?>
+        
+      <div class="text-center mb-6">
 
-                <div class="flex justify-center gap-4 mt-4">
-                    <a href="edit_book.php?title=<?php echo urlencode($book['B_title']); ?>"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
-                    <a href="AddBookCopy.php?title=<?php echo urlencode($book['B_title']); ?>"
-                        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Copy</a>
-                    <a href="BookList.php?title=<?php echo urlencode($book['B_title']); ?>"
-                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">List</a>
-                </div>
-            </div>
+        <?php if ($book['photo']): ?>
+        <img src="../../pic/Book/<?php echo htmlspecialchars($book['photo']); ?>" alt="Book Photo"
+          class="w-48 h-48 mx-auto rounded-lg shadow-md">
+        <?php endif; ?>
 
-            <!-- Book Information Section -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">General Information</h3>
-                    <p><strong>Subtitle:</strong> <?php echo htmlspecialchars($book['subtitle']); ?></p>
-                    <p><strong>Author:</strong> <?php echo htmlspecialchars($book['author']); ?></p>
-                    <p><strong>Edition:</strong> <?php echo htmlspecialchars($book['edition']); ?></p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">Identifiers</h3>
-                    <p><strong>LCCN:</strong> <?php echo htmlspecialchars($book['LCCN']); ?></p>
-                    <p><strong>ISBN:</strong> <?php echo htmlspecialchars($book['ISBN']); ?></p>
-                    <p><strong>ISSN:</strong> <?php echo htmlspecialchars($book['ISSN']); ?></p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">Classification</h3>
-                    <p><strong>Material Type:</strong> <?php echo htmlspecialchars($book['MT']); ?></p>
-                    <p><strong>Subject Type:</strong> <?php echo htmlspecialchars($book['ST']); ?></p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">Publication Details</h3>
-                    <p><strong>Place:</strong> <?php echo htmlspecialchars($book['place']); ?></p>
-                    <p><strong>Publisher:</strong> <?php echo htmlspecialchars($book['publisher']); ?></p>
-                    <p><strong>Publication Date:</strong> <?php echo htmlspecialchars($book['Pdate']); ?></p>
-                    <p><strong>Copyright:</strong> <?php echo htmlspecialchars($book['copyright']); ?></p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <h3 class="text-lg font-semibold mb-2">Physical Details</h3>
-                    <p><strong>Extent:</strong> <?php echo htmlspecialchars($book['extent']); ?></p>
-                    <p><strong>Other Details:</strong> <?php echo htmlspecialchars($book['Odetail']); ?></p>
-                    <p><strong>Size:</strong> <?php echo htmlspecialchars($book['size']); ?></p>
-                </div>
-            </div>
+        <h2 class="text-3xl font-semibold mt-4">
+          <?php echo htmlspecialchars($book['B_title']); ?>
+        </h2>
 
-            <!-- Additional Information -->
-            <div class="mt-8">
-    <h3 class="text-2xl font-semibold mb-4">Additional Information</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Co-authors -->
-                    
+        <div class="flex justify-center gap-4 mt-4">
+          <a href="edit_book.php?title=<?php echo urlencode($book['book_id']); ?>"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+          <a href="AddBookCopy.php?title=<?php echo urlencode($book['book_id']); ?>"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Copy</a>
+          <a href="BookList.php?title=<?php echo urlencode($book['book_id']); ?>"
+            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">List</a>
+        </div>
+      </div>
 
+      <!-- Book Information Section -->
+      <div class="grid grid-cols-1 m-6 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="text-lg font-semibold mb-2">General Information</h3>
+          <p><strong>Subtitle:</strong>
+            <?php echo htmlspecialchars($book['subtitle']); ?>
+          </p>
+          <p><strong>Author:</strong>
+            <?php echo htmlspecialchars($book['author']); ?>
+          </p>
+          <p><strong>Edition:</strong>
+            <?php echo htmlspecialchars($book['edition']); ?>
+          </p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="text-lg font-semibold mb-2">Identifiers</h3>
+          <p><strong>LCCN:</strong>
+            <?php echo htmlspecialchars($book['LCCN']); ?>
+          </p>
+          <p><strong>ISBN:</strong>
+            <?php echo htmlspecialchars($book['ISBN']); ?>
+          </p>
+          <p><strong>ISSN:</strong>
+            <?php echo htmlspecialchars($book['ISSN']); ?>
+          </p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="text-lg font-semibold mb-2">Classification</h3>
+          <p><strong>Material Type:</strong>
+            <?php echo htmlspecialchars($book['MT']); ?>
+          </p>
+          <p><strong>Subject Type:</strong>
+            <?php echo htmlspecialchars($book['ST']); ?>
+          </p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="text-lg font-semibold mb-2">Publication Details</h3>
+          <p><strong>Place:</strong>
+            <?php echo htmlspecialchars($book['place']); ?>
+          </p>
+          <p><strong>Publisher:</strong>
+            <?php echo htmlspecialchars($book['publisher']); ?>
+          </p>
+          <p><strong>Publication Date:</strong>
+            <?php echo htmlspecialchars($book['Pdate']); ?>
+          </p>
+          <p><strong>Copyright:</strong>
+            <?php echo htmlspecialchars($book['copyright']); ?>
+          </p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h3 class="text-lg font-semibold mb-2">Physical Details</h3>
+          <p><strong>Extent:</strong>
+            <?php echo htmlspecialchars($book['extent']); ?>
+          </p>
+          <p><strong>Other Details:</strong>
+            <?php echo htmlspecialchars($book['Odetail']); ?>
+          </p>
+          <p><strong>Size:</strong>
+            <?php echo htmlspecialchars($book['size']); ?>
+          </p>
+        </div>
+      </div>
+
+      <!-- Additional Information -->
+      <div class="m-6">
+        <h3 class="text-2xl font-semibold mb-4">Additional Information</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            
          
 
-        <!-- Series -->
-        <div class="bg-white p-6 rounded-lg shadow">
+          
+          <!-- Series -->
+          <div class="bg-white p-6 rounded-lg shadow">
             <h4 class="text-lg font-semibold mb-2">Series</h4>
-            <ul class="list-none list-inside">
-                <li>Volume <?php echo htmlspecialchars($book['volume']); ?> - <?php echo htmlspecialchars($book['IL']); ?> (<?php echo htmlspecialchars($book['F_and_P']); ?>)</li>
+            <ul class="list-disc list-none list-inside">
+              <li>Volume
+                <?php echo htmlspecialchars($book['volume']); ?>
+              </li>
+            </ul>
+
+          </div>
+
+
+
+          <!-- Resources -->
+        <div class="bg-white p-6 rounded-lg shadow">
+                <h4 class="text-lg font-semibold mb-2">Resources</h4>
+                <ul class="list-disc list-none list-inside">
+                <li>
+                    <?php 
+                // Check if there's a URL or description
+                if (!empty($book['url']) || !empty($book['Description'])) {
+                    // If there's a URL
+                    if (!empty($book['url'])) {
+                        // If there's a description, use it as the link text
+                        if (!empty($book['Description'])) {
+                            echo '<a href="' . htmlspecialchars($book['url']) . '" class="text-blue-500 underline" target="_blank">' . htmlspecialchars($book['Description']) . '</a>';
+                        } else {
+                            // If there's no description, use the URL as the link text
+                            echo '<a href="' . htmlspecialchars($book['url']) . '" class="text-blue-500 underline" target="_blank">' . htmlspecialchars($book['url']) . '</a>';
+                        }
+                    }
+                    // If there's no URL, just display the description
+                    else {
+                        echo '<span class="text-gray-500">' . htmlspecialchars($book['Description']) . '</span>';
+                    }
+                } else {
+                    // If there's no URL or description, display "No resources"
+                    echo '<span class="text-gray-500">No resources</span>';
+                }
+            ?>
+              </li>
             </ul>
         </div>
 
-        <!-- Subjects -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h4 class="text-lg font-semibold mb-2">Subjects</h4>
-            <ul class="list-none list-inside">
-                <li><?php echo htmlspecialchars($book['Sub_Head']) . ": " . htmlspecialchars($book['Sub_Head_input']); ?></li>
-            </ul>
-        </div>
-
-        <!-- Resources -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h4 class="text-lg font-semibold mb-2">Resources</h4>
-            <ul class="list-none list-inside">
-                <?php if (!empty($book['url']) && !empty($book['Description'])): ?>
-                    <li><a href="<?php echo htmlspecialchars($book['url']); ?>" class="text-blue-500 underline" target="_blank"><?php echo htmlspecialchars($book['Description']); ?></a></li>
-                <?php elseif (!empty($book['url'])): ?>
-                    <li><a href="<?php echo htmlspecialchars($book['url']); ?>" class="text-blue-500 underline" target="_blank">No description available</a></li>
-                <?php elseif (!empty($book['Description'])): ?>
-                    <li><?php echo htmlspecialchars($book['Description']); ?></li>
-                <?php else: ?>
-                    <li>No link or description available.</li>
-                <?php endif; ?>
-            </ul>
-        </div>
-
-        <!-- Alternate Titles -->
-        <div class="bg-white p-6 rounded-lg shadow">
+          <!-- Alternate Titles -->
+          <div class="bg-white p-6 rounded-lg shadow">
             <h4 class="text-lg font-semibold mb-2">Alternate Titles</h4>
-            <ul class="list-none list-inside">
-                <li><?php echo htmlspecialchars($book['UTitle']); ?></li>
-                <li><?php echo htmlspecialchars($book['VForm']); ?></li>
-                <li><?php echo htmlspecialchars($book['SUTitle']); ?></li>
+            <ul class="list-none pl-0">
+              <li class="text-base">
+                <h1 class="text-xs mb-1">Uniform Titles</h1>
+                <span class="ml-4">
+                  <?php echo !empty($book['UTitle']) ? htmlspecialchars($book['UTitle']) : 'No title'; ?>
+                </span>
+              </li>
+              <hr>
+              <li class="text-base">
+                <h1 class="text-xs mb-1">Varying Form</h1>
+                <span class="ml-4">
+                  <?php echo !empty($book['VForm']) ? htmlspecialchars($book['VForm']) : 'No title'; ?>
+                </span>
+              </li>
+              <hr>
+              <li class="text-base">
+                <h1 class="text-xs mb-1">Series Uniform Title</h1>
+                <span class="ml-4">
+                  <?php echo !empty($book['SUTitle']) ? htmlspecialchars($book['SUTitle']) : 'No title'; ?>
+                </span>
+              </li>
+              <hr>
             </ul>
-        </div>
-    </div>
-</div>
+          </div>
 
+          <!-- Co-authors -->
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-lg font-semibold mb-2">Co-authors</h4>
+            <?php if ($coAuthorsResult->num_rows > 0): ?>
+            <ul class="list-disc list-none list-inside">
+              <?php while ($row = $coAuthorsResult->fetch_assoc()): ?>
+              <li>
+                <?php echo htmlspecialchars($row['Co_Name']) . " - " . htmlspecialchars($row['Co_Date']) . " (" . htmlspecialchars($row['Co_Role']) . ")"; ?>
+              </li>
+              <?php endwhile; ?>
+            </ul>
+            <?php else: ?>
+            <p>No co-authors available.</p>
             <?php endif; ?>
-        </div>
+          </div>
+          <!-- Subjects -->
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h4 class="text-lg font-semibold mb-2">Subjects</h4>
+            <?php if ($subjectsResult->num_rows > 0): ?>
+            <ul class="list-disc list-none list-inside">
+              <?php while ($book = $subjectsResult->fetch_assoc()): ?>
+              <li>
+                <?php echo htmlspecialchars($book['Sub_Head']) . ": " . htmlspecialchars($book['Sub_Head_input']); ?>
+              </li>
+              <?php endwhile; ?>
+            </ul>
+            <?php else: ?>
+            <p>No subjects information available.</p>
+            <?php endif; ?>
+          </div>
 
-          <!-- Footer at the Bottom -->
-          <footer class="bg-blue-600 text-white mt-auto">
-            <?php include 'include/footer.php'; ?>
-        </footer>
-    </main>
+        </div>
+        <?php endif; ?>
+      </div>
+
+      <!-- Footer at the Bottom -->
+      <footer class="bg-blue-600 text-white mt-auto">
+        <?php include 'include/footer.php'; ?>
+      </footer>
+  </main>
+
+
 </body>
 
 </html>
