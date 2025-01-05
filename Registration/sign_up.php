@@ -85,17 +85,109 @@
 
             <!-- Contact Information Section -->
             <div class="group-box">
-              <p class="tile">Contact</p>
-              <div class="text-group">
-                <label for="contact">Contact No. 1</label>
-                <input id="contact" name="contact" class="box" type="text" placeholder="09*********" pattern="^\d{11}$"
-                  title="Please enter a valid 11-digit number">
-              </div>
+            <p class="tile">Contact</p>
+<div class="text-group">
+  <label for="contact">Contact No.</label>
+  <input id="contact" name="contact" class="box" type="tel" placeholder="09*********" 
+    title="Please enter a valid 11-digit number" pattern="^09\d{9}$">
+  <span id="contact-message"></span> <!-- Message for contact format validation -->
+</div>
 
-              <div class="text-group">
-                <label for="email">Email 1</label>
-                <input id="email" name="email" class="box" type="email" placeholder="sample@gmail.com">
-              </div>
+<div class="text-group">
+  <label for="email">Email</label>
+  <input id="email" name="email" class="box" type="email" placeholder="sample@gmail.com">
+  <span id="email-message"></span> <!-- Message for email format validation -->
+</div>
+
+<script>
+// Function to validate contact number format
+function validateContact() {
+  const contact = document.getElementById('contact').value;
+  const contactMessage = document.getElementById('contact-message');
+  const contactField = document.getElementById('contact');
+
+  // Regular expression to match the contact number format: 11 digits starting with 09
+  const contactRegex = /^09\d{9}$/;
+
+  if (contactRegex.test(contact)) {
+    contactField.classList.remove('invalid');
+    contactField.classList.add('valid');
+    contactMessage.textContent = "Contact number is valid";
+    contactMessage.classList.remove('error-message');
+    contactMessage.classList.add('success-message');
+  } else {
+    contactField.classList.remove('valid');
+    contactField.classList.add('invalid');
+    contactMessage.textContent = "Please enter a valid 11-digit contact number";
+    contactMessage.classList.remove('success-message');
+    contactMessage.classList.add('error-message');
+  }
+}
+
+// Function to validate email format
+function validateEmail() {
+  const email = document.getElementById('email').value;
+  const emailMessage = document.getElementById('email-message');
+  const emailField = document.getElementById('email');
+
+  // Regular expression to match a standard email format
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+  if (emailRegex.test(email)) {
+    emailField.classList.remove('invalid');
+    emailField.classList.add('valid');
+    emailMessage.textContent = "Email address is valid";
+    emailMessage.classList.remove('error-message');
+    emailMessage.classList.add('success-message');
+  } else {
+    emailField.classList.remove('valid');
+    emailField.classList.add('invalid');
+    emailMessage.textContent = "Please enter a valid email address";
+    emailMessage.classList.remove('success-message');
+    emailMessage.classList.add('error-message');
+  }
+}
+
+// Add event listener for real-time contact number validation
+document.getElementById('contact').addEventListener('input', validateContact);
+
+// Add event listener for real-time email validation
+document.getElementById('email').addEventListener('input', validateEmail);
+
+// Add event listener to form submission to prevent submission if any field is invalid
+document.querySelector('form').addEventListener('submit', function(event) {
+  const contact = document.getElementById('contact').value;
+  const email = document.getElementById('email').value;
+
+  // If contact or email is empty, show the respective error message
+  if (!contact) {
+    event.preventDefault();
+    Swal.fire({
+      icon: 'error',
+      title: 'Contact is required',
+      text: 'Please enter your contact number.',
+      confirmButtonText: 'OK'
+    });
+  } else if (!email) {
+    event.preventDefault();
+    Swal.fire({
+      icon: 'error',
+      title: 'Email is required',
+      text: 'Please enter your email address.',
+      confirmButtonText: 'OK'
+    });
+  } else if (!/^09\d{9}$/.test(contact) || !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email)) {
+    event.preventDefault(); // Stop form submission
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Contact or Email Format',
+      text: 'Please ensure both the contact number and email address are valid.',
+      confirmButtonText: 'OK'
+    });
+  }
+});
+</script>
+
 
             </div>
           </div>
@@ -109,10 +201,58 @@
           <div class="group-1">
             <div class="group-box">
               <p class="tile">Account Information</p>
+             
               <div class="text-group">
                 <label for="IDno">ID Number:</label>
                 <input type="text" id="IDno" name="IDno" class="box" placeholder="Enter ID (if Manual)" required>
+                <span id="id-message"></span> <!-- Message for format validation -->
               </div>
+
+
+              <script>
+  // Function to validate ID number format
+  function validateID() {
+    const id = document.getElementById('IDno').value;
+    const idMessage = document.getElementById('id-message');
+    const idField = document.getElementById('IDno');
+
+    // Regular expression to match the ID format: year(4 digits)-code(4 digits)-letter(1 letter)
+    const idRegex = /^\d{4}-\d{4}-[A-Za-z]{1}$/;
+
+    if (idRegex.test(id)) {
+      idField.classList.remove('invalid');
+      idField.classList.add('valid');
+      idMessage.textContent = "ID format is correct";
+      idMessage.classList.remove('error-message');
+      idMessage.classList.add('success-message');
+    } else {
+      idField.classList.remove('valid');
+      idField.classList.add('invalid');
+      idMessage.textContent = "ID number not in correct format";
+      idMessage.classList.remove('success-message');
+      idMessage.classList.add('error-message');
+    }
+  }
+
+  // Add event listener for real-time ID validation
+  document.getElementById('IDno').addEventListener('input', validateID);
+
+  // Add event listener to form submission to prevent submission if ID format is invalid
+  document.querySelector('form').addEventListener('submit', function(event) {
+    const id = document.getElementById('IDno').value;
+    // If ID is not in valid format, prevent form submission
+    if (!/^\d{4}-\d{4}-[A-Za-z]{1}$/.test(id)) {
+      event.preventDefault(); // Stop form submission
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid ID Format',
+        text: 'ID number must follow the format: yyyy-xxxx-X (year-code-letter)',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+</script>
+
 
               <div class="text-group">
                 <label for="U_Type">User Type</label>
@@ -210,44 +350,116 @@
         </script>
 
 
-        <!-- pass mail -->
-        <div class="form-step">
-          <p class="top"><b>User Information</b></p>
+<div class="form-step">
+  <p class="top"><b>User Information</b></p>
 
-          <div class="group-1">
-            <div class="group-box">
-              <p class="title">Account Information</p>
+  <div class="group-1">
+    <div class="group-box">
+      <p class="title">Account Information</p>
 
-              <div class="text-group">
-                <label for="username">Username</label>
-                <input id="username" name="username" class="box" type="text" placeholder="Enter Username">
-              </div>
+      <div class="text-group">
+        <label for="username">Username</label>
+        <input id="username" name="username" class="box" type="text" placeholder="Enter Username">
+      </div>
 
-              <div class="text-group">
-                <label for="password">Password</label>
-                <div class="pass">
-                  <input id="password" name="password" class="box" type="password" placeholder="Enter Password">
-                  <span id="password-toggle" class="show-password"
-                    onclick="togglePasswordVisibility('password', 'password-toggle')">📚</span>
-                </div>
-                <small id="password-message"></small>
-              </div>
-
-              <div class="text-group">
-                <label for="password-repeat">Repeat Password</label>
-                <div class="pass">
-                  <input id="password-repeat" name="password-repeat" class="box" type="password"
-                    placeholder="Repeat Password">
-                  <span id="password-repeat-toggle" class="show-password"
-                    onclick="togglePasswordVisibility('password-repeat', 'password-repeat-toggle')">📚</span>
-                </div>
-                <small id="password-repeat-message"></small>
-              </div>
-
-
-            </div>
-          </div>
+      <div class="text-group">
+        <label for="password">Password</label>
+        <div class="pass">
+          <input id="password" name="password" class="box" type="password" placeholder="Enter Password">
+          <span id="password-toggle" class="show-password" onclick="togglePasswordVisibility('password', 'password-toggle')">📚</span>
         </div>
+        <small id="password-message"></small>
+      </div>
+
+      <div class="text-group">
+        <label for="password-repeat">Repeat Password</label>
+        <div class="pass">
+          <input id="password-repeat" name="password-repeat" class="box" type="password" placeholder="Repeat Password">
+          <span id="password-repeat-toggle" class="show-password" onclick="togglePasswordVisibility('password-repeat', 'password-repeat-toggle')">📚</span>
+        </div>
+        <small id="password-repeat-message"></small>
+      </div>
+      
+<script>
+  // Function to validate password
+  function validatePassword() {
+    const password = document.getElementById('password').value;
+    const passwordMessage = document.getElementById('password-message');
+    const passwordRepeat = document.getElementById('password-repeat').value;
+    const passwordField = document.getElementById('password');
+    const passwordRepeatField = document.getElementById('password-repeat');
+
+    // Updated regex to include special characters like '-', '_', and others
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>_\-])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-]{8,}$/;
+
+    // Flag to track password validity
+    let isValid = true;
+
+    // Password format validation
+    if (passwordRegex.test(password)) {
+      passwordField.classList.remove('invalid');
+      passwordField.classList.add('valid');
+      passwordMessage.textContent = "Password requirement complete";
+      passwordMessage.classList.remove('error-message');
+      passwordMessage.classList.add('success-message');
+    } else {
+      passwordField.classList.remove('valid');
+      passwordField.classList.add('invalid');
+      passwordMessage.textContent = "Password does not meet recommended format";
+      passwordMessage.classList.remove('success-message');
+      passwordMessage.classList.add('error-message');
+      isValid = false;
+    }
+
+    // Validate password confirmation
+    if (password !== passwordRepeat) {
+      passwordRepeatField.classList.add('invalid');
+      document.getElementById('password-repeat-message').textContent = "Passwords do not match";
+      document.getElementById('password-repeat-message').classList.add('error-message');
+      isValid = false; // Mark as invalid if passwords don't match
+    } else {
+      passwordRepeatField.classList.remove('invalid');
+      document.getElementById('password-repeat-message').textContent = "";
+    }
+
+    return isValid; // Return whether the form is valid
+  }
+
+  // Add event listeners to both password fields for real-time validation
+  document.getElementById('password').addEventListener('input', validatePassword);
+  document.getElementById('password-repeat').addEventListener('input', validatePassword);
+
+  // Add event listener to form submission to check password validity
+  document.querySelector('form').addEventListener('submit', function(event) {
+    const password = document.getElementById('password').value;
+    const passwordRepeat = document.getElementById('password-repeat').value;
+
+    // Check if the password is valid format
+    if (!/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>_\-])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-]{8,}$/.test(password)) {
+      event.preventDefault(); // Stop form submission
+      // SweetAlert2 Popup for invalid password format
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Password Format',
+        text: 'Password does not meet the required format',
+        confirmButtonText: 'OK'
+      });
+    } else if (password !== passwordRepeat) {
+      event.preventDefault(); // Stop form submission
+      // SweetAlert2 Popup for password mismatch
+      Swal.fire({
+        icon: 'error',
+        title: 'Password Mismatch',
+        text: 'Passwords do not match',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
+</script>
+    </div>
+  </div>
+</div>
+
 
 
       </div>
@@ -263,72 +475,28 @@
     </form>
   </main>
 </body>
+
+
 <script src="js/script.js"></script>
-<script>
-  document.getElementById("registration-form").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const requiredFields = {
-      "Fname": "Firstname",
-      "Sname": "Surname",
-      "Mname": "Middle Name",
-      "Sex": "Sex",
-      "DOB": "Birthdate",
-      "municipality": "Municipality/City",
-      "barangay": "Barangay",
-      "province": "Province",
-      "contact": "Contact No. 1",
-      "email": "Email 1",
-      "IDno": "ID Number",
-      "U_Type": "User Type",
-      "username": "Username",
-      "password": "Password",
-      "password-repeat": "Repeat Password"
-    };
-
-    let missingFields = [];
-    Object.keys(requiredFields).forEach(field => {
-      const input = document.querySelector(`[name="${field}"]`);
-      if (input && !input.value.trim()) {
-        missingFields.push(requiredFields[field]);
-      }
-    });
-
-    if (missingFields.length > 0) {
-      Swal.fire({
-        title: 'Submission Error',
-        text: `Please fill in the following fields: ${missingFields.join(", ")}`,
-        icon: 'warning',
-        confirmButtonText: 'Okay'
-      });
-    } else {
-      Swal.fire({
-        title: 'Success',
-        text: 'All fields are filled! Submitting...',
-        icon: 'success',
-        confirmButtonText: 'Okay'
-      }).then(() => {
-        this.submit();
-      });
-    }
-  });
-</script>
 
 
 <!-- Add the following CSS for validation feedback -->
 <style>
   .valid {
     background-color: #d4edda;
-    /* Green background for valid */
     border-color: #28a745;
-    /* Green border for valid */
   }
 
   .invalid {
     background-color: #f8d7da;
-    /* Red background for invalid */
     border-color: #dc3545;
-    /* Red border for invalid */
+  }
+  input:invalid {
+    border-color: red;
+  }
+
+  input:valid {
+    border-color: green;
   }
 
   small {
@@ -349,67 +517,8 @@
     /* Green for success message */
   }
 </style>
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Add the following JavaScript for validation and feedback -->
-<script>
-  // Function to validate password
-  function validatePassword() {
-    const password = document.getElementById('password').value;
-    const passwordMessage = document.getElementById('password-message');
-    const passwordRepeat = document.getElementById('password-repeat').value;
-    const passwordField = document.getElementById('password');
-    const passwordRepeatField = document.getElementById('password-repeat');
-
-    // Updated regex to include special characters like '-', '_', and others
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>_\-])[A-Za-z\d!@#$%^&*(),.?":{}|<>_\-]{8,}$/;
-
-    if (passwordRegex.test(password)) {
-      passwordField.classList.remove('invalid');
-      passwordField.classList.add('valid');
-      passwordMessage.textContent = "Password requirement complete";
-      passwordMessage.classList.remove('error-message');
-      passwordMessage.classList.add('success-message');
-    } else {
-      passwordField.classList.remove('valid');
-      passwordField.classList.add('invalid');
-      passwordMessage.textContent = "Password does not meet recommended format";
-      passwordMessage.classList.remove('success-message');
-      passwordMessage.classList.add('error-message');
-    }
-
-    // Validate password confirmation
-    if (password !== passwordRepeat) {
-      passwordRepeatField.classList.add('invalid');
-      document.getElementById('password-repeat-message').textContent = "Passwords do not match";
-      document.getElementById('password-repeat-message').classList.add('error-message');
-    } else {
-      passwordRepeatField.classList.remove('invalid');
-      document.getElementById('password-repeat-message').textContent = "";
-    }
-  }
-
-  // Add event listeners to both password fields for real-time validation
-  document.getElementById('password').addEventListener('input', validatePassword);
-  document.getElementById('password-repeat').addEventListener('input', validatePassword);
-</script>
-
-<!-- Add the following JavaScript to handle validation -->
-<script>
-  // Validate contact number (11 digits)
-  document.getElementById('contact').addEventListener('input', function () {
-    const contact = this.value;
-    const isValid = /^\d{11}$/.test(contact);  // Check if it's 11 digits
-    this.classList.toggle('valid', isValid);  // Apply 'valid' class
-    this.classList.toggle('invalid', !isValid);  // Apply 'invalid' class
-  });
-
-  // Validate email format
-  document.getElementById('email').addEventListener('input', function () {
-    const email = this.value;
-    const isValid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-    this.classList.toggle('valid', isValid);  // Apply 'valid' class
-    this.classList.toggle('invalid', !isValid);  // Apply 'invalid' class
-  });
-</script>
 
 </html>

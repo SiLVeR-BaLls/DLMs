@@ -36,7 +36,8 @@
                     <li><a href="BrowseUser.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'BrowseUser.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Browse Users</a></li>
                     <li><a href="pending.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'pending.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Pending User</a></li>
                     <li><a href="Assign.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'Assign.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Assign User</a></li>
-                    <li><a href="AddUser.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'AddUser.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Add User User</a></li>
+                    <li><a href="AddUser.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'AddUser.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Add User</a></li>
+                    <li><a href="AddStaff.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'AddStaff.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Add Staff</a></li>
                 </ul>
             </li>
 

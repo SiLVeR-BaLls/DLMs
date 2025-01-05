@@ -10,12 +10,12 @@ $bookID = isset($_GET['bookID']) ? $_GET['bookID'] : '';
 $bookID = htmlspecialchars($bookID);
 
 // Query to search for books by a partial or exact match of the book ID
-$sql = "SELECT book_copies.ID, book_copies.copy_ID, book_copies.B_title, book_copies.status, book_copies.callNumber, 
+$sql = "SELECT Book_copies.book_copy_ID, book_copies.copy_ID, book_copies.B_title, book_copies.status, book_copies.callNumber, 
                book_copies.circulationType, book_copies.dateAcquired, book_copies.description1, book_copies.description2, book_copies.description3,
                book.B_title AS book_title, book.author, book.ISBN, book.publisher, book.Pdate
         FROM book_copies
         LEFT JOIN book ON book_copies.B_title = book.B_title
-        WHERE book_copies.ID LIKE ?";
+        WHERE Book_copies.book_copy_ID LIKE ?";
 
 // Prepare the SQL statement to prevent SQL injection
 $stmt = $conn->prepare($sql);

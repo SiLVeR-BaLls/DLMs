@@ -23,7 +23,7 @@ if ($conn->connect_error) {
     book.extent,
     GROUP_CONCAT(DISTINCT coauthor.Co_Name SEPARATOR ', ') AS coauthor,  
     COUNT(CASE WHEN book_copies.status = 'Available' THEN 1 END) AS available_count,
-    COUNT(book_copies.ID) AS total_count
+    COUNT(Book_copies.book_copy_ID) AS total_count
 FROM 
     book 
 LEFT JOIN 
@@ -71,14 +71,82 @@ ORDER BY
     display: none;
     opacity: 0;
   }
+
+  /* Ensure the table is responsive and content fits well */
+.table-container {
+  overflow-x: auto; /* Enables horizontal scroll */
+}
+
+/* Adjust the table layout for fixed columns and wrap long text */
+table {
+  width: 100%;
+  table-layout: fixed; /* Use fixed layout for better control */
+}
+
+/* Title Column Specific Styles */
+th, td {
+  padding: 8px;
+  text-overflow: ellipsis; /* Truncate overflowed text with ellipsis */
+  white-space: nowrap;     /* Prevent text from wrapping */
+  overflow: hidden;        /* Hide overflowing content */
+  word-wrap: break-word;   /* Break words if necessary */
+}
+
+/* Allow long text in the title column to break and adjust accordingly */
+td.title {
+  max-width: 300px;        /* Set a max-width for the title column */
+  overflow-wrap: break-word; /* Allow breaking long words */
+  word-wrap: break-word;    /* Ensure wrapping of long text */
+}
+
+/* For other table columns, you can apply similar strategies */
+td, th {
+  max-width: 200px;  /* Optional: set max width for other columns */
+}
+
+/* Styling for the availability icons */
+td.flex {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+td .bg-green-500,
+td .bg-red-500 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+}
+
+/* Apply border-radius to table rows and individual cells */
+table tr:first-child td:first-child {
+  border-top-left-radius: 10px;
+}
+
+table tr:first-child td:last-child {
+  border-top-right-radius: 10px;
+}
+
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+  
 </style>
 <div class="my-6 px-4 flex justify-between items-center">
   <!-- Centered Search Controls -->
   <div class="flex flex-row gap-4 items-center">
     <!-- Search Input -->
     <input type="text" id="searchInput"
-      class="form-input block w-40 sm:w-60 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-700 text-sm"
-      placeholder="Enter search term...">
+    class="form-input block w-40 sm:w-60 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-gray-700 text-sm"
+    placeholder="Enter search term...">
 
     <!-- Search Type Selection -->
     <select id="searchType"
@@ -96,17 +164,16 @@ ORDER BY
   </div>
 </div>
 
-<div class="my-6 px-4 overflow-x-auto rounded-lg shadow-md">
-  <table class="min-w-full table-auto">
-    <thead class="bg-gray-800 text-white overflow-x-auto rounded-lg shadow-md">
+<div class="my-6 px-4 overflow-x-auto table-container rounded-lg shadow-md">
+  <table class="min-w-full table-auto rounded-lg overflow-hidden">
+    <thead class="bg-gray-800 text-white">
       <tr>
-        <th class="px-4 py-2">Title</th>
+        <th class="px-4 py-2 rounded-tl-lg">Title</th>
         <th class="px-4 py-2">Author</th>
-        <th class="px-4 py-2">Co-authors</th>
-
-        <th class="px-4 py-2">Material Type</th>
+        <th class="px-4 py-2 w-36">Co-authors</th>  <!-- Adjust width with Tailwind -->
+        <th class="px-4 py-2 w-28">Material Type</th>  <!-- Adjust width with Tailwind -->
         <th class="px-4 py-2">Extent</th>
-        <th class="px-4 py-2">Copies</th>
+        <th class="px-4 py-2 rounded-tr-lg">Copies</th>
       </tr>
     </thead>
     <tbody id="bookTableBody" class="bg-white">
@@ -127,32 +194,16 @@ ORDER BY
         onclick="window.location.href='ViewBook.php?title=<?php echo urlencode($row['book_id']); ?>';"
         onmouseenter="showPopup(event, this)" onmouseleave="hidePopup()">
 
-
-        <td class="px-4 py-2 title">
-          <?php echo htmlspecialchars($row['B_title']); ?>
-        </td>
-        <td class="px-4 py-2 author">
-          <?php echo htmlspecialchars($row['author']); ?>
-        </td>
-        <td class="px-4 py-2 coauthor">
-          <?php echo htmlspecialchars($row['coauthor']); ?>
-        </td>
-
-        <td class="px-4 py-2 MT">
-          <?php echo htmlspecialchars($row['MT']); ?>
-        </td>
-        <td class="px-4 py-2 extent">
-          <?php echo htmlspecialchars($row['extent']); ?>
-        </td>
+        <td class="px-4 py-2 title"><?php echo htmlspecialchars($row['B_title']); ?></td>
+        <td class="px-4 py-2 author"><?php echo htmlspecialchars($row['author']); ?></td>
+        <td class="px-4 py-2 coauthor"><?php echo htmlspecialchars($row['coauthor']); ?></td>
+        <td class="px-4 py-2 MT"><?php echo htmlspecialchars($row['MT']); ?></td>
+        <td class="px-4 py-2 extent"><?php echo htmlspecialchars($row['extent']); ?></td>
         <td class="px-4 py-2 flex justify-center gap-2">
           <?php if ($row['available_count'] > 0): ?>
-          <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
-            ✔
-          </div>
+          <div class="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">✔</div>
           <?php else: ?>
-          <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center">
-            ✖
-          </div>
+          <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center">✖</div>
           <?php endif; ?>
         </td>
       </tr>
@@ -165,6 +216,7 @@ ORDER BY
     </tbody>
   </table>
 </div>
+
 
 <!-- Popup Container -->
 <div id="popup" class="hidden bg-white p-4 border shadow-lg rounded-lg z-50"></div>

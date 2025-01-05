@@ -25,8 +25,8 @@ include '../config.php';
     <div class="flex-grow ">
       <!-- Header at the Top -->
       <?php include 'include/header.php'; ?>
-
-      <?php include 'include/AddUserTable.php'; ?>
+      
+      <?php include 'include/AddStaffTable.php'; ?>
 
    
       <!-- Footer at the Bottom -->

@@ -14,11 +14,9 @@ $studentInfo = null;
 // Fetch student information if ID is provided and the user is logged in
 if ($isLoggedIn && $idNo) {
     // Query with JOIN to fetch data from both tables
-    $query = "SELECT user_details.*, users_info.*, user_log.* 
-              FROM user_details 
-              JOIN users_info ON user_details.IDno = users_info.IDno 
-              JOIN user_log ON user_details.IDno = user_log.IDno 
-              WHERE user_details.IDno = ?;";
+    $query = "SELECT * 
+              FROM users_info
+              WHERE users_info.IDno = ?;";
 
     // Prepare the statement
     if ($stmt = $conn->prepare($query)) {
@@ -52,8 +50,10 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ID Card - <?php echo htmlspecialchars($idNo); ?></title>
+    <!-- display qr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <!-- download qr -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>

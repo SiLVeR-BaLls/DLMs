@@ -11,7 +11,7 @@
   // Use prepared statements to fetch filtered book copies
   $sql = "SELECT * FROM book_copies";
   if (!empty($book_title)) {
-      $sql .= " WHERE B_title = ?";
+      $sql .= " WHERE book_id = ?";
   }
   $stmt = $conn->prepare($sql);
 
@@ -70,7 +70,6 @@
               <th class="py-2 px-4 border-b">Vendor</th>
               <th class="py-2 px-4 border-b">Funding Source</th>
               <th class="py-2 px-4 border-b">Sublocation</th>
-              <th class="py-2 px-4 border-b">Note</th>
               <th class="py-2 px-4 border-b">Rating</th>
               <th class="py-2 px-4 border-b">Action</th>
             </tr>
@@ -80,7 +79,7 @@
                         if ($result && $result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr class='border-b hover:bg-gray-50'>
-                                    <td class='py-2 px-4'>" . htmlspecialchars($row['book_id']) . "</td>
+                                    <td class='py-2 px-4'>" . htmlspecialchars($row['book_copy']) . "</td>
                                     <td class='py-2 px-4'>" . htmlspecialchars($row['status']) . "</td>
                                     <td class='py-2 px-4'>" . htmlspecialchars($row['B_title']) . "</td>
                                     <td class='py-2 px-4'>" . htmlspecialchars($row['copy_ID']) . "</td>
@@ -88,7 +87,6 @@
                                     <td class='py-2 px-4'>" . htmlspecialchars($row['vendor']) . "</td>
                                     <td class='py-2 px-4'>" . htmlspecialchars($row['fundingSource']) . "</td>
                                     <td class='py-2 px-4'>" . htmlspecialchars($row['Sublocation']) . "</td>
-                                    <td class='py-2 px-4'>" . htmlspecialchars($row['note']) . "</td>
                                     <td class='py-2 px-4'>";
                                 // Display ratings dynamically
                               // Display ratings dynamically
@@ -115,7 +113,7 @@
 
                                 echo "</td>
                                     <td class='py-2 px-4'>
-                                        <a href='ViewCopy.php?ID=" . urlencode($row['ID']) . "' class='bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600'>View</a>
+                                        <a href='ViewCopy.php?book_copy_ID=" . urlencode($row['book_copy_ID']) . "' class='bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600'>View</a>
                                     </td>
                                 </tr>";
                             }

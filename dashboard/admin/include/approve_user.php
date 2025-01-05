@@ -13,8 +13,8 @@ require 'PHPMailer/src/SMTP.php';
 if (isset($_GET['id'])) {
     $userId = $_GET['id'];
 
-    // Fetch email from the 'contact' table based on the user ID
-    $sql = "SELECT email FROM contact WHERE IDno = ?";
+    // Fetch email from the 'users_info' table based on the user ID
+    $sql = "SELECT email FROM users_info WHERE IDno = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
     $stmt->execute();
@@ -24,8 +24,8 @@ if (isset($_GET['id'])) {
         $stmt->bind_result($email);
         $stmt->fetch();
         
-        // Fetch username and password from 'user_log' table
-        $userQuery = "SELECT username, password FROM user_log WHERE IDno = ?";
+        // Fetch username and password from 'users_info' table
+        $userQuery = "SELECT username, password FROM users_info WHERE IDno = ?";
         $userStmt = $conn->prepare($userQuery);
         $userStmt->bind_param("s", $userId);
         $userStmt->execute();
@@ -35,8 +35,8 @@ if (isset($_GET['id'])) {
             $userStmt->bind_result($username, $password);
             $userStmt->fetch();
 
-            // Update the user status to 'approved' in the user_log table
-            $updateQuery = "UPDATE user_log SET status = 'approved' WHERE IDno = ?";
+            // Update the user status to 'approved' in the users_info table
+            $updateQuery = "UPDATE users_info SET status_log = 'approved' WHERE IDno = ?";
             $updateStmt = $conn->prepare($updateQuery);
             $updateStmt->bind_param("s", $userId);
             $updateStmt->execute();

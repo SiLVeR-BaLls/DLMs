@@ -14,7 +14,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['ID'])) {
                borrow_book.borrow_date, borrow_book.return_date, 
                book_copies.rating
         FROM borrow_book
-        JOIN book_copies ON borrow_book.ID = book_copies.ID
+        JOIN book_copies ON borrow_book.ID = Book_copies.book_copy_ID
         JOIN book ON book_copies.B_title = book.B_title
         WHERE borrow_book.return_date IS NULL AND borrow_book.ID LIKE ?
     ");

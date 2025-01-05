@@ -117,7 +117,7 @@
           <?php echo htmlspecialchars($message); ?>
         </div>
         <?php endif; ?>
-        <form action="CopyConnection.php" method="post" class="book-card">
+        <form action="include/CopyConnection.php" method="post" class="book-card">
 
           <!-- Display the title -->
         <div class="text-center mb-4">
@@ -125,7 +125,7 @@
             <input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
         </div>
 
-          <input type="hidden" name="B_title" id="B_title" value="<?php echo htmlspecialchars($book['B_title']); ?>">
+          <input type="hidden" name="book_id" id="book_id" value="<?php echo htmlspecialchars($book['book_id']); ?>">
 
           <!-- Status and Rating (Grouped in one row) -->
           <div class="flex flex-wrap gap-4 justify-center mb-4">

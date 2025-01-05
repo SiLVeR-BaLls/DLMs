@@ -5,10 +5,9 @@
     function getPendingUsers() {
         global $conn;
         $query = "
-            SELECT u.IDno, u.Fname, u.Sname, l.U_Type 
-            FROM users_info u 
-            JOIN user_log l ON u.IDno = l.IDno 
-            WHERE l.status = 'pending'
+            SELECT IDno, Fname, Sname, U_Type 
+            FROM users_info
+            WHERE status_log = 'pending'
         ";
         $result = $conn->query($query);
         

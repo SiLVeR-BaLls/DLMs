@@ -37,7 +37,7 @@ if ($conn->connect_error) {
                         Book.extent,
                 COUNT(CASE WHEN Book_copies.status = 'Available' THEN 1 END) AS available_count, 
                 COUNT(CASE WHEN Book_copies.status = 'Borrowed' THEN 1 END) AS borrowed_count,
-                COUNT(Book_copies.ID) AS total_count
+                COUNT(book_copies.book_copy_ID ) AS total_count
             FROM 
                 Book 
             LEFT JOIN 

@@ -70,7 +70,7 @@ const courses = {
     baccalaureate: [
       "BS in English",
       "BS in Human Services",
-      "BS in Bio)",
+      "BS in Bio",
       "BS in Comm Dev",
       "BS in Comp Sci",
       "BS in Info Systems",
@@ -116,27 +116,6 @@ function updateCourses() {
 document.getElementById("college").addEventListener("change", updateCourses);
 
 
-//repaet password
-
-// Form validation on submit
-document
-  .getElementById("registration-form")
-  .addEventListener("submit", function (event) {
-    const password = document.getElementById("password").value;
-    const passwordRepeat = document.getElementById("password-repeat").value;
-    const errorMessage = document.getElementById("error-message");
-
-    if (password !== passwordRepeat) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Passwords do not match.",
-      });
-      event.preventDefault(); // Prevent form submission
-    } else {
-      errorMessage.textContent = ""; // Clear error message
-    }
-  });
 
 //password visible
 function togglePasswordVisibility(passwordId, iconId) {
@@ -209,7 +188,6 @@ function displayErrorMessage() {
 window.onload = displayErrorMessage;
 
 //idno problem
-
 
 
 const nextBtn = document.getElementById('nextBtn');

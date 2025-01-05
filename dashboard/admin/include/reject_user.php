@@ -14,8 +14,8 @@ require 'PHPMailer/src/SMTP.php';
 if (isset($_GET['id'])) {
     $userId = $_GET['id'];
 
-    // Fetch email from the 'contact' table based on the user ID
-    $sql = "SELECT email FROM contact WHERE IDno = ?";
+    // Fetch email from the 'users_info' table based on the user ID
+    $sql = "SELECT email FROM users_info WHERE IDno = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $userId);
     $stmt->execute();
@@ -25,8 +25,8 @@ if (isset($_GET['id'])) {
         $stmt->bind_result($email);
         $stmt->fetch();
         
-        // Update the user status to 'rejected' in the user_log table
-        $updateQuery = "UPDATE user_log SET status = 'rejected' WHERE IDno = ?";
+        // Update the user status to 'rejected' in the users_info table
+        $updateQuery = "UPDATE users_info SET status_log = 'rejected' WHERE IDno = ?";
         $updateStmt = $conn->prepare($updateQuery);
         $updateStmt->bind_param("s", $userId);
         $updateStmt->execute();
