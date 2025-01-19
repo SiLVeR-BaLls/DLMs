@@ -41,7 +41,7 @@
   $borrowedQuery = "
       SELECT u.course, u.college, COUNT(bb.ID) AS borrow_count
       FROM borrow_book AS bb
-      LEFT JOIN user_details AS u ON bb.IDno = u.IDno
+      LEFT JOIN users_info AS u ON bb.IDno = u.IDno
       WHERE bb.borrow_date IS NOT NULL
       GROUP BY u.course, u.college
   ";

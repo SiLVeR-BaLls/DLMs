@@ -11,13 +11,13 @@
 
   // Handle form submission for book return and rating update
   if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['approve'])) {
-      $book_id = $_POST["book_id"];
+      $book_copy = $_POST["book_copy"];
       $rating = $_POST["rating"];
 
-      if (!empty($book_id)) {
-          // Check if the Borrow book_id exists and book is still borrowed
-          $checkID = $conn->prepare("SELECT book_id FROM borrow_book WHERE book_id = ? AND return_date IS NULL");
-          $checkID->bind_param("i", $book_id);
+      if (!empty($book_copy)) {
+          // Check if the Borrow book_copy exists and book is still borrowed
+          $checkID = $conn->prepare("SELECT book_copy FROM borrow_book WHERE book_copy = ? AND return_date IS NULL");
+          $checkID->bind_param("i", $book_copy);
           $checkID->execute();
           $checkID->store_result();
 
@@ -26,18 +26,18 @@
               $conn->begin_transaction();
 
               // Update the rating in the book_copies table
-              $updateRating = $conn->prepare("UPDATE book_copies SET rating = ? WHERE book_id = ?");
-              $updateRating->bind_param("is", $rating, $book_id);
+              $updateRating = $conn->prepare("UPDATE book_copies SET rating = ? WHERE book_copy = ?");
+              $updateRating->bind_param("is", $rating, $book_copy);
               $updateRating->execute();
 
               // Update the return date in borrow_book
-              $stmt = $conn->prepare("UPDATE borrow_book SET return_date = NOW() WHERE book_id = ?");
-              $stmt->bind_param("s", $book_id);
+              $stmt = $conn->prepare("UPDATE borrow_book SET return_date = NOW() WHERE book_copy = ?");
+              $stmt->bind_param("s", $book_copy);
               $stmt->execute();
 
               // Update the book status to 'Available'
-              $updateBook = $conn->prepare("UPDATE book_copies SET status = 'Available' WHERE book_id = ?");
-              $updateBook->bind_param("s", $book_id);
+              $updateBook = $conn->prepare("UPDATE book_copies SET status = 'Available' WHERE book_copy = ?");
+              $updateBook->bind_param("s", $book_copy);
               $updateBook->execute();
 
               // Commit transaction
@@ -55,12 +55,12 @@
   
   // Handle extend action
   if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['extendBook'])) {
-    $book_id = $_POST["book_id"];
+    $book_copy = $_POST["book_copy"];
     $newDueDate = $_POST["newDueDate"];
 
-    if (!empty($book_id) && !empty($newDueDate)) {
-        $stmt = $conn->prepare("UPDATE borrow_book SET due_date = ? WHERE book_id = ?");
-        $stmt->bind_param("ss", $newDueDate, $book_id);
+    if (!empty($book_copy) && !empty($newDueDate)) {
+        $stmt = $conn->prepare("UPDATE borrow_book SET due_date = ? WHERE book_copy = ?");
+        $stmt->bind_param("ss", $newDueDate, $book_copy);
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {
@@ -69,19 +69,18 @@
             $errorMessage = "Failed to extend due date.";
         }
     } else {
-        $errorMessage = "Borrow book_id or new due date is missing.";
+        $errorMessage = "Borrow book_copy or new due date is missing.";
     }
 }
 
   // Fetch borrowed books with optional search and filter
   $query = "
       SELECT 
-          bb.book_id, bb.borrow_id, bb.borrow_date, ui.IDno, ui.Fname, ui.Sname, 
-          bc.B_title, b.author, bb.due_date, ud.college, ud.course, bc.rating
+          bb.book_copy, bb.borrow_id, bb.borrow_date, ui.IDno, ui.Fname, ui.Sname, 
+          bc.B_title, b.author, bb.due_date, ui.college, ui.course, bc.rating
       FROM borrow_book AS bb
       JOIN users_info AS ui ON bb.IDno = ui.IDno
-      JOIN user_details AS ud ON bb.IDno = ud.IDno
-      JOIN book_copies AS bc ON bb.book_id = bc.book_id
+      JOIN book_copies AS bc ON bb.book_copy = bc.book_copy
       JOIN book AS b ON bc.B_title = b.B_title
       WHERE bb.return_date IS NULL
   ";
@@ -93,7 +92,7 @@
       } else {
           $query .= " AND (
               bc.B_title LIKE ? OR ui.Fname LIKE ? OR 
-              ui.Sname LIKE ? OR bb.book_id LIKE ? OR ui.IDno LIKE ?
+              ui.Sname LIKE ? OR bb.book_copy LIKE ? OR ui.IDno LIKE ?
           )";
       }
   }
@@ -156,7 +155,7 @@
             <option value="bc.B_title">Book Title</option>
             <option value="ui.Fname">First Name</option>
             <option value="ui.Sname">Surname</option>
-            <option value="bb.book_id">Book ID</option>
+            <option value="bb.book_copy">Book ID</option>
             <option value="ui.IDno">User ID</option>
           </select>
         </div>
@@ -181,9 +180,9 @@
               </thead>
               <tbody>
                     <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr class="cursor-pointer" data-id="<?= $row['book_id'] ?>" data-rating="<?= $row['rating'] ?>">
+                    <tr class="cursor-pointer" data-id="<?= $row['book_copy'] ?>" data-rating="<?= $row['rating'] ?>">
                       <td class="px-4 py-2">
-                        <?= htmlspecialchars($row['book_id']) ?>
+                        <?= htmlspecialchars($row['book_copy']) ?>
                       </td>
                       <td class="px-4 py-2">
                         <?= htmlspecialchars($row['IDno']) ?>
@@ -243,7 +242,7 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xs">
       <h3 class="text-xl font-semibold mb-4 text-center text-gray-900">Extend Due Date</h3>
       <form method="POST">
-        <input type="hidden" name="book_id" id="borrowIdExtend">
+        <input type="hidden" name="book_copy" id="borrowIdExtend">
         <p><strong class="text-gray-900">Borrow ID:</strong> <span id="borrowIdExtendDisplay"
             class="font-medium text-gray-700"></span></p>
 
@@ -268,7 +267,7 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xs">
       <h3 class="text-xl font-semibold mb-4 text-center text-gray-900">Admin Approval</h3>
       <form action="" method="POST" id="approvalForm">
-        <input type="hidden" name="book_id" id="borrowId">
+        <input type="hidden" name="book_copy" id="borrowId">
         <div class="mb-4">
           <p><strong class="text-gray-900">Borrow ID:</strong> <span id="borrowIdDisplay"
               class="font-medium text-gray-700"></span></p>

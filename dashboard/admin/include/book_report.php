@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 // Query to fetch books with ratings (0, 1, 2) and count borrowed books
 $ratingQuery = "
-    SELECT bc.B_title, bc.book_id, bc.rating
+    SELECT bc.B_title, bc.book_copy, bc.rating
     FROM book_copies bc
     WHERE bc.rating IS NOT NULL AND bc.status IN ('Available', 'Borrowed')
 ";
@@ -31,13 +31,13 @@ $allBorrowedBooks = [];
 
 // Query for most borrowed books based on B_title and college IDno
 $borrowedQuery = "
-    SELECT ud.college, bc.B_title, COUNT(bb.book_id) AS Borrowed_Count
+    SELECT ui.college, bc.B_title, COUNT(bb.book_copy) AS Borrowed_Count
     FROM borrow_book bb
-    JOIN book_copies bc ON bb.book_id = bc.book_id
-    JOIN user_details ud ON bb.IDno = ud.IDno
+    JOIN book_copies bc ON bb.book_copy = bc.book_copy
+    JOIN users_info ui ON bb.IDno = ui.IDno
     WHERE bc.status = 'Borrowed'
-    GROUP BY ud.college, bc.B_title
-    ORDER BY ud.college, Borrowed_Count DESC
+    GROUP BY ui.college, bc.B_title
+    ORDER BY ui.college, Borrowed_Count DESC
 ";
 $borrowedResult = $conn->query($borrowedQuery);
 
@@ -146,7 +146,7 @@ if ($ratingResult->num_rows > 0) {
                         <?php
                         if (count($booksWithRatingZero) > 0) {
                             foreach ($booksWithRatingZero as $book) {
-                                echo "<li class='text-red-600 font-semibold'><strong>{$book['book_id']}</strong> - {$book['B_title']}</li>";
+                                echo "<li class='text-red-600 font-semibold'><strong>{$book['book_copy']}</strong> - {$book['B_title']}</li>";
                             }
                         } else {
                             echo "<li>No books with rating 0 found.</li>";
@@ -167,7 +167,7 @@ if ($ratingResult->num_rows > 0) {
                         <?php
                         if (count($booksWithRatingOne) > 0) {
                             foreach ($booksWithRatingOne as $book) {
-                                echo "<li class='text-orange-600 font-semibold'><strong>{$book['book_id']}</strong> - {$book['B_title']}</li>";
+                                echo "<li class='text-orange-600 font-semibold'><strong>{$book['book_copy']}</strong> - {$book['B_title']}</li>";
                             }
                         } else {
                             echo "<li>No books with rating 1 found.</li>";
@@ -188,7 +188,7 @@ if ($ratingResult->num_rows > 0) {
                         <?php
                         if (count($booksWithRatingTwo) > 0) {
                             foreach ($booksWithRatingTwo as $book) {
-                                echo "<li class='text-yellow-600 font-semibold'><strong>{$book['book_id']}</strong> - {$book['B_title']}</li>";
+                                echo "<li class='text-yellow-600 font-semibold'><strong>{$book['book_copy']}</strong> - {$book['B_title']}</li>";
                             }
                         } else {
                             echo "<li>No books with rating 2 found.</li>";

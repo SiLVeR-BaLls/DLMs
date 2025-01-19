@@ -20,6 +20,7 @@
                 </button>
                 <ul class="hidden group-hover:block bg-blue-500 ml-4 mt-1 space-y-1">
                     <li><a href="Borrow.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'Borrow.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Borrow</a></li>
+                    <li><a href="CopyList.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'CopyList.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Copy List</a></li>
                     <li><a href="BorrowDisplay.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'BorrowDisplay.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Borrowed</a></li>
                     <li><a href="Catalog.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'Catalog.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Catalog</a></li>
                     <li><a href="ReturnBook.php" class="block py-2 px-4 <?php echo (basename($_SERVER['PHP_SELF']) == 'ReturnBook.php') ? 'bg-blue-700' : ''; ?> hover:bg-blue-700">Return</a></li>

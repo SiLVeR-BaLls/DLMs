@@ -4,22 +4,22 @@
   include 'include/ReturnConnect.php';
 
     // Handle AJAX request to fetch borrow book details and rating
-    if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['book_id'])) {
-        $book_id = $_GET['book_id'];
+    if (isset($_GET['ajax']) && $_GET['ajax'] == 'true' && isset($_GET['book_copy'])) {
+        $book_copy = $_GET['book_copy'];
 
         // SQL query to fetch all matching records
         $stmt = $conn->prepare("
-            SELECT book.id AS book_id, book.B_title, book.author, book.publisher, 
-                  book_copies.copy_ID, borrow_book.book_id AS borrow_id, borrow_book.IDno, 
+            SELECT book.book_id AS book_copy, book.B_title, book.author, book.publisher, 
+                  book_copies.copy_ID, borrow_book.book_copy AS borrow_id, borrow_book.IDno, 
                   borrow_book.borrow_date, borrow_book.return_date, 
                   book_copies.rating
             FROM borrow_book
-            JOIN book_copies ON borrow_book.book_id = book_copies.book_id
+            JOIN book_copies ON borrow_book.book_copy = book_copies.book_copy
             JOIN book ON book_copies.B_title = book.B_title
-            WHERE borrow_book.return_date IS NULL AND borrow_book.book_id LIKE ?
+            WHERE borrow_book.return_date IS NULL AND borrow_book.book_copy LIKE ?
         ");
 
-        $searchTerm = "%" . $book_id . "%"; // Add wildcards for partial matching
+        $searchTerm = "%" . $book_copy . "%"; // Add wildcards for partial matching
         $stmt->bind_param("s", $searchTerm);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -31,14 +31,14 @@
                 $bookDetails = json_encode($borrow); // Convert to JSON for JavaScript handling
                 $response .= "<li class='cursor-pointer list-none text-blue-500 hover:underline' onclick='displaySelectedBook(this)' 
                                 data-book='" . htmlspecialchars($bookDetails, ENT_QUOTES, 'UTF-8') . "'>";
-                $response .= "book_id: " . $borrow['borrow_id'] . " | Title: " . $borrow['B_title'];
+                $response .= "book_copy: " . $borrow['borrow_id'] . " | Title: " . $borrow['B_title'];
                 $response .= "</li>";
             }
 
             $response .= "</ul><div id='bookDetails' class='mt-4'></div>";
             echo $response;
         } else {
-            echo "<p class='text-red-500'>No active borrow record found for this book_id.</p>";
+            echo "<p class='text-red-500'>No active borrow record found for this book_copy.</p>";
         }
 
         $conn->close();
@@ -47,7 +47,7 @@
 
     // Update the rating if the form is submitted
     if (isset($_POST['approve'])) {
-        $book_id = $_POST['book_id'];
+        $book_copy = $_POST['book_copy'];
 
         // Check if the rating is set, even if it's 0
         if (isset($_POST['rating']) && $_POST['rating'] !== '') {
@@ -57,8 +57,8 @@
             error_log("Received rating: " . $rating);
 
             // Update query to save the rating before returning the book
-            $stmt = $conn->prepare("UPDATE book_copies SET rating = ? WHERE book_id = ?");
-            $stmt->bind_param("is", $rating, $book_id);
+            $stmt = $conn->prepare("UPDATE book_copies SET rating = ? WHERE book_copy = ?");
+            $stmt->bind_param("is", $rating, $book_copy);
 
             if ($stmt->execute()) {
                 $successMessage = "Book return and rating update successful.";
@@ -101,8 +101,8 @@
         <h2 class="text-2xl font-semibold mb-4 text-center">Return Book</h2>
         <form method="POST" action="">
           <div>
-            <label for="book_id" class="block text-lg">Book ID:</label>
-            <input type="text" id="book_id" name="book_id" required class="w-full p-2 border border-gray-300 rounded-md"
+            <label for="book_copy" class="block text-lg">Book ID:</label>
+            <input type="text" id="book_copy" name="book_copy" required class="w-full p-2 border border-gray-300 rounded-md"
               oninput="fetchBorrowDetails()">
           </div>
           <div id="borrowDetails" class="mt-4">
@@ -128,7 +128,7 @@
       <p class="mt-2">Are you sure you want to return this book?</p>
       <div class="mt-4">
         <form method="POST" action="">
-          <input type="hidden" id="confirmID" name="book_id">
+          <input type="hidden" id="confirmID" name="book_copy">
           <input type="hidden" id="confirmRating" name="rating">
           <button type="submit" name="approve" value="1"
             class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Approve</button>
@@ -141,13 +141,13 @@
 
   <script>
     function fetchBorrowDetails() {
-      var book_id = document.getElementById("book_id").value;
+      var book_copy = document.getElementById("book_copy").value;
 
-      if (book_id.length >= 1) {
+      if (book_copy.length >= 1) {
         $.ajax({
           url: '', // Request to the same page
           type: 'GET',
-          data: { book_id: book_id, ajax: 'true' },
+          data: { book_copy: book_copy, ajax: 'true' },
           success: function (response) {
             $('#borrowDetails').html(response);
           },
@@ -161,11 +161,11 @@
     }
 
     function openConfirmationDialog() {
-      var book_id = document.getElementById("book_id").value;
+      var book_copy = document.getElementById("book_copy").value;
       var rating = document.getElementById("rating") ? document.getElementById("rating").value : "";
 
-      if (book_id && rating >= 0) { // Check for valid ID and rating
-        document.getElementById("confirmID").value = book_id;
+      if (book_copy && rating >= 0) { // Check for valid ID and rating
+        document.getElementById("confirmID").value = book_copy;
         document.getElementById("confirmRating").value = rating;
         document.getElementById("confirmationPopUp").style.display = 'flex';
       } else {
@@ -198,7 +198,7 @@
 
                         `;
             document.getElementById("bookDetails").innerHTML = details;
-            document.getElementById("book_id").value = book.borrow_id;
+            document.getElementById("book_copy").value = book.borrow_id;
           }
         } catch (error) {
           console.error("Error parsing book data:", error);

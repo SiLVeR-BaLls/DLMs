@@ -5,12 +5,13 @@ include '../../config.php';
 $IDno = $_GET['IDno'];
 
 // Query to search for the user by IDno, only where status is 'approved'
-$sql = "SELECT users_info.IDno,
-               users_info.Fname,
-               user_log.U_Type
-        FROM users_info
-        JOIN user_log ON users_info.IDno = user_log.IDno
-        WHERE users_info.IDno LIKE ? AND user_log.status = 'approved'";
+$sql = "SELECT ui.IDno,
+       ui.Fname,
+       ui.U_Type
+FROM users_info ui
+WHERE ui.IDno LIKE ? 
+  AND ui.status_log = 'approved';
+";
 
 $stmt = $conn->prepare($sql);
 $searchParam = "%$IDno%";

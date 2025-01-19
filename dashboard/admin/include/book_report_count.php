@@ -1,8 +1,8 @@
 <?php
     // SQL query to get the count of borrowed books grouped by B_title, sorted by Borrowed_Count in descending order
-    $sql = "SELECT bc.B_title, COUNT(bb.book_id) AS Borrowed_Count
+    $sql = "SELECT bc.B_title, COUNT(bb.book_copy) AS Borrowed_Count
             FROM borrow_book bb
-            JOIN book_copies bc ON bb.book_id = bc.book_id
+            JOIN book_copies bc ON bb.book_copy = bc.book_copy
             GROUP BY bc.B_title
             ORDER BY Borrowed_Count DESC";
 
